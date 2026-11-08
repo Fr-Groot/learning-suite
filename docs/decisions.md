@@ -24,3 +24,4 @@
 | 2026-11-08 | Le lecteur livré ne contient pas le validateur complet (Ajv) | Studio vérifie avant export ; l'aperçu et `npm run validate` vérifient tout |
 | 2026-11-08 | Tests de bout en bout avec Playwright sur Edge déjà installé | Pas de navigateur à télécharger sur le poste |
 | 2026-11-08 | Voix off d'exemple générées avec la voix Windows « Hortense » (WAV) | Gratuit et hors ligne ; MP3 recommandé pour les vrais modules |
+| 2026-11-09 | Code hébergé sur GitHub, dépôt privé Fr-Groot/learning-suite | Sauvegarde en ligne ; passage en public (AGPLv3) décidé plus tard par le porteur |
