@@ -292,6 +292,29 @@
 .lsp-dragdrop--order .lsp-dd-drop:not(.lsp-dd-drop--pool) { flex: 0 0 52px; border-radius: 50%; width: 52px; height: 52px; padding: 0; }
 .lsp-dragdrop.is-done .lsp-dd-drop { opacity: 0.85; }
 
+/* ---------- Zones cliquables ---------- */
+.lsp--slides .lsp-hotspot { display: flex; flex-direction: column; height: 100%; }
+.lsp-hotspot-stage { display: flex; justify-content: center; align-items: center; }
+.lsp--slides .lsp-hotspot-stage { flex: 1 1 auto; min-height: 0; }
+.lsp-hotspot-figure { position: relative; max-width: 100%; }
+.lsp--vertical .lsp-hotspot-figure { width: 100%; }
+.lsp-hotspot-figure img { display: block; width: 100%; height: 100%; border-radius: var(--lsp-radius); user-select: none; }
+.lsp-zone {
+  position: absolute; padding: 0; border: 3px dashed color-mix(in srgb, var(--lsp-primary) 55%, transparent); border-radius: 8px;
+  background: color-mix(in srgb, var(--lsp-primary) 6%, transparent); cursor: pointer;
+}
+.lsp-zone--ellipse { border-radius: 50%; }
+.lsp-zone:hover { background: color-mix(in srgb, var(--lsp-primary) 16%, transparent); }
+.lsp-zone[aria-pressed="true"], .lsp-zone[aria-expanded="true"] { border-style: solid; border-color: var(--lsp-accent); background: color-mix(in srgb, var(--lsp-accent) 22%, transparent); }
+.lsp-zone.is-seen::after { content: "✓"; position: absolute; top: -10px; right: -10px; width: 22px; height: 22px; border-radius: 50%; background: var(--lsp-success); color: #fff; font-size: 13px; line-height: 22px; }
+.lsp-zone.is-right { border: 3px solid var(--lsp-success); background: color-mix(in srgb, var(--lsp-success) 20%, transparent); }
+.lsp-zone.is-missed { border: 3px dashed var(--lsp-success); background: none; }
+.lsp-zone.is-wrong { border: 3px solid var(--lsp-error); background: color-mix(in srgb, var(--lsp-error) 18%, transparent); }
+.lsp-zone:disabled { cursor: default; }
+.lsp-hotspot-info { margin-top: 10px; padding: 10px 14px; background: var(--lsp-background); border-radius: var(--lsp-radius); min-height: 3em; }
+.lsp-hotspot-info p { margin: 0 0 0.3em; }
+.lsp-hotspot-info-title { font-weight: 700; color: var(--lsp-primary); }
+
 /* ---------- Cartes à retourner ---------- */
 .lsp-flipcards { display: grid; grid-template-columns: repeat(var(--lsp-cols, 3), minmax(0, 1fr)); gap: 16px; height: 100%; }
 .lsp-flipcards > [role="listitem"] { min-height: 0; }

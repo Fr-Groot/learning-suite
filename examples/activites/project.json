@@ -515,6 +515,99 @@
           }
         }
       ]
+    },
+    {
+      "id": "zones",
+      "title": "Trouvez les erreurs",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "zones-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Trouvez les 4 erreurs",
+          "frame": {
+            "x": 60,
+            "y": 20,
+            "w": 1160,
+            "h": 70
+          }
+        },
+        {
+          "id": "zones-activite",
+          "type": "hotspot",
+          "kind": "find",
+          "attempts": 2,
+          "prompt": "Ce poste de travail est laissé sans surveillance. Touchez les **4 risques** pour la sécurité.",
+          "src": "media/bureau.svg",
+          "alt": "Un bureau avec un écran allumé, un post-it, une clé USB, un badge, une tasse et une plante.",
+          "zones": [
+            {
+              "id": "ecran",
+              "x": 33,
+              "y": 15,
+              "w": 30,
+              "h": 40,
+              "label": "Écran avec la session ouverte",
+              "correct": true
+            },
+            {
+              "id": "postit",
+              "x": 64.5,
+              "y": 12,
+              "w": 11.5,
+              "h": 17,
+              "label": "Post-it avec le mot de passe",
+              "correct": true
+            },
+            {
+              "id": "usb",
+              "x": 15.5,
+              "y": 64,
+              "w": 13,
+              "h": 9,
+              "label": "Clé USB inconnue",
+              "correct": true
+            },
+            {
+              "id": "badge",
+              "x": 57.5,
+              "y": 72.5,
+              "w": 13,
+              "h": 14,
+              "label": "Badge oublié sur le bureau",
+              "correct": true
+            },
+            {
+              "id": "tasse",
+              "x": 75.5,
+              "y": 54.5,
+              "w": 9,
+              "h": 11.5,
+              "label": "Tasse de café"
+            },
+            {
+              "id": "plante",
+              "x": 81,
+              "y": 37,
+              "w": 13,
+              "h": 26,
+              "label": "Plante verte"
+            }
+          ],
+          "feedback": {
+            "correct": "Bravo, rien ne vous échappe !",
+            "partial": "Il reste des risques : regardez les zones vertes en pointillés.",
+            "incorrect": "Regardez l'écran, le post-it, la clé USB et le badge."
+          },
+          "frame": {
+            "x": 60,
+            "y": 100,
+            "w": 1160,
+            "h": 600
+          }
+        }
+      ]
     }
   ]
 }
