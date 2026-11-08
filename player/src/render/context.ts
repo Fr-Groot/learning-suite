@@ -1,5 +1,5 @@
 // Ce que chaque brique peut demander au lecteur pendant l'affichage.
-import type { Response, QuestionState, Score } from "../activities.ts";
+import type { MultiActivity, Response, QuestionState, Score } from "../activities.ts";
 import type { ButtonAction, HtmlBlock, Mode, Project, QuestionBlock } from "../types.ts";
 
 export interface RenderContext {
@@ -17,6 +17,10 @@ export interface RenderContext {
   seed: number;
   /** Un jeu HTML a envoyé un score ou signalé sa fin. */
   reportHtml(b: HtmlBlock, msg: { score?: number; completed?: boolean }): void;
+  /** Activité de découverte : un élément (carte, onglet, zone) a été ouvert. */
+  openItem(blockId: string, itemId: string, allIds: string[], requireAll: boolean): void;
+  /** Valide une activité à plusieurs éléments (texte à trous, glisser-déposer, zones). */
+  submitMulti(b: MultiActivity, response: Response): QuestionState;
   score(): Score;
   retry(): void;
   /** Une brique s'abonne pour se redessiner quand l'état change (score, verrous). */

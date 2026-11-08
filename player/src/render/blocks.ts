@@ -2,11 +2,13 @@
 import type { Block } from "../types.ts";
 import { renderButton } from "./button.ts";
 import type { RenderContext } from "./context.ts";
+import { renderFlipCards } from "./flipcards.ts";
 import { renderHtml } from "./html.ts";
 import { renderImage } from "./image.ts";
 import { renderAudio, renderVideo } from "./media.ts";
 import { renderQuestion } from "./question.ts";
 import { renderResults } from "./results.ts";
+import { renderReveal } from "./reveal.ts";
 import { renderShape } from "./shape.ts";
 import { applyStyle } from "./style.ts";
 import { renderText } from "./text.ts";
@@ -23,6 +25,8 @@ export function renderBlock(b: Block, ctx: RenderContext): HTMLElement {
     case "question": content = renderQuestion(b, ctx); break;
     case "results": content = renderResults(b, ctx); break;
     case "html": content = renderHtml(b, ctx); break;
+    case "flipcards": content = renderFlipCards(b, ctx); break;
+    case "reveal": content = renderReveal(b, ctx); break;
     default: content = ctx.doc.createElement("div");
   }
   const wrap = ctx.doc.createElement("div");

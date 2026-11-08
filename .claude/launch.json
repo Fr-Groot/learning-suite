@@ -48,6 +48,23 @@
       "env": {
         "PORT": "5182"
       }
+    },
+    {
+      "name": "lecteur-activites",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "player",
+        "run",
+        "open",
+        "--",
+        "../examples/activites",
+        "--no-open"
+      ],
+      "port": 5183,
+      "env": {
+        "PORT": "5183"
+      }
     }
   ]
 }

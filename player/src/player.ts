@@ -1,7 +1,7 @@
 // Le lecteur : assemble l'interface (titre, menu, progression, navigation, voix off)
 // et affiche la page courante dans le bon mode.
 import { Navigator } from "./navigation.ts";
-import { computeScore, hasGradedActivities, isGraded, waitsForActivities, newQuestionState, pageActivities, reportHtml, submit, type QuestionState } from "./activities.ts";
+import { computeScore, hasGradedActivities, isGraded, waitsForActivities, newQuestionState, openItem, submitMulti, pageActivities, reportHtml, submit, type QuestionState } from "./activities.ts";
 import { el, type RenderContext } from "./render/context.ts";
 import { renderSlidesPage } from "./render/layout-slides.ts";
 import { renderVerticalPage } from "./render/layout-vertical.ts";
@@ -144,7 +144,7 @@ export class Player {
         ? ""
         : rule === "voiceoverEnded"
           ? "Écoutez la voix off jusqu'au bout pour continuer."
-          : "Répondez aux questions pour continuer.";
+          : "Terminez les activités de la page pour continuer.";
     if (!ui.menu.hidden) this.drawMenu();
     this.updaters.forEach((fn) => fn());
   }
@@ -289,6 +289,19 @@ export class Player {
       reportHtml: (b, msg) => {
         this.states.set(b.id, reportHtml(this.states.get(b.id) ?? newQuestionState(), msg));
         this.afterActivity();
+      },
+      openItem: (blockId, itemId, allIds, requireAll) => {
+        const before = this.states.get(blockId) ?? newQuestionState();
+        const after = openItem(before, itemId, allIds, requireAll);
+        this.states.set(blockId, after);
+        // On ne prévient le LMS que si quelque chose a changé.
+        if (after.opened!.length !== (before.opened ?? []).length || after.done !== before.done) this.afterActivity();
+      },
+      submitMulti: (b, response) => {
+        const st = submitMulti(b, this.states.get(b.id) ?? newQuestionState(), response);
+        this.states.set(b.id, st);
+        this.afterActivity();
+        return st;
       },
       score: () => this.score(),
       retry: () => this.retry(),
