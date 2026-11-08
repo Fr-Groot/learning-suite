@@ -88,6 +88,23 @@ export class Navigator {
     return this.canPrev() && this.goTo(this.index - 1, true);
   }
 
+  /** État à sauvegarder pour la reprise. */
+  snapshot() {
+    return { page: this.index, visited: [...this.visited], unlocked: [...this.unlocked] };
+  }
+
+  /** Reprend un état sauvegardé (les valeurs hors limites sont ignorées). */
+  restore(s: { page: number; visited: number[]; unlocked: number[] }) {
+    const ok = (i: number) => Number.isInteger(i) && i >= 0 && i < this.count;
+    s.visited.filter(ok).forEach((i) => this.visited.add(i));
+    s.unlocked.filter(ok).forEach((i) => this.unlocked.add(i));
+    if (ok(s.page)) {
+      this.index = s.page;
+      this.visited.add(s.page);
+      this.refreshUnlock(s.page);
+    }
+  }
+
   indexOf(pageId: string) {
     return this.project.pages.findIndex((p) => p.id === pageId);
   }

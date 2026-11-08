@@ -1,5 +1,6 @@
 // Page d'aperçu (npm run open) : charge le projet, le vérifie entièrement, puis l'affiche.
 import { mount } from "./index.ts";
+import { LocalTracker } from "./tracker/local.ts";
 import type { Project } from "./types.ts";
 import { validateProject } from "./validate.ts";
 
@@ -27,7 +28,7 @@ try {
   const check = validateProject(data);
   if (!check.ok) showErrors("Ce projet contient des erreurs", check.errors);
   else {
-    const player = mount(app, data as Project, { baseUrl: "/project/" });
+    const player = mount(app, data as Project, { baseUrl: "/project/", tracker: new LocalTracker({ resume: false }) });
     // Accès pratique depuis la console du navigateur et pour les tests automatiques.
     (window as unknown as { player: unknown }).player = player;
   }

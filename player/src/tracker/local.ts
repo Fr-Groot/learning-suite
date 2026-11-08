@@ -1,56 +1,46 @@
-// Suivi « aperçu » : rien n'est envoyé nulle part. On garde la dernière session
-// dans la mémoire du navigateur et on l'affiche dans la console, pour vérifier.
+// Suivi local : rien n'est envoyé nulle part. Sert à l'aperçu et aux exports HTML5.
+// Avec resume = true, l'état est gardé dans la mémoire du navigateur pour la reprise.
 import type { Meta } from "../types.ts";
-import type { Score } from "../quiz.ts";
-import type { Tracker } from "./tracker.ts";
-
-export interface LocalRecord {
-  moduleId: string;
-  startedAt: string;
-  lastPage?: string;
-  progress: number;
-  score?: Score;
-  completed: boolean;
-}
+import { isSavedState, type Report, type SavedState, type Tracker } from "./tracker.ts";
 
 export class LocalTracker implements Tracker {
-  record: LocalRecord | null = null;
+  /** Dernier rapport reçu (utile pour les tests et la console). */
+  last: Report | null = null;
+  private key = "";
   private readonly log: boolean;
+  private readonly resume: boolean;
 
-  constructor(options: { log?: boolean } = {}) {
+  constructor(options: { log?: boolean; resume?: boolean } = {}) {
     this.log = options.log ?? true;
+    this.resume = options.resume ?? false;
   }
 
-  start(meta: Meta) {
-    this.record = { moduleId: meta.id, startedAt: new Date().toISOString(), progress: 0, completed: false };
-    this.save("démarrage");
-  }
-  pageViewed(pageId: string, progress: number) {
-    if (!this.record) return;
-    this.record.lastPage = pageId;
-    this.record.progress = progress;
-    this.save(`page ${pageId}`);
-  }
-  setScore(score: Score) {
-    if (!this.record) return;
-    this.record.score = score;
-    this.save(`score ${score.percent} %`);
-  }
-  complete() {
-    if (!this.record) return;
-    this.record.completed = true;
-    this.save("terminé");
-  }
-  finish() {
-    this.save("fin de session");
-  }
-
-  private save(event: string) {
-    if (this.log) console.info(`[suivi] ${event}`, this.record);
+  start(meta: Meta): SavedState | null {
+    this.key = `learning-suite:${meta.id}`;
+    if (this.log) console.info(`[suivi] démarrage « ${meta.title} »`);
+    if (!this.resume) return null;
     try {
-      if (this.record) localStorage.setItem(`learning-suite:${this.record.moduleId}`, JSON.stringify(this.record));
+      const saved = JSON.parse(localStorage.getItem(this.key) ?? "null")?.state;
+      return isSavedState(saved) ? saved : null;
     } catch {
-      // Mémoire du navigateur indisponible (navigation privée…) : sans importance pour l'aperçu.
+      return null;
     }
+  }
+
+  update(report: Report) {
+    this.last = report;
+    if (this.log) {
+      const score = report.score ? `, score ${report.score.percent} %` : "";
+      console.info(`[suivi] page ${report.pageId}, ${Math.round(report.progress * 100)} % vu, ${report.status}${score}`);
+    }
+    try {
+      localStorage.setItem(this.key, JSON.stringify(report));
+    } catch {
+      // Mémoire du navigateur indisponible (navigation privée…) : sans gravité.
+    }
+  }
+
+  finish() {
+    if (this.log) console.info("[suivi] fin de session");
   }
 }

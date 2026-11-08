@@ -55,7 +55,7 @@ test("parcours complet réussi : 6 pages, quiz, résultat et suivi", async ({ pa
 
   // Le suivi local a bien enregistré la fin du module et le score.
   const record = await page.evaluate(() => JSON.parse(localStorage.getItem("learning-suite:01f0ff45-cc04-463c-9fed-b7db022d3346") ?? "null"));
-  expect(record).toMatchObject({ completed: true, progress: 1, score: { percent: 100, passed: true } });
+  expect(record).toMatchObject({ status: "passed", progress: 1, score: { percent: 100, passed: true } });
 });
 
 test("échec, puis « Recommencer le quiz »", async ({ page }) => {

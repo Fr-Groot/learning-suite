@@ -1,12 +1,12 @@
 // Le lecteur : assemble l'interface (titre, menu, progression, navigation, voix off)
 // et affiche la page courante dans le bon mode.
 import { Navigator } from "./navigation.ts";
-import { computeScore, isGraded, newQuestionState, pageActivities, reportHtml, submit, type QuestionState } from "./quiz.ts";
+import { computeScore, hasGradedActivities, isGraded, newQuestionState, pageActivities, reportHtml, submit, type QuestionState } from "./quiz.ts";
 import { el, type RenderContext } from "./render/context.ts";
 import { renderSlidesPage } from "./render/layout-slides.ts";
 import { renderVerticalPage } from "./render/layout-vertical.ts";
 import { LocalTracker } from "./tracker/local.ts";
-import type { Tracker } from "./tracker/tracker.ts";
+import type { LessonStatus, SavedState, Tracker } from "./tracker/tracker.ts";
 import type { ButtonAction, Project } from "./types.ts";
 import { startVoiceover, type VoiceoverControls } from "./voiceover.ts";
 
@@ -28,7 +28,6 @@ export class Player {
   private disposers: (() => void)[] = [];
   private disposePage: () => void = () => {};
   private voiceover: VoiceoverControls = { stop() {} };
-  private completed = false;
   private readonly ui;
 
   constructor(container: HTMLElement, project: Project, options: PlayerOptions = {}) {
@@ -38,8 +37,17 @@ export class Player {
     this.tracker = options.tracker ?? new LocalTracker();
     this.nav = new Navigator(project);
     this.ui = this.buildShell(container);
-    this.tracker.start(project.meta);
-    this.doc.defaultView?.addEventListener("pagehide", () => this.tracker.finish());
+    const saved = this.tracker.start(project.meta);
+    if (saved) this.restore(saved);
+    // Fin de session : on prévient le LMS une seule fois, quel que soit l'événement.
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      this.tracker.finish();
+    };
+    this.doc.defaultView?.addEventListener("pagehide", finish);
+    this.doc.defaultView?.addEventListener("beforeunload", finish);
     this.show(false);
   }
 
@@ -166,15 +174,43 @@ export class Player {
       if (page.unlockNext === "voiceoverEnded" && this.nav.page === page) {
         this.nav.unlockCurrent();
         this.refresh();
+        this.report();
       }
     });
 
-    this.tracker.pageViewed(page.id, this.nav.progress);
-    if (this.nav.allVisited && !this.completed) {
-      this.completed = true;
-      this.tracker.complete();
-    }
     this.refresh();
+    this.report();
+  }
+
+  // ---------- Suivi et reprise ----------
+
+  /** Statut de l'apprenant : réussi/échoué s'il y a des activités notées, sinon terminé quand tout est vu. */
+  status(): LessonStatus {
+    if (hasGradedActivities(this.project)) {
+      const s = this.score();
+      return s.complete ? (s.passed ? "passed" : "failed") : "incomplete";
+    }
+    return this.nav.allVisited ? "completed" : "incomplete";
+  }
+
+  snapshot(): SavedState {
+    return { v: 1, ...this.nav.snapshot(), activities: Object.fromEntries(this.states) };
+  }
+
+  private restore(saved: SavedState) {
+    this.nav.restore(saved);
+    const ids = new Set(this.project.pages.flatMap((p) => p.blocks.map((b) => b.id)));
+    for (const [id, st] of Object.entries(saved.activities)) if (ids.has(id)) this.states.set(id, st);
+  }
+
+  private report() {
+    this.tracker.update({
+      pageId: this.nav.page.id,
+      progress: this.nav.progress,
+      status: this.status(),
+      score: hasGradedActivities(this.project) ? this.score() : null,
+      state: this.snapshot(),
+    });
   }
 
   private pageQuestionsDone() {
@@ -214,18 +250,20 @@ export class Player {
       graded.forEach((q) => this.states.delete(q.id));
       if (p.unlockNext === "questionsAnswered") this.nav.lock(i);
     });
-    this.tracker.setScore(this.score());
     if (first >= 0) {
       this.nav.goTo(first, true);
       this.show();
-    } else this.refresh();
+    } else {
+      this.refresh();
+      this.report();
+    }
   }
 
   /** Après une réponse ou un score de jeu : score, déblocage, affichage. */
   private afterActivity() {
-    this.tracker.setScore(this.score());
     if (this.nav.page.unlockNext === "questionsAnswered" && this.pageQuestionsDone()) this.nav.unlockCurrent();
     this.refresh();
+    this.report();
   }
 
   score() {

@@ -76,3 +76,16 @@ describe("navigation", () => {
     expect(n.progress).toBe(1);
   });
 });
+
+it("reprise : restaure page, pages vues et verrous, ignore les valeurs absurdes", () => {
+  const a = new Navigator(threePages());
+  a.next();
+  a.unlockCurrent();
+  const b = new Navigator(threePages());
+  b.restore({ ...a.snapshot(), visited: [...a.snapshot().visited, 99] });
+  expect(b.current).toBe(1);
+  expect(b.canNext()).toBe(true);
+  expect(b.visitedCount).toBe(2);
+  b.restore({ page: -4, visited: [], unlocked: [] });
+  expect(b.current).toBe(1);
+});
