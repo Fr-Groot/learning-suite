@@ -1,5 +1,5 @@
 // Fichier imsmanifest.xml d'un paquet SCORM 1.2 : un seul SCO (le module entier).
-import { hasGradedActivities } from "../quiz.ts";
+import { hasGradedActivities } from "../activities.ts";
 import type { Project } from "../types.ts";
 
 const xml = (s: string) =>

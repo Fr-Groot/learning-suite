@@ -1,7 +1,7 @@
 // Le lecteur : assemble l'interface (titre, menu, progression, navigation, voix off)
 // et affiche la page courante dans le bon mode.
 import { Navigator } from "./navigation.ts";
-import { computeScore, hasGradedActivities, isGraded, newQuestionState, pageActivities, reportHtml, submit, type QuestionState } from "./quiz.ts";
+import { computeScore, hasGradedActivities, isGraded, waitsForActivities, newQuestionState, pageActivities, reportHtml, submit, type QuestionState } from "./activities.ts";
 import { el, type RenderContext } from "./render/context.ts";
 import { renderSlidesPage } from "./render/layout-slides.ts";
 import { renderVerticalPage } from "./render/layout-vertical.ts";
@@ -168,7 +168,7 @@ export class Player {
     if (moveFocus) this.ui.main.focus({ preventScroll: true });
 
     // Une page « questionsAnswered » déjà toute répondue reste débloquée.
-    if (page.unlockNext === "questionsAnswered" && this.pageQuestionsDone()) this.nav.unlockCurrent();
+    if (waitsForActivities(page) && this.pageQuestionsDone()) this.nav.unlockCurrent();
 
     this.voiceover = startVoiceover(page, (s) => this.resolve(s), { button: this.ui.voBtn, transcriptToggle: this.ui.trBtn, transcript: this.ui.transcript }, () => {
       if (page.unlockNext === "voiceoverEnded" && this.nav.page === page) {
@@ -248,7 +248,7 @@ export class Player {
       if (graded.length === 0) return;
       if (first < 0) first = i;
       graded.forEach((q) => this.states.delete(q.id));
-      if (p.unlockNext === "questionsAnswered") this.nav.lock(i);
+      if (waitsForActivities(p)) this.nav.lock(i);
     });
     if (first >= 0) {
       this.nav.goTo(first, true);
@@ -261,7 +261,7 @@ export class Player {
 
   /** Après une réponse ou un score de jeu : score, déblocage, affichage. */
   private afterActivity() {
-    if (this.nav.page.unlockNext === "questionsAnswered" && this.pageQuestionsDone()) this.nav.unlockCurrent();
+    if (waitsForActivities(this.nav.page) && this.pageQuestionsDone()) this.nav.unlockCurrent();
     this.refresh();
     this.report();
   }

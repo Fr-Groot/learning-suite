@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeScore, isCorrect, newQuestionState, reportHtml, shuffled, submit, type QuestionState } from "../src/quiz.ts";
+import { computeScore, isCorrect, newQuestionState, reportHtml, shuffled, submit, type QuestionState } from "../src/activities.ts";
 import type { QuestionBlock } from "../src/types.ts";
 import { miniProject } from "./fixture.ts";
 

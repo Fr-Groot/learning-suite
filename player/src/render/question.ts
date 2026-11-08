@@ -1,5 +1,5 @@
 import { renderMarkdown } from "../markdown.ts";
-import { attemptsLeft, shuffled, type Response } from "../quiz.ts";
+import { attemptsLeft, shuffled, type Response } from "../activities.ts";
 import type { Choice, QuestionBlock } from "../types.ts";
 import { el, type RenderContext } from "./context.ts";
 
@@ -46,7 +46,7 @@ export function renderQuestion(q: QuestionBlock, ctx: RenderContext): HTMLElemen
   const selection = (): string[] => inputs.filter((i) => i.checked).map((i) => i.value);
   const toResponse = (ids: string[]): Response => (q.kind === "truefalse" ? ids[0] === "true" : ids);
   const fromResponse = (r: Response | undefined): string[] =>
-    r === undefined ? [] : typeof r === "boolean" ? [String(r)] : r;
+    r === undefined ? [] : typeof r === "boolean" ? [String(r)] : Array.isArray(r) ? r : [];
 
   const syncButton = () => {
     const done = ctx.questionState(q.id).done;

@@ -54,6 +54,6 @@ describe("validation du project.json", () => {
   it("repère un verrou sur une page sans question", () => {
     const p = miniProject();
     p.pages[0].unlockNext = "questionsAnswered";
-    expect(validateProject(p).errors.join()).toMatch(/aucune question/);
+    expect(validateProject(p).errors.join()).toMatch(/aucune activité à terminer/);
   });
 });

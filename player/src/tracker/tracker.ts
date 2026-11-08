@@ -1,6 +1,6 @@
 // Interface unique entre le lecteur et la plateforme qui suit l'apprenant.
 // Un adaptateur par format : LocalTracker (aperçu, HTML5), Scorm12Tracker, puis SCORM 2004, cmi5, xAPI.
-import type { QuestionState, Score } from "../quiz.ts";
+import type { QuestionState, Score } from "../activities.ts";
 import type { Meta } from "../types.ts";
 
 /** Statut de l'apprenant, au sens SCORM. */

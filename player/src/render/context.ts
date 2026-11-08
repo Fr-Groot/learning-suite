@@ -1,5 +1,5 @@
 // Ce que chaque brique peut demander au lecteur pendant l'affichage.
-import type { Response, QuestionState, Score } from "../quiz.ts";
+import type { Response, QuestionState, Score } from "../activities.ts";
 import type { ButtonAction, HtmlBlock, Mode, Project, QuestionBlock } from "../types.ts";
 
 export interface RenderContext {

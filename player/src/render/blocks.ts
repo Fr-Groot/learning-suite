@@ -23,6 +23,7 @@ export function renderBlock(b: Block, ctx: RenderContext): HTMLElement {
     case "question": content = renderQuestion(b, ctx); break;
     case "results": content = renderResults(b, ctx); break;
     case "html": content = renderHtml(b, ctx); break;
+    default: content = ctx.doc.createElement("div");
   }
   const wrap = ctx.doc.createElement("div");
   wrap.className = `lsp-block lsp-block--${b.type}`;

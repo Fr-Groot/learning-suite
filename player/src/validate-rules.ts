@@ -1,5 +1,6 @@
 // Règles de cohérence que le schéma ne sait pas exprimer.
 // Fichier léger (sans Ajv) : il est aussi embarqué dans le lecteur livré.
+import { pageActivities, waitsForActivities } from "./activities.ts";
 import type { Project } from "./types.ts";
 
 /** Règles de cohérence hors schéma. */
@@ -22,8 +23,8 @@ export function checkRules(project: Project): string[] {
       }
     }
 
-    if (page.unlockNext === "questionsAnswered" && !page.blocks.some((b) => b.type === "question" || (b.type === "html" && b.graded))) {
-      errors.push(`${where} : « Suivant » attend des réponses, mais la page n'a aucune question ni jeu noté.`);
+    if (waitsForActivities(page) && pageActivities(page).length === 0) {
+      errors.push(`${where} : « Suivant » attend des réponses, mais la page n'a aucune activité à terminer.`);
     }
     if (page.unlockNext === "voiceoverEnded" && !page.voiceover) {
       errors.push(`${where} : « Suivant » attend la fin de la voix off, mais la page n'en a pas.`);

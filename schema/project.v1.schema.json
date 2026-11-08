@@ -22,9 +22,10 @@
     "schemaVersion": {
       "enum": [
         "1.0",
-        "1.1"
+        "1.1",
+        "1.2"
       ],
-      "description": "Version du format. 1.1 ajoute la brique html (jeux et contenus HTML). Un projet 1.0 reste valide."
+      "description": "Version du format. 1.1 ajoute la brique html ; 1.2 les activités (cartes, onglets, texte à trous, glisser-déposer, zones). Les anciennes versions restent valides."
     },
     "meta": {
       "$ref": "#/$defs/meta"
@@ -345,10 +346,11 @@
           "enum": [
             "always",
             "voiceoverEnded",
-            "questionsAnswered"
+            "questionsAnswered",
+            "activitiesDone"
           ],
           "default": "always",
-          "description": "Quand le bouton « Suivant » se débloque. questionsAnswered = toutes les activités notées de la page sont terminées (questions et jeux HTML notés)."
+          "description": "Quand « Suivant » se débloque. activitiesDone (= questionsAnswered) : toutes les activités de la page sont terminées."
         },
         "blocks": {
           "type": "array",
@@ -493,7 +495,12 @@
             "audio",
             "question",
             "results",
-            "html"
+            "html",
+            "flipcards",
+            "reveal",
+            "fillblanks",
+            "dragdrop",
+            "hotspot"
           ]
         }
       },
@@ -604,6 +611,66 @@
           },
           "then": {
             "$ref": "#/$defs/htmlBlock"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "flipcards"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/flipcardsBlock"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "reveal"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/revealBlock"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "fillblanks"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/fillblanksBlock"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "dragdrop"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/dragdropBlock"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "hotspot"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/hotspotBlock"
           }
         }
       ]
@@ -1069,6 +1136,533 @@
           "maximum": 4000,
           "default": 600,
           "description": "Hauteur en pixels en mode vertical (en mode diapositives, c'est le frame qui compte)."
+        }
+      }
+    },
+    "gradedProps": {
+      "type": "object",
+      "description": "Réglages des activités notées à plusieurs éléments.",
+      "properties": {
+        "graded": {
+          "type": "boolean",
+          "default": true,
+          "description": "Compte dans le score final."
+        },
+        "points": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 1
+        },
+        "attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 1,
+          "description": "Nombre d'essais."
+        },
+        "scoring": {
+          "enum": [
+            "partial",
+            "all-or-nothing"
+          ],
+          "default": "partial",
+          "description": "partial : points au prorata (3 sur 4 = 75 %) ; all-or-nothing : 0 point s'il y a une erreur."
+        },
+        "feedback": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "correct": {
+              "$ref": "#/$defs/richText"
+            },
+            "partial": {
+              "$ref": "#/$defs/richText",
+              "description": "Message si une partie seulement est juste."
+            },
+            "incorrect": {
+              "$ref": "#/$defs/richText"
+            }
+          }
+        }
+      }
+    },
+    "flipcardsBlock": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/blockBase"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "cards"
+      ],
+      "description": "Cartes à retourner (recto / verso).",
+      "properties": {
+        "type": {
+          "const": "flipcards"
+        },
+        "cards": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "front"
+                ]
+              },
+              {
+                "required": [
+                  "frontImage"
+                ]
+              }
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "front": {
+                "$ref": "#/$defs/richText",
+                "description": "Recto : texte."
+              },
+              "frontImage": {
+                "$ref": "#/$defs/mediaPath",
+                "description": "Recto : image."
+              },
+              "back": {
+                "$ref": "#/$defs/richText",
+                "description": "Verso : texte."
+              },
+              "backImage": {
+                "$ref": "#/$defs/mediaPath"
+              },
+              "alt": {
+                "type": "string",
+                "maxLength": 500,
+                "description": "Description des images."
+              }
+            }
+          }
+        },
+        "columns": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "Nombre de colonnes (automatique si absent)."
+        },
+        "requireAll": {
+          "type": "boolean",
+          "default": false,
+          "description": "Il faut retourner toutes les cartes pour terminer."
+        }
+      }
+    },
+    "revealBlock": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/blockBase"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "layout",
+        "items"
+      ],
+      "description": "Contenu à découvrir : onglets, accordéon ou frise.",
+      "properties": {
+        "type": {
+          "const": "reveal"
+        },
+        "layout": {
+          "enum": [
+            "tabs",
+            "accordion",
+            "timeline"
+          ],
+          "description": "Onglets, accordéon ou frise chronologique."
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "title"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "description": "Titre de l'onglet, de la section ou de l'étape (ex. une date)."
+              },
+              "content": {
+                "$ref": "#/$defs/richText"
+              },
+              "image": {
+                "$ref": "#/$defs/mediaPath"
+              },
+              "alt": {
+                "type": "string",
+                "maxLength": 500
+              }
+            }
+          }
+        },
+        "requireAll": {
+          "type": "boolean",
+          "default": false,
+          "description": "Il faut tout ouvrir pour terminer."
+        }
+      }
+    },
+    "fillblanksBlock": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/blockBase"
+        },
+        {
+          "$ref": "#/$defs/gradedProps"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "text"
+      ],
+      "description": "Texte à trous (saisie ou liste).",
+      "properties": {
+        "type": {
+          "const": "fillblanks"
+        },
+        "prompt": {
+          "$ref": "#/$defs/richText",
+          "description": "Consigne."
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000,
+          "pattern": "\\[\\[[^\\]]+\\]\\]",
+          "description": "Texte avec trous : [[mange|dévore]] = à saisir (plusieurs réponses acceptées) ; [[*mange|dort]] = liste, l'étoile marque la bonne réponse."
+        },
+        "caseSensitive": {
+          "type": "boolean",
+          "default": false,
+          "description": "Distinguer majuscules et minuscules."
+        },
+        "accentSensitive": {
+          "type": "boolean",
+          "default": false,
+          "description": "Exiger les accents."
+        }
+      }
+    },
+    "dragdropBlock": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/blockBase"
+        },
+        {
+          "$ref": "#/$defs/gradedProps"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind"
+      ],
+      "description": "Glisser-déposer (au doigt, à la souris ou au clavier).",
+      "properties": {
+        "type": {
+          "const": "dragdrop"
+        },
+        "kind": {
+          "enum": [
+            "categorize",
+            "match",
+            "order"
+          ],
+          "description": "Ranger dans des catégories, relier des paires, ou remettre dans l'ordre."
+        },
+        "prompt": {
+          "$ref": "#/$defs/richText",
+          "description": "Consigne."
+        },
+        "categories": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            }
+          }
+        },
+        "items": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "text"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "image": {
+                "$ref": "#/$defs/mediaPath"
+              },
+              "alt": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "category": {
+                "$ref": "#/$defs/id",
+                "description": "categorize : identifiant de la bonne catégorie."
+              }
+            }
+          },
+          "description": "categorize : éléments à ranger ; order : éléments DANS LE BON ORDRE (ils seront mélangés)."
+        },
+        "pairs": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 10,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "prompt",
+              "answer"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "prompt": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "answer": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              }
+            }
+          }
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "kind": {
+              "const": "categorize"
+            }
+          },
+          "required": [
+            "categories",
+            "items"
+          ],
+          "not": {
+            "required": [
+              "pairs"
+            ]
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "match"
+            }
+          },
+          "required": [
+            "pairs"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "items"
+                ]
+              },
+              {
+                "required": [
+                  "categories"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "order"
+            }
+          },
+          "required": [
+            "items"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "pairs"
+                ]
+              },
+              {
+                "required": [
+                  "categories"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "hotspotBlock": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/blockBase"
+        },
+        {
+          "$ref": "#/$defs/gradedProps"
+        }
+      ],
+      "unevaluatedProperties": false,
+      "required": [
+        "kind",
+        "src",
+        "alt",
+        "zones"
+      ],
+      "description": "Image avec zones cliquables.",
+      "properties": {
+        "type": {
+          "const": "hotspot"
+        },
+        "kind": {
+          "enum": [
+            "find",
+            "explore"
+          ],
+          "description": "find : cliquer les bonnes zones (noté) ; explore : cliquer pour découvrir une information."
+        },
+        "prompt": {
+          "$ref": "#/$defs/richText",
+          "description": "Consigne."
+        },
+        "src": {
+          "$ref": "#/$defs/mediaPath"
+        },
+        "alt": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "zones": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "x",
+              "y",
+              "w",
+              "h",
+              "label"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "shape": {
+                "enum": [
+                  "rectangle",
+                  "ellipse"
+                ],
+                "default": "rectangle"
+              },
+              "x": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Position en % de la largeur de l'image."
+              },
+              "y": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Position en % de la hauteur."
+              },
+              "w": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100
+              },
+              "h": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "description": "Nom de la zone (lu par les lecteurs d'écran)."
+              },
+              "correct": {
+                "type": "boolean",
+                "description": "find : zone à trouver."
+              },
+              "content": {
+                "$ref": "#/$defs/richText",
+                "description": "explore : information affichée au clic."
+              }
+            }
+          }
+        },
+        "requireAll": {
+          "type": "boolean",
+          "default": false,
+          "description": "explore : il faut ouvrir toutes les zones."
         }
       }
     }

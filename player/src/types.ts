@@ -5,7 +5,7 @@ export type Mode = "slides" | "vertical";
 
 export interface Project {
   $schema?: string;
-  schemaVersion: "1.0" | "1.1";
+  schemaVersion: "1.0" | "1.1" | "1.2";
   meta: Meta;
   mode: Mode;
   theme: Theme;
@@ -46,7 +46,7 @@ export interface Navigation {
   showProgress?: boolean;
 }
 
-export type UnlockRule = "always" | "voiceoverEnded" | "questionsAnswered";
+export type UnlockRule = "always" | "voiceoverEnded" | "questionsAnswered" | "activitiesDone";
 
 export interface Page {
   id: string;
@@ -170,8 +170,103 @@ export interface HtmlBlock extends BlockBase {
   height?: number;
 }
 
-/** Activités qui peuvent compter dans le score. */
-export type Activity = QuestionBlock | HtmlBlock;
+/** Réglages communs aux activités notées à plusieurs éléments (v1.2). */
+interface GradedProps {
+  graded?: boolean;
+  points?: number;
+  attempts?: number;
+  /** partial = au prorata (défaut) ; all-or-nothing = 0 point s'il y a une erreur. */
+  scoring?: "partial" | "all-or-nothing";
+  feedback?: { correct?: string; partial?: string; incorrect?: string };
+}
+
+export interface FlipCard {
+  id: string;
+  front?: string;
+  frontImage?: string;
+  back?: string;
+  backImage?: string;
+  alt?: string;
+}
+
+export interface FlipCardsBlock extends BlockBase {
+  type: "flipcards";
+  cards: FlipCard[];
+  columns?: number;
+  requireAll?: boolean;
+}
+
+export interface RevealItem {
+  id: string;
+  title: string;
+  content?: string;
+  image?: string;
+  alt?: string;
+}
+
+export interface RevealBlock extends BlockBase {
+  type: "reveal";
+  layout: "tabs" | "accordion" | "timeline";
+  items: RevealItem[];
+  requireAll?: boolean;
+}
+
+export interface FillBlanksBlock extends BlockBase, GradedProps {
+  type: "fillblanks";
+  prompt?: string;
+  /** Texte avec trous : [[réponse|autre réponse]] (saisie) ou [[*bonne|mauvaise]] (liste). */
+  text: string;
+  caseSensitive?: boolean;
+  accentSensitive?: boolean;
+}
+
+export interface DragItem {
+  id: string;
+  text: string;
+  image?: string;
+  alt?: string;
+}
+
+export interface DragDropBlock extends BlockBase, GradedProps {
+  type: "dragdrop";
+  kind: "categorize" | "match" | "order";
+  prompt?: string;
+  /** categorize : les catégories. */
+  categories?: { id: string; label: string }[];
+  /** categorize : éléments à ranger (category = bonne catégorie) ; order : éléments dans le bon ordre. */
+  items?: (DragItem & { category?: string })[];
+  /** match : paires (prompt fixe, answer à déplacer). */
+  pairs?: { id: string; prompt: string; answer: string }[];
+}
+
+export interface HotspotZone {
+  id: string;
+  shape?: "rectangle" | "ellipse";
+  /** Position et taille en % de l'image. */
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  label: string;
+  correct?: boolean;
+  content?: string;
+}
+
+export interface HotspotBlock extends BlockBase, GradedProps {
+  type: "hotspot";
+  kind: "find" | "explore";
+  prompt?: string;
+  src: string;
+  alt: string;
+  zones: HotspotZone[];
+  requireAll?: boolean;
+}
+
+/** Activités notées (ou qui peuvent l'être). */
+export type Activity = QuestionBlock | HtmlBlock | FillBlanksBlock | DragDropBlock | HotspotBlock;
+
+/** Activités de découverte (jamais notées). */
+export type Discovery = FlipCardsBlock | RevealBlock | HotspotBlock;
 
 export type Block =
   | TextBlock
@@ -182,4 +277,9 @@ export type Block =
   | AudioBlock
   | QuestionBlock
   | ResultsBlock
-  | HtmlBlock;
+  | HtmlBlock
+  | FlipCardsBlock
+  | RevealBlock
+  | FillBlanksBlock
+  | DragDropBlock
+  | HotspotBlock;
