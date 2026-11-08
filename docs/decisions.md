@@ -19,3 +19,8 @@
 | 2026-11-08 | Schéma partagé dans `schema/` (JSON Schema 2020-12) | Une seule source de vérité pour Studio, lecteur et IA |
 | 2026-11-08 | Mot « pages » + toile fixe 1280 × 720 en mode diapositives | Un vocabulaire pour les deux modes ; l'auteur garde les mêmes coordonnées quel que soit l'écran |
 | 2026-11-08 | Texte en mini-Markdown, pas de HTML | Lisible par l'humain et l'IA, et pas d'injection de code |
+| 2026-11-08 | Schéma v1 validé tel que proposé (pages, 8 briques dont `results`, quiz tout ou rien) | Validé par le porteur |
+| 2026-11-08 | Lecteur : TypeScript + Vite, sortie `player.js` + `player.css` (~30 Ko, ~10 Ko compressés) | Léger, sans framework, réutilisable tel quel par les exports |
+| 2026-11-08 | Le lecteur livré ne contient pas le validateur complet (Ajv) | Studio vérifie avant export ; l'aperçu et `npm run validate` vérifient tout |
+| 2026-11-08 | Tests de bout en bout avec Playwright sur Edge déjà installé | Pas de navigateur à télécharger sur le poste |
+| 2026-11-08 | Voix off d'exemple générées avec la voix Windows « Hortense » (WAV) | Gratuit et hors ligne ; MP3 recommandé pour les vrais modules |

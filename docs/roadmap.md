@@ -1,5 +1,12 @@
 # Roadmap
 
+## État au 2026-11-08
+Ordre changé (voir decisions.md) : on a commencé par le socle Studio et la phase 3.
+- Fait : appli Studio vide (fenêtre + installateurs .exe et MSI).
+- Fait : schéma project.json v1, lecteur HTML5, deux projets d'exemple, tests.
+- Reste en phase 3 : export HTML5 et SCORM 1.2, skill Claude, test SCORM Cloud.
+- Ensuite : phase 1 (Review) ou suite de la phase 3, à décider.
+
 ## Phase 1 : Review en local (sur ton PC)
 Livrable : le serveur tourne sur ton PC, s'ouvre dans le navigateur.
 - Créer un projet de relecture, déposer un zip SCORM ou HTML.

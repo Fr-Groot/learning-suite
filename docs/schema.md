@@ -1,4 +1,6 @@
-# Format project.json — version 1 (proposition)
+# Format project.json — version 1
+
+Validé le 2026-11-08. Lecteur : `player/`. Exemples : `examples/`.
 
 Un module = un dossier contenant `project.json` + un sous-dossier `media/`
 (images, sons, vidéos). Le fichier technique qui fait foi est
