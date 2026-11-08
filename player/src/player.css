@@ -251,6 +251,47 @@
 .lsp-blank:disabled { color: var(--lsp-text); opacity: 1; }
 .lsp-blank-answer { color: var(--lsp-success); font-weight: 600; }
 
+/* ---------- Glisser-déposer ---------- */
+.lsp-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.lsp-dd-board { display: flex; flex-direction: column; gap: 14px; }
+.lsp-dd-pool {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-height: 56px; padding: 10px;
+  border: 2px dashed color-mix(in srgb, var(--lsp-text) 20%, transparent); border-radius: var(--lsp-radius);
+}
+.lsp-dd-pool.is-empty { min-height: 0; padding: 4px 10px; }
+.lsp-dd-item {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; min-height: 44px; max-width: 100%;
+  border: 2px solid var(--lsp-primary); border-radius: calc(var(--lsp-radius) * 2); background: var(--lsp-background);
+  color: var(--lsp-text); font: inherit; font-size: 0.95em; text-align: left; cursor: grab; touch-action: none; user-select: none;
+  position: relative; z-index: 1;
+}
+.lsp-dd-item img { max-height: 48px; max-width: 80px; object-fit: contain; }
+.lsp-dd-item[aria-pressed="true"] { background: var(--lsp-primary); color: #fff; box-shadow: 0 0 0 3px color-mix(in srgb, var(--lsp-primary) 30%, transparent); }
+.lsp-dd-item.is-dragging { z-index: 20; cursor: grabbing; pointer-events: none; box-shadow: 0 8px 24px rgb(0 0 0 / 0.25); }
+.lsp-dd-item.is-right { border-color: var(--lsp-success); background: color-mix(in srgb, var(--lsp-success) 10%, var(--lsp-background)); }
+.lsp-dd-item.is-wrong { border-color: var(--lsp-error); background: color-mix(in srgb, var(--lsp-error) 8%, var(--lsp-background)); }
+.lsp-dd-item:disabled { cursor: default; color: var(--lsp-text); }
+.lsp-dd-expected { font-size: 0.85em; font-weight: 600; color: var(--lsp-success); }
+.lsp-dd-drop {
+  display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 8px 12px;
+  border: 0; border-radius: var(--lsp-radius); background: var(--lsp-secondary); color: #fff; font: inherit; font-weight: 600; cursor: pointer;
+}
+.lsp-dd-drop--pool { display: none; background: transparent; color: var(--lsp-primary); border: 2px solid currentColor; padding: 4px 10px; min-height: 36px; font-size: 0.85em; }
+.lsp-dragdrop.has-selection .lsp-dd-drop--pool { display: inline-flex; }
+.lsp-dragdrop.has-selection .lsp-dd-drop:not(:disabled) { outline: 3px solid var(--lsp-accent); outline-offset: 1px; }
+.lsp-dd-target {
+  display: flex; flex-direction: column; gap: 8px; padding: 8px; min-height: 100px;
+  border: 2px dashed color-mix(in srgb, var(--lsp-text) 20%, transparent); border-radius: var(--lsp-radius); background: var(--lsp-background);
+}
+.lsp-dd-slot { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; align-content: flex-start; }
+.is-over { border-color: var(--lsp-accent) !important; background: color-mix(in srgb, var(--lsp-accent) 12%, var(--lsp-background)); }
+.lsp-dragdrop--categorize .lsp-dd-targets { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.lsp-dragdrop--match .lsp-dd-targets, .lsp-dragdrop--order .lsp-dd-targets { display: grid; gap: 8px; }
+.lsp-dragdrop--match .lsp-dd-target, .lsp-dragdrop--order .lsp-dd-target { flex-direction: row; align-items: center; min-height: 56px; padding: 4px 6px; }
+.lsp-dragdrop--match .lsp-dd-drop:not(.lsp-dd-drop--pool) { flex: 0 0 45%; justify-content: flex-start; text-align: left; }
+.lsp-dragdrop--order .lsp-dd-drop:not(.lsp-dd-drop--pool) { flex: 0 0 52px; border-radius: 50%; width: 52px; height: 52px; padding: 0; }
+.lsp-dragdrop.is-done .lsp-dd-drop { opacity: 0.85; }
+
 /* ---------- Cartes à retourner ---------- */
 .lsp-flipcards { display: grid; grid-template-columns: repeat(var(--lsp-cols, 3), minmax(0, 1fr)); gap: 16px; height: 100%; }
 .lsp-flipcards > [role="listitem"] { min-height: 0; }

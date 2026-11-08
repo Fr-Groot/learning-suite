@@ -334,6 +334,187 @@
           }
         }
       ]
+    },
+    {
+      "id": "ranger",
+      "title": "Bon ou mauvais réflexe ?",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "ranger-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Bon ou mauvais réflexe ?",
+          "frame": {
+            "x": 60,
+            "y": 30,
+            "w": 1160,
+            "h": 70
+          }
+        },
+        {
+          "id": "ranger-activite",
+          "type": "dragdrop",
+          "kind": "categorize",
+          "categories": [
+            {
+              "id": "bon",
+              "label": "✓ Bon réflexe"
+            },
+            {
+              "id": "mauvais",
+              "label": "✗ Mauvais réflexe"
+            }
+          ],
+          "items": [
+            {
+              "id": "r1",
+              "text": "Verrouiller son poste en partant",
+              "category": "bon"
+            },
+            {
+              "id": "r2",
+              "text": "Noter son mot de passe sur un post-it",
+              "category": "mauvais"
+            },
+            {
+              "id": "r3",
+              "text": "Installer les mises à jour",
+              "category": "bon"
+            },
+            {
+              "id": "r4",
+              "text": "Ouvrir une pièce jointe inattendue",
+              "category": "mauvais"
+            },
+            {
+              "id": "r5",
+              "text": "Signaler un mail douteux",
+              "category": "bon"
+            },
+            {
+              "id": "r6",
+              "text": "Prêter son badge à un collègue",
+              "category": "mauvais"
+            }
+          ],
+          "feedback": {
+            "correct": "Tous les réflexes sont bien rangés.",
+            "partial": "Quelques erreurs : regardez la correction.",
+            "incorrect": "Revoyez les pages précédentes."
+          },
+          "frame": {
+            "x": 60,
+            "y": 110,
+            "w": 1160,
+            "h": 580
+          }
+        }
+      ]
+    },
+    {
+      "id": "relier",
+      "title": "Le bon mot",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "relier-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Associez chaque terme à sa définition",
+          "frame": {
+            "x": 60,
+            "y": 30,
+            "w": 1160,
+            "h": 70
+          }
+        },
+        {
+          "id": "relier-activite",
+          "type": "dragdrop",
+          "kind": "match",
+          "attempts": 2,
+          "pairs": [
+            {
+              "id": "m1",
+              "prompt": "Hameçonnage",
+              "answer": "Faux message pour voler des identifiants"
+            },
+            {
+              "id": "m2",
+              "prompt": "Rançongiciel",
+              "answer": "Logiciel qui chiffre vos fichiers contre rançon"
+            },
+            {
+              "id": "m3",
+              "prompt": "Double authentification",
+              "answer": "Un code en plus du mot de passe"
+            },
+            {
+              "id": "m4",
+              "prompt": "Mise à jour",
+              "answer": "Correction des failles connues"
+            }
+          ],
+          "frame": {
+            "x": 60,
+            "y": 110,
+            "w": 1160,
+            "h": 580
+          }
+        }
+      ]
+    },
+    {
+      "id": "ordre",
+      "title": "Dans l’ordre",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "ordre-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Remettez les étapes dans l’ordre",
+          "frame": {
+            "x": 60,
+            "y": 30,
+            "w": 1160,
+            "h": 70
+          }
+        },
+        {
+          "id": "ordre-activite",
+          "type": "dragdrop",
+          "kind": "order",
+          "scoring": "all-or-nothing",
+          "attempts": 2,
+          "prompt": "Vous avez cliqué sur un lien douteux. Que faites-vous ?",
+          "items": [
+            {
+              "id": "o1",
+              "text": "Débrancher le réseau"
+            },
+            {
+              "id": "o2",
+              "text": "Prévenir le service informatique"
+            },
+            {
+              "id": "o3",
+              "text": "Noter ce qui s’est passé"
+            },
+            {
+              "id": "o4",
+              "text": "Changer ses mots de passe"
+            }
+          ],
+          "frame": {
+            "x": 60,
+            "y": 110,
+            "w": 1160,
+            "h": 580
+          }
+        }
+      ]
     }
   ]
 }
