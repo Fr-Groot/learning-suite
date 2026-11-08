@@ -16,3 +16,6 @@
 | 2026-11-08 | Ordre changé : Studio + schéma + lecteur avant Review | Choix du porteur : poser d'abord le format pivot et le lecteur |
 | 2026-11-08 | Rust en version MSVC sous Windows | Configuration officielle de Tauri, moins de surprises à la construction |
 | 2026-11-08 | Installateurs Studio : setup.exe (NSIS) et MSI | Le .exe pour les indépendants (sans droits admin), le MSI pour les DSI |
+| 2026-11-08 | Schéma partagé dans `schema/` (JSON Schema 2020-12) | Une seule source de vérité pour Studio, lecteur et IA |
+| 2026-11-08 | Mot « pages » + toile fixe 1280 × 720 en mode diapositives | Un vocabulaire pour les deux modes ; l'auteur garde les mêmes coordonnées quel que soit l'écran |
+| 2026-11-08 | Texte en mini-Markdown, pas de HTML | Lisible par l'humain et l'IA, et pas d'injection de code |

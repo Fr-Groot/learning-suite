@@ -1,0 +1,416 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:learning-suite:schema:project:v1",
+  "title": "Projet Learning Suite (v1)",
+  "description": "Format d'un module e-learning : project.json + dossier media/. Source de vérité partagée par Studio, le lecteur et l'IA.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "meta", "mode", "theme", "navigation", "scoring", "pages"],
+  "properties": {
+    "$schema": { "type": "string", "description": "Chemin facultatif vers ce schéma, pour l'aide à la saisie dans les éditeurs." },
+    "schemaVersion": { "const": "1.0", "description": "Version du format. Change seulement si le format évolue." },
+    "meta": { "$ref": "#/$defs/meta" },
+    "mode": {
+      "enum": ["slides", "vertical"],
+      "description": "slides = diapositives 16:9 avec briques placées librement ; vertical = briques empilées, lecture au défilement (mobile)."
+    },
+    "theme": { "$ref": "#/$defs/theme" },
+    "navigation": { "$ref": "#/$defs/navigation" },
+    "scoring": { "$ref": "#/$defs/scoring" },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/page" },
+      "description": "Les écrans du module, dans l'ordre. On dit « page » dans les deux modes."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "mode": { "const": "slides" } } },
+      "then": {
+        "properties": { "pages": { "items": { "properties": { "blocks": { "items": {
+          "required": ["frame"],
+          "not": { "required": ["width"] }
+        } } } } } }
+      },
+      "else": {
+        "properties": { "pages": { "items": { "properties": { "blocks": { "items": {
+          "not": { "required": ["frame"] }
+        } } } } } }
+      }
+    }
+  ],
+
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$",
+      "description": "Identifiant court, unique dans le projet (lettres, chiffres, - et _)."
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$",
+      "description": "Couleur hexadécimale : #RRGGBB ou #RRGGBBAA (transparence)."
+    },
+    "mediaPath": {
+      "type": "string",
+      "pattern": "^media/(?!.*\\.\\.)[^\\\\:*?\"<>|]+$",
+      "description": "Chemin d'un fichier du dossier media/ du projet, ex. media/accueil.png."
+    },
+    "richText": {
+      "type": "string",
+      "maxLength": 5000,
+      "description": "Texte en mini-Markdown : **gras**, *italique*, listes (- ou 1.), [lien](https://…), retours à la ligne. Pas de HTML."
+    },
+
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "language"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "description": "Identifiant unique du module (UUID), créé une fois pour toutes."
+        },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+          "description": "Langue du contenu : fr, en, fr-CA…"
+        },
+        "author": { "type": "string", "maxLength": 200 },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Version du module, ex. 1.0.0."
+        },
+        "estimatedMinutes": { "type": "integer", "minimum": 1, "maximum": 600 }
+      }
+    },
+
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["colors", "fonts"],
+      "properties": {
+        "colors": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["primary", "background", "text"],
+          "properties": {
+            "primary": { "$ref": "#/$defs/color", "description": "Couleur principale : boutons, titres, barre de progression." },
+            "secondary": { "$ref": "#/$defs/color" },
+            "accent": { "$ref": "#/$defs/color", "description": "Mise en avant ponctuelle." },
+            "background": { "$ref": "#/$defs/color", "description": "Fond des pages." },
+            "surface": { "$ref": "#/$defs/color", "description": "Fond des cartes, questions, menus." },
+            "text": { "$ref": "#/$defs/color" },
+            "success": { "$ref": "#/$defs/color", "description": "Bonne réponse, module réussi." },
+            "error": { "$ref": "#/$defs/color", "description": "Mauvaise réponse, module échoué." }
+          }
+        },
+        "fonts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["heading", "body"],
+          "properties": {
+            "heading": { "type": "string", "maxLength": 100, "description": "Police des titres, ex. « Inter »." },
+            "body": { "type": "string", "maxLength": 100, "description": "Police du texte courant." }
+          }
+        },
+        "radius": { "type": "number", "minimum": 0, "maximum": 64, "default": 8, "description": "Arrondi des angles (boutons, cartes), en pixels." }
+      }
+    },
+
+    "navigation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "linear": { "type": "boolean", "default": false, "description": "Vrai = le menu ne permet pas de sauter vers une page pas encore vue." },
+        "allowBack": { "type": "boolean", "default": true, "description": "Bouton « Précédent » visible." },
+        "showMenu": { "type": "boolean", "default": true, "description": "Menu des pages visible." },
+        "showProgress": { "type": "boolean", "default": true, "description": "Barre de progression visible." }
+      }
+    },
+
+    "scoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passingScore"],
+      "properties": {
+        "passingScore": {
+          "type": "number", "minimum": 0, "maximum": 100,
+          "description": "Seuil de réussite en %, calculé sur les points des questions notées (graded)."
+        }
+      }
+    },
+
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "blocks"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200, "description": "Titre affiché dans le menu." },
+        "background": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "color": { "$ref": "#/$defs/color" },
+            "image": { "$ref": "#/$defs/mediaPath" }
+          }
+        },
+        "voiceover": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["src"],
+          "description": "Voix off de la page : un fichier audio + sa transcription (accessibilité).",
+          "properties": {
+            "src": { "$ref": "#/$defs/mediaPath" },
+            "transcript": { "type": "string", "maxLength": 10000 },
+            "autoplay": { "type": "boolean", "default": true }
+          }
+        },
+        "unlockNext": {
+          "enum": ["always", "voiceoverEnded", "questionsAnswered"],
+          "default": "always",
+          "description": "Quand le bouton « Suivant » se débloque."
+        },
+        "blocks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/block" },
+          "description": "Briques de la page. En mode slides, l'ordre sert aussi de superposition (la dernière est au-dessus)."
+        }
+      }
+    },
+
+    "frame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "w", "h"],
+      "description": "Position et taille sur la toile 1280 × 720 (mode slides seulement). Le lecteur met à l'échelle de l'écran.",
+      "properties": {
+        "x": { "type": "number", "minimum": -1280, "maximum": 2560 },
+        "y": { "type": "number", "minimum": -720, "maximum": 1440 },
+        "w": { "type": "number", "exclusiveMinimum": 0, "maximum": 2560 },
+        "h": { "type": "number", "exclusiveMinimum": 0, "maximum": 1440 },
+        "rotation": { "type": "number", "minimum": -360, "maximum": 360, "default": 0 }
+      }
+    },
+
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Surcharges ponctuelles du thème pour une brique.",
+      "properties": {
+        "color": { "$ref": "#/$defs/color" },
+        "background": { "$ref": "#/$defs/color" },
+        "fontSize": { "type": "number", "minimum": 8, "maximum": 200 },
+        "bold": { "type": "boolean" },
+        "align": { "enum": ["left", "center", "right"] },
+        "verticalAlign": { "enum": ["top", "middle", "bottom"] },
+        "radius": { "type": "number", "minimum": 0, "maximum": 999 },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "padding": { "type": "number", "minimum": 0, "maximum": 200 }
+      }
+    },
+
+    "blockBase": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "type": "string" },
+        "frame": { "$ref": "#/$defs/frame" },
+        "width": {
+          "enum": ["full", "content"],
+          "default": "content",
+          "description": "Mode vertical seulement : full = bord à bord, content = colonne de lecture."
+        },
+        "style": { "$ref": "#/$defs/style" }
+      }
+    },
+
+    "block": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["text", "image", "shape", "button", "video", "audio", "question", "results"] }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "const": "text" } } }, "then": { "$ref": "#/$defs/textBlock" } },
+        { "if": { "properties": { "type": { "const": "image" } } }, "then": { "$ref": "#/$defs/imageBlock" } },
+        { "if": { "properties": { "type": { "const": "shape" } } }, "then": { "$ref": "#/$defs/shapeBlock" } },
+        { "if": { "properties": { "type": { "const": "button" } } }, "then": { "$ref": "#/$defs/buttonBlock" } },
+        { "if": { "properties": { "type": { "const": "video" } } }, "then": { "$ref": "#/$defs/videoBlock" } },
+        { "if": { "properties": { "type": { "const": "audio" } } }, "then": { "$ref": "#/$defs/audioBlock" } },
+        { "if": { "properties": { "type": { "const": "question" } } }, "then": { "$ref": "#/$defs/questionBlock" } },
+        { "if": { "properties": { "type": { "const": "results" } } }, "then": { "$ref": "#/$defs/resultsBlock" } }
+      ]
+    },
+
+    "textBlock": {
+      "$ref": "#/$defs/blockBase",
+      "unevaluatedProperties": false,
+      "required": ["content"],
+      "properties": {
+        "type": { "const": "text" },
+        "variant": { "enum": ["title", "subtitle", "body", "caption"], "default": "body", "description": "Style de base tiré du thème." },
+        "content": { "$ref": "#/$defs/richText" }
+      }
+    },
+
+    "imageBlock": {
+      "$ref": "#/$defs/blockBase",
+      "unevaluatedProperties": false,
+      "required": ["src", "alt"],
+      "properties": {
+        "type": { "const": "image" },
+        "src": { "$ref": "#/$defs/mediaPath" },
+        "alt": { "type": "string", "maxLength": 500, "description": "Description pour les lecteurs d'écran. Chaîne vide = image décorative." },
+        "fit": { "enum": ["contain", "cover"], "default": "contain" }
+      }
+    },
+
+    "shapeBlock": {
+      "$ref": "#/$defs/blockBase",
+      "unevaluatedProperties": false,
+      "required": ["shape"],
+      "properties": {
+        "type": { "const": "shape" },
+        "shape": { "enum": ["rectangle", "ellipse", "line"] },
+        "fill": { "$ref": "#/$defs/color" },
+        "stroke": { "$ref": "#/$defs/color" },
+        "strokeWidth": { "type": "number", "minimum": 0, "maximum": 50, "default": 0 }
+      }
+    },
+
+    "buttonBlock": {
+      "$ref": "#/$defs/blockBase",
+      "unevaluatedProperties": false,
+      "required": ["label", "action"],
+      "properties": {
+        "type": { "const": "button" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "variant": { "enum": ["primary", "secondary"], "default": "primary" },
+        "action": {
+          "oneOf": [
+            {
+              "type": "object", "additionalProperties": false, "required": ["type"],
+              "properties": { "type": { "enum": ["next", "prev"] } }
+            },
+            {
+              "type": "object", "additionalProperties": false, "required": ["type", "page"],
+              "properties": { "type": { "const": "goto" }, "page": { "$ref": "#/$defs/id" } }
+            },
+            {
+              "type": "object", "additionalProperties": false, "required": ["type", "href"],
+              "properties": { "type": { "const": "url" }, "href": { "type": "string", "pattern": "^https://" } }
+            }
+          ]
+        }
+      }
+    },
+
+    "videoBlock": {
+      "$ref": "#/$defs/blockBase",
+      "unevaluatedProperties": false,
+      "required": ["src"],
+      "properties": {
+        "type": { "const": "video" },
+        "src": { "$ref": "#/$defs/mediaPath", "description": "Fichier MP4 (H.264) recommandé." },
+        "poster": { "$ref": "#/$defs/mediaPath", "description": "Image affichée avant la lecture." },
+        "captions": { "$ref": "#/$defs/mediaPath", "description": "Sous-titres au format WebVTT (.vtt)." },
+        "autoplay": { "type": "boolean", "default": false },
+        "loop": { "type": "boolean", "default": false }
+      }
+    },
+
+    "audioBlock": {
+      "$ref": "#/$defs/blockBase",
+      "unevaluatedProperties": false,
+      "required": ["src"],
+      "properties": {
+        "type": { "const": "audio" },
+        "src": { "$ref": "#/$defs/mediaPath", "description": "Fichier MP3 recommandé." },
+        "label": { "type": "string", "maxLength": 200 },
+        "transcript": { "type": "string", "maxLength": 10000 },
+        "autoplay": { "type": "boolean", "default": false }
+      }
+    },
+
+    "choice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "correct"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "correct": { "type": "boolean" }
+      }
+    },
+
+    "questionBlock": {
+      "$ref": "#/$defs/blockBase",
+      "unevaluatedProperties": false,
+      "required": ["kind", "prompt"],
+      "properties": {
+        "type": { "const": "question" },
+        "kind": { "enum": ["single", "multiple", "truefalse"], "description": "Choix unique, choix multiple ou vrai/faux." },
+        "prompt": { "$ref": "#/$defs/richText", "description": "L'énoncé de la question." },
+        "choices": { "type": "array", "minItems": 2, "maxItems": 10, "items": { "$ref": "#/$defs/choice" } },
+        "answer": { "type": "boolean", "description": "Vrai/faux seulement : la bonne réponse." },
+        "feedback": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "correct": { "$ref": "#/$defs/richText" },
+            "incorrect": { "$ref": "#/$defs/richText" }
+          }
+        },
+        "attempts": { "type": "integer", "minimum": 1, "maximum": 10, "default": 1, "description": "Nombre d'essais autorisés." },
+        "shuffle": { "type": "boolean", "default": false, "description": "Mélanger l'ordre des choix." },
+        "points": { "type": "number", "minimum": 0, "maximum": 100, "default": 1 },
+        "graded": { "type": "boolean", "default": true, "description": "Compte dans le score final (faux = question d'entraînement)." }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "truefalse" } } },
+          "then": { "required": ["answer"], "not": { "required": ["choices"] } },
+          "else": { "required": ["choices"], "not": { "required": ["answer"] } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "single" } } },
+          "then": {
+            "properties": { "choices": {
+              "contains": { "properties": { "correct": { "const": true } } },
+              "minContains": 1, "maxContains": 1
+            } }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "multiple" } } },
+          "then": {
+            "properties": { "choices": {
+              "contains": { "properties": { "correct": { "const": true } } },
+              "minContains": 1
+            } }
+          }
+        }
+      ]
+    },
+
+    "resultsBlock": {
+      "$ref": "#/$defs/blockBase",
+      "unevaluatedProperties": false,
+      "description": "Affiche le score, le seuil et « Réussi » ou « Échoué ».",
+      "properties": {
+        "type": { "const": "results" },
+        "passedMessage": { "$ref": "#/$defs/richText" },
+        "failedMessage": { "$ref": "#/$defs/richText" },
+        "allowRetry": { "type": "boolean", "default": true, "description": "Bouton « Recommencer le quiz » en cas d'échec." }
+      }
+    }
+  }
+}
