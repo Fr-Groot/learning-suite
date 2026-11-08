@@ -13,7 +13,31 @@ import { startVoiceover, type VoiceoverControls } from "./voiceover.ts";
 export interface PlayerOptions {
   /** Adresse du dossier du projet (là où se trouve media/). Par défaut : dossier courant. */
   baseUrl?: string;
+  /** Adresse d'un média, si elle ne se calcule pas simplement à partir de baseUrl (ex. Studio). */
+  resolveMedia?: (src: string) => string;
   tracker?: Tracker;
+}
+
+/** Couleurs, polices et arrondis du thème, posés en variables CSS sur un élément. */
+export function themeVars(project: Project): Record<string, string> {
+  const c = project.theme.colors;
+  return {
+    "--lsp-primary": c.primary,
+    "--lsp-secondary": c.secondary ?? c.text,
+    "--lsp-accent": c.accent ?? c.primary,
+    "--lsp-background": c.background,
+    "--lsp-surface": c.surface ?? c.background,
+    "--lsp-text": c.text,
+    "--lsp-success": c.success ?? "#1E9E5A",
+    "--lsp-error": c.error ?? "#D64545",
+    "--lsp-font-heading": `"${project.theme.fonts.heading}", system-ui, sans-serif`,
+    "--lsp-font-body": `"${project.theme.fonts.body}", system-ui, sans-serif`,
+    "--lsp-radius": `${project.theme.radius ?? 8}px`,
+  };
+}
+
+export function applyTheme(el: HTMLElement, project: Project) {
+  for (const [k, v] of Object.entries(themeVars(project))) el.style.setProperty(k, v);
 }
 
 export class Player {
@@ -21,6 +45,7 @@ export class Player {
   private readonly project: Project;
   private readonly tracker: Tracker;
   private readonly baseUrl: string;
+  private readonly resolveMedia?: (src: string) => string;
   private readonly states = new Map<string, QuestionState>();
   private readonly seed = Math.floor(Math.random() * 2 ** 31);
   private readonly doc: Document;
@@ -34,6 +59,7 @@ export class Player {
     this.project = project;
     this.doc = container.ownerDocument;
     this.baseUrl = options.baseUrl ?? "";
+    this.resolveMedia = options.resolveMedia;
     this.tracker = options.tracker ?? new LocalTracker();
     this.nav = new Navigator(project);
     this.ui = this.buildShell(container);
@@ -56,22 +82,8 @@ export class Player {
   private buildShell(container: HTMLElement) {
     const { doc, project } = this;
     const nav = project.navigation;
-    const c = project.theme.colors;
     const root = el(doc, "div", { class: `lsp lsp--${project.mode}`, attrs: { lang: project.meta.language } });
-    const vars: Record<string, string | undefined> = {
-      "--lsp-primary": c.primary,
-      "--lsp-secondary": c.secondary ?? c.text,
-      "--lsp-accent": c.accent ?? c.primary,
-      "--lsp-background": c.background,
-      "--lsp-surface": c.surface ?? c.background,
-      "--lsp-text": c.text,
-      "--lsp-success": c.success ?? "#1E9E5A",
-      "--lsp-error": c.error ?? "#D64545",
-      "--lsp-font-heading": `"${project.theme.fonts.heading}", system-ui, sans-serif`,
-      "--lsp-font-body": `"${project.theme.fonts.body}", system-ui, sans-serif`,
-      "--lsp-radius": `${project.theme.radius ?? 8}px`,
-    };
-    for (const [k, v] of Object.entries(vars)) if (v) root.style.setProperty(k, v);
+    applyTheme(root, project);
 
     const menuBtn = el(doc, "button", { class: "lsp-icon-btn", text: "☰ Menu", attrs: { type: "button", "aria-expanded": "false", "aria-controls": "lsp-menu" } });
     const counter = el(doc, "span", { class: "lsp-counter" });
@@ -218,6 +230,7 @@ export class Player {
   }
 
   private resolve(src: string) {
+    if (this.resolveMedia) return this.resolveMedia(src);
     if (!this.baseUrl) return src;
     return this.baseUrl.endsWith("/") ? this.baseUrl + src : `${this.baseUrl}/${src}`;
   }
