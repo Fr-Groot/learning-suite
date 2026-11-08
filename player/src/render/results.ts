@@ -2,6 +2,8 @@ import { renderMarkdown } from "../markdown.ts";
 import type { ResultsBlock } from "../types.ts";
 import { el, type RenderContext } from "./context.ts";
 
+const fmt = (n: number) => n.toLocaleString("fr-FR", { maximumFractionDigits: 2 });
+
 export function renderResults(b: ResultsBlock, ctx: RenderContext): HTMLElement {
   const { doc } = ctx;
   const box = el(doc, "section", { class: "lsp-results", attrs: { "aria-live": "polite", "aria-label": "Résultat" } });
@@ -14,7 +16,7 @@ export function renderResults(b: ResultsBlock, ctx: RenderContext): HTMLElement 
     if (!s.complete) {
       box.append(
         el(doc, "p", { class: "lsp-results-status", text: "Résultat en attente" }),
-        el(doc, "p", { text: "Répondez à toutes les questions pour voir votre résultat." }),
+        el(doc, "p", { text: "Terminez toutes les activités notées pour voir votre résultat." }),
       );
       return;
     }
@@ -22,7 +24,7 @@ export function renderResults(b: ResultsBlock, ctx: RenderContext): HTMLElement 
     box.append(
       el(doc, "p", { class: "lsp-results-score", text: `${s.percent} %` }),
       el(doc, "p", { class: "lsp-results-status", text: s.passed ? "Réussi" : "Échoué" }),
-      el(doc, "p", { class: "lsp-results-detail", text: `${s.raw} point${s.raw > 1 ? "s" : ""} sur ${s.max} · seuil de réussite : ${threshold} %` }),
+      el(doc, "p", { class: "lsp-results-detail", text: `${fmt(s.raw)} point${s.raw > 1 ? "s" : ""} sur ${fmt(s.max)} · seuil de réussite : ${threshold} %` }),
     );
     const message = s.passed ? b.passedMessage : b.failedMessage;
     if (message) {

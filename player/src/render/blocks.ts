@@ -2,6 +2,7 @@
 import type { Block } from "../types.ts";
 import { renderButton } from "./button.ts";
 import type { RenderContext } from "./context.ts";
+import { renderHtml } from "./html.ts";
 import { renderImage } from "./image.ts";
 import { renderAudio, renderVideo } from "./media.ts";
 import { renderQuestion } from "./question.ts";
@@ -21,6 +22,7 @@ export function renderBlock(b: Block, ctx: RenderContext): HTMLElement {
     case "audio": content = renderAudio(b, ctx); break;
     case "question": content = renderQuestion(b, ctx); break;
     case "results": content = renderResults(b, ctx); break;
+    case "html": content = renderHtml(b, ctx); break;
   }
   const wrap = ctx.doc.createElement("div");
   wrap.className = `lsp-block lsp-block--${b.type}`;

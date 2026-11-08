@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jeu des paires</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+         gap: 14px; padding: 16px; font-family: "Segoe UI", system-ui, sans-serif; background: #F3F5FA; color: #1B2A4A; }
+  h1 { margin: 0; font-size: 22px; }
+  p { margin: 0; }
+  .grid { display: grid; grid-template-columns: repeat(4, minmax(90px, 140px)); gap: 10px; }
+  button.card { aspect-ratio: 4 / 3; border: 0; border-radius: 10px; font: 600 15px/1.2 inherit; padding: 8px; cursor: pointer;
+                background: #2F5BEA; color: transparent; transition: background .2s; }
+  button.card.open { background: #fff; color: #1B2A4A; box-shadow: inset 0 0 0 2px #2F5BEA; }
+  button.card.found { background: #E3F5EC; color: #1E9E5A; box-shadow: inset 0 0 0 2px #1E9E5A; cursor: default; }
+  .info { font-size: 15px; }
+  .end { font-weight: 700; color: #1E9E5A; }
+  @media (max-width: 520px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+  <h1>Retrouvez les paires</h1>
+  <p class="info">Associez chaque outil à son rôle. Essais : <span id="essais">0</span></p>
+  <div class="grid" id="grille"></div>
+  <p class="end" id="fin" hidden></p>
+
+<script>
+// Pont Learning Suite (copié depuis schema/learning-suite-bridge.js)
+window.LearningSuite = {
+  score: function (value) {
+    var n = Math.max(0, Math.min(100, Number(value) || 0));
+    window.parent.postMessage({ type: "learning-suite", score: n, completed: true }, "*");
+  },
+  complete: function () {
+    window.parent.postMessage({ type: "learning-suite", completed: true }, "*");
+  },
+};
+
+// Le jeu : 4 paires outil / rôle.
+var paires = [
+  ["Studio", "Créer"],
+  ["Review", "Relire"],
+  ["Lecteur", "Afficher"],
+  ["Serveur", "Diffuser"],
+];
+var cartes = [];
+paires.forEach(function (p, i) { cartes.push({ texte: p[0], paire: i }, { texte: p[1], paire: i }); });
+cartes.sort(function () { return Math.random() - 0.5; });
+
+var grille = document.getElementById("grille");
+var essais = 0, trouvees = 0, ouvertes = [];
+
+cartes.forEach(function (c) {
+  var b = document.createElement("button");
+  b.className = "card";
+  b.textContent = c.texte;
+  b.setAttribute("aria-label", "Carte cachée");
+  b.onclick = function () {
+    if (b.classList.contains("open") || b.classList.contains("found") || ouvertes.length === 2) return;
+    b.classList.add("open");
+    b.setAttribute("aria-label", c.texte);
+    ouvertes.push({ b: b, c: c });
+    if (ouvertes.length === 2) {
+      essais++;
+      document.getElementById("essais").textContent = essais;
+      var a = ouvertes[0], d = ouvertes[1];
+      if (a.c.paire === d.c.paire) {
+        a.b.classList.add("found"); d.b.classList.add("found");
+        ouvertes = [];
+        trouvees++;
+        if (trouvees === paires.length) terminer();
+      } else {
+        setTimeout(function () {
+          [a, d].forEach(function (o) { o.b.classList.remove("open"); o.b.setAttribute("aria-label", "Carte cachée"); });
+          ouvertes = [];
+        }, 900);
+      }
+    }
+  };
+  grille.appendChild(b);
+});
+
+function terminer() {
+  // 4 essais = parfait (100). Chaque essai en plus retire 10 points, minimum 40.
+  var score = Math.max(40, 100 - (essais - paires.length) * 10);
+  var fin = document.getElementById("fin");
+  fin.hidden = false;
+  fin.textContent = "Bravo ! Score : " + score + " %";
+  LearningSuite.score(score);
+}
+</script>
+</body>
+</html>

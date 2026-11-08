@@ -1,0 +1,60 @@
+{
+  "$schema": "../../schema/project.v1.schema.json",
+  "schemaVersion": "1.1",
+  "meta": {
+    "id": "5b7e2d1a-93c4-4f0e-8a61-2c9d4e7f1b38",
+    "title": "Jeu HTML avec score",
+    "description": "Exemple de brique html : un jeu de paires qui envoie son score au module.",
+    "language": "fr",
+    "author": "Learning Suite",
+    "version": "1.0.0",
+    "estimatedMinutes": 2
+  },
+  "mode": "slides",
+  "theme": {
+    "colors": {
+      "primary": "#2F5BEA",
+      "secondary": "#1B2A4A",
+      "accent": "#FFB020",
+      "background": "#FFFFFF",
+      "surface": "#F3F5FA",
+      "text": "#1B2A4A",
+      "success": "#1E9E5A",
+      "error": "#D64545"
+    },
+    "fonts": { "heading": "Segoe UI", "body": "Segoe UI" },
+    "radius": 10
+  },
+  "navigation": { "linear": true, "allowBack": true, "showMenu": true, "showProgress": true },
+  "scoring": { "passingScore": 60 },
+  "pages": [
+    {
+      "id": "intro",
+      "title": "Présentation",
+      "blocks": [
+        { "id": "intro-titre", "type": "text", "variant": "title", "content": "Un jeu dans le module",
+          "frame": { "x": 80, "y": 120, "w": 1120, "h": 90 } },
+        { "id": "intro-texte", "type": "text",
+          "content": "La page suivante contient un **jeu HTML** (ici, fait à la main ; il pourrait être généré par une IA).\n\nLe jeu envoie son score au module, qui l'ajoute au résultat et le transmet au LMS.",
+          "frame": { "x": 80, "y": 240, "w": 900, "h": 220 } },
+        { "id": "intro-go", "type": "button", "label": "Jouer", "action": { "type": "next" },
+          "frame": { "x": 80, "y": 500, "w": 220, "h": 64 } }
+      ]
+    },
+    {
+      "id": "jeu",
+      "title": "Le jeu",
+      "unlockNext": "questionsAnswered",
+      "blocks": [
+        { "id": "jeu-paires", "type": "html", "src": "media/jeux/paires.html", "title": "Jeu : retrouvez les paires",
+          "graded": true, "points": 2,
+          "frame": { "x": 40, "y": 30, "w": 800, "h": 660 } },
+        { "id": "jeu-resultat", "type": "results",
+          "passedMessage": "Score transmis au module.",
+          "failedMessage": "Rejouez pour améliorer votre score.",
+          "allowRetry": true,
+          "frame": { "x": 870, "y": 30, "w": 370, "h": 660 } }
+      ]
+    }
+  ]
+}

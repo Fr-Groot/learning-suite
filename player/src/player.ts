@@ -1,13 +1,13 @@
 // Le lecteur : assemble l'interface (titre, menu, progression, navigation, voix off)
 // et affiche la page courante dans le bon mode.
 import { Navigator } from "./navigation.ts";
-import { computeScore, newQuestionState, submit, type QuestionState } from "./quiz.ts";
+import { computeScore, isGraded, newQuestionState, pageActivities, reportHtml, submit, type QuestionState } from "./quiz.ts";
 import { el, type RenderContext } from "./render/context.ts";
 import { renderSlidesPage } from "./render/layout-slides.ts";
 import { renderVerticalPage } from "./render/layout-vertical.ts";
 import { LocalTracker } from "./tracker/local.ts";
 import type { Tracker } from "./tracker/tracker.ts";
-import type { ButtonAction, Project, QuestionBlock } from "./types.ts";
+import type { ButtonAction, Project } from "./types.ts";
 import { startVoiceover, type VoiceoverControls } from "./voiceover.ts";
 
 export interface PlayerOptions {
@@ -25,6 +25,7 @@ export class Player {
   private readonly seed = Math.floor(Math.random() * 2 ** 31);
   private readonly doc: Document;
   private updaters: (() => void)[] = [];
+  private disposers: (() => void)[] = [];
   private disposePage: () => void = () => {};
   private voiceover: VoiceoverControls = { stop() {} };
   private completed = false;
@@ -144,6 +145,8 @@ export class Player {
 
   private show(moveFocus = true) {
     this.disposePage();
+    this.disposers.forEach((fn) => fn());
+    this.disposers = [];
     this.voiceover.stop();
     this.updaters = [];
     const page = this.nav.page;
@@ -175,9 +178,7 @@ export class Player {
   }
 
   private pageQuestionsDone() {
-    return this.nav.page.blocks
-      .filter((b): b is QuestionBlock => b.type === "question")
-      .every((q) => this.states.get(q.id)?.done);
+    return pageActivities(this.nav.page).every((a) => this.states.get(a.id)?.done);
   }
 
   private resolve(src: string) {
@@ -207,7 +208,7 @@ export class Player {
     const pages = this.project.pages;
     let first = -1;
     pages.forEach((p, i) => {
-      const graded = p.blocks.filter((b): b is QuestionBlock => b.type === "question" && b.graded !== false);
+      const graded = p.blocks.filter(isGraded);
       if (graded.length === 0) return;
       if (first < 0) first = i;
       graded.forEach((q) => this.states.delete(q.id));
@@ -218,6 +219,13 @@ export class Player {
       this.nav.goTo(first, true);
       this.show();
     } else this.refresh();
+  }
+
+  /** Après une réponse ou un score de jeu : score, déblocage, affichage. */
+  private afterActivity() {
+    this.tracker.setScore(this.score());
+    if (this.nav.page.unlockNext === "questionsAnswered" && this.pageQuestionsDone()) this.nav.unlockCurrent();
+    this.refresh();
   }
 
   score() {
@@ -237,14 +245,17 @@ export class Player {
       submit: (q, response) => {
         const st = submit(q, this.states.get(q.id) ?? newQuestionState(), response);
         this.states.set(q.id, st);
-        if (q.graded !== false) this.tracker.setScore(this.score());
-        if (this.nav.page.unlockNext === "questionsAnswered" && this.pageQuestionsDone()) this.nav.unlockCurrent();
-        this.refresh();
+        this.afterActivity();
         return st;
+      },
+      reportHtml: (b, msg) => {
+        this.states.set(b.id, reportHtml(this.states.get(b.id) ?? newQuestionState(), msg));
+        this.afterActivity();
       },
       score: () => this.score(),
       retry: () => this.retry(),
       onUpdate: (fn) => this.updaters.push(fn),
+      onDispose: (fn) => this.disposers.push(fn),
     };
   }
 }

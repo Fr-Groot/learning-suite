@@ -4,15 +4,50 @@
     {
       "name": "lecteur-presentation",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "player", "run", "open", "--", "../examples/presentation-suite", "--no-open"],
+      "runtimeArgs": [
+        "--prefix",
+        "player",
+        "run",
+        "open",
+        "--",
+        "../examples/presentation-suite",
+        "--no-open"
+      ],
       "port": 5180
     },
     {
       "name": "lecteur-vertical",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "player", "run", "open", "--", "../examples/vertical-demo", "--no-open"],
+      "runtimeArgs": [
+        "--prefix",
+        "player",
+        "run",
+        "open",
+        "--",
+        "../examples/vertical-demo",
+        "--no-open"
+      ],
       "port": 5181,
-      "env": { "PORT": "5181" }
+      "env": {
+        "PORT": "5181"
+      }
+    },
+    {
+      "name": "lecteur-jeu",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "player",
+        "run",
+        "open",
+        "--",
+        "../examples/jeu-html",
+        "--no-open"
+      ],
+      "port": 5182,
+      "env": {
+        "PORT": "5182"
+      }
     }
   ]
 }

@@ -5,7 +5,7 @@ export type Mode = "slides" | "vertical";
 
 export interface Project {
   $schema?: string;
-  schemaVersion: "1.0";
+  schemaVersion: "1.0" | "1.1";
   meta: Meta;
   mode: Mode;
   theme: Theme;
@@ -161,6 +161,18 @@ export interface ResultsBlock extends BlockBase {
   allowRetry?: boolean;
 }
 
+export interface HtmlBlock extends BlockBase {
+  type: "html";
+  src: string;
+  title: string;
+  graded?: boolean;
+  points?: number;
+  height?: number;
+}
+
+/** Activités qui peuvent compter dans le score. */
+export type Activity = QuestionBlock | HtmlBlock;
+
 export type Block =
   | TextBlock
   | ImageBlock
@@ -169,4 +181,5 @@ export type Block =
   | VideoBlock
   | AudioBlock
   | QuestionBlock
-  | ResultsBlock;
+  | ResultsBlock
+  | HtmlBlock;

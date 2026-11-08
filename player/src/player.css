@@ -230,6 +230,13 @@
 .is-correct .lsp-feedback-status { color: var(--lsp-success); }
 .is-incorrect .lsp-feedback-status { color: var(--lsp-error); }
 
+/* ---------- Brique HTML (jeux) ---------- */
+.lsp-html { display: flex; flex-direction: column; height: 100%; }
+.lsp-html-frame { flex: 1 1 auto; width: 100%; min-height: 0; border: 0; border-radius: var(--lsp-radius); background: #fff; }
+.lsp--vertical .lsp-html-frame { flex: none; }
+.lsp-html-status { margin: 6px 0 0; font-size: 0.85em; font-weight: 600; color: var(--lsp-success); }
+.lsp--slides .lsp-html-status { font-size: 16px; }
+
 /* ---------- Résultat ---------- */
 .lsp-results {
   display: flex;

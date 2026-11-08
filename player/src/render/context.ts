@@ -1,6 +1,6 @@
 // Ce que chaque brique peut demander au lecteur pendant l'affichage.
 import type { Response, QuestionState, Score } from "../quiz.ts";
-import type { ButtonAction, Mode, Project, QuestionBlock } from "../types.ts";
+import type { ButtonAction, HtmlBlock, Mode, Project, QuestionBlock } from "../types.ts";
 
 export interface RenderContext {
   project: Project;
@@ -15,10 +15,14 @@ export interface RenderContext {
   submit(q: QuestionBlock, response: Response): QuestionState;
   /** Graine de mélange des choix, fixe pendant la session. */
   seed: number;
+  /** Un jeu HTML a envoyé un score ou signalé sa fin. */
+  reportHtml(b: HtmlBlock, msg: { score?: number; completed?: boolean }): void;
   score(): Score;
   retry(): void;
   /** Une brique s'abonne pour se redessiner quand l'état change (score, verrous). */
   onUpdate(fn: () => void): void;
+  /** Nettoyage à faire quand on quitte la page (écouteurs…). */
+  onDispose(fn: () => void): void;
   doc: Document;
 }
 

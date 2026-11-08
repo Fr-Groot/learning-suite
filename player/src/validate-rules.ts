@@ -22,8 +22,8 @@ export function checkRules(project: Project): string[] {
       }
     }
 
-    if (page.unlockNext === "questionsAnswered" && !page.blocks.some((b) => b.type === "question")) {
-      errors.push(`${where} : « Suivant » attend des réponses, mais la page n'a aucune question.`);
+    if (page.unlockNext === "questionsAnswered" && !page.blocks.some((b) => b.type === "question" || (b.type === "html" && b.graded))) {
+      errors.push(`${where} : « Suivant » attend des réponses, mais la page n'a aucune question ni jeu noté.`);
     }
     if (page.unlockNext === "voiceoverEnded" && !page.voiceover) {
       errors.push(`${where} : « Suivant » attend la fin de la voix off, mais la page n'en a pas.`);
