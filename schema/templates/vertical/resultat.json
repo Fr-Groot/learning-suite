@@ -1,0 +1,18 @@
+{
+  "id": "page",
+  "title": "Résultat",
+  "blocks": [
+    {
+      "id": "titre",
+      "type": "text",
+      "variant": "title",
+      "content": "Votre résultat"
+    },
+    {
+      "id": "resultat",
+      "type": "results",
+      "passedMessage": "Bravo, module réussi !",
+      "failedMessage": "Relisez le module, puis réessayez."
+    }
+  ]
+}

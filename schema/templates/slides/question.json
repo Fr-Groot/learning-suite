@@ -1,0 +1,41 @@
+{
+  "id": "page",
+  "title": "Question",
+  "unlockNext": "activitiesDone",
+  "blocks": [
+    {
+      "id": "question",
+      "type": "question",
+      "kind": "single",
+      "prompt": "Votre question ?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Bonne réponse",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Autre proposition",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Autre proposition",
+          "correct": false
+        }
+      ],
+      "feedback": {
+        "correct": "Exact !",
+        "incorrect": "Pas tout à fait : la bonne réponse est…"
+      },
+      "shuffle": true,
+      "frame": {
+        "x": 140,
+        "y": 80,
+        "w": 1000,
+        "h": 560
+      }
+    }
+  ]
+}

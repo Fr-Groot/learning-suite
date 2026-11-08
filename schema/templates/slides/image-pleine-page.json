@@ -1,0 +1,36 @@
+{
+  "id": "page",
+  "title": "Image pleine page",
+  "background": {
+    "image": "media/fond.jpg"
+  },
+  "blocks": [
+    {
+      "id": "bandeau",
+      "type": "shape",
+      "shape": "rectangle",
+      "fill": "#000000AA",
+      "frame": {
+        "x": 0,
+        "y": 520,
+        "w": 1280,
+        "h": 200
+      }
+    },
+    {
+      "id": "legende",
+      "type": "text",
+      "variant": "subtitle",
+      "content": "Une légende courte et percutante",
+      "frame": {
+        "x": 60,
+        "y": 560,
+        "w": 1160,
+        "h": 120
+      },
+      "style": {
+        "color": "#FFFFFF"
+      }
+    }
+  ]
+}

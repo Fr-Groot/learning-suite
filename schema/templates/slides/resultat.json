@@ -1,0 +1,30 @@
+{
+  "id": "page",
+  "title": "Résultat",
+  "blocks": [
+    {
+      "id": "titre",
+      "type": "text",
+      "variant": "title",
+      "content": "Votre résultat",
+      "frame": {
+        "x": 60,
+        "y": 40,
+        "w": 1160,
+        "h": 80
+      }
+    },
+    {
+      "id": "resultat",
+      "type": "results",
+      "passedMessage": "Bravo, module réussi !",
+      "failedMessage": "Relisez le module, puis réessayez.",
+      "frame": {
+        "x": 240,
+        "y": 150,
+        "w": 800,
+        "h": 480
+      }
+    }
+  ]
+}

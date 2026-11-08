@@ -1,0 +1,26 @@
+{
+  "id": "page",
+  "title": "Titre, texte et image",
+  "blocks": [
+    {
+      "id": "titre",
+      "type": "text",
+      "variant": "title",
+      "content": "Titre de la page"
+    },
+    {
+      "id": "texte",
+      "type": "text",
+      "variant": "body",
+      "content": "Votre texte ici.\n- Premier point\n- Deuxième point"
+    },
+    {
+      "id": "image",
+      "type": "image",
+      "src": "media/image.png",
+      "alt": "Description de l'image",
+      "fit": "contain",
+      "width": "full"
+    }
+  ]
+}

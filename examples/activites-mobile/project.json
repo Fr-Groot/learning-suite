@@ -1,0 +1,477 @@
+{
+  "$schema": "../../schema/project.v1.schema.json",
+  "schemaVersion": "1.2",
+  "meta": {
+    "id": "4e8b1c37-2a9d-4f61-8c05-7d3e9a1b6f22",
+    "title": "Les bons réflexes numériques (mobile)",
+    "description": "Les mêmes activités en mode vertical, pour le téléphone.",
+    "language": "fr",
+    "author": "Learning Suite",
+    "version": "1.0.0",
+    "estimatedMinutes": 10
+  },
+  "mode": "vertical",
+  "theme": {
+    "colors": {
+      "primary": "#2F5BEA",
+      "secondary": "#1B2A4A",
+      "accent": "#FFB020",
+      "background": "#FFFFFF",
+      "surface": "#F3F5FA",
+      "text": "#1B2A4A",
+      "success": "#1E9E5A",
+      "error": "#D64545"
+    },
+    "fonts": {
+      "heading": "Segoe UI",
+      "body": "Segoe UI"
+    },
+    "radius": 10
+  },
+  "navigation": {
+    "linear": false,
+    "allowBack": true,
+    "showMenu": true,
+    "showProgress": true
+  },
+  "scoring": {
+    "passingScore": 70
+  },
+  "pages": [
+    {
+      "id": "accueil",
+      "title": "Bienvenue",
+      "background": {
+        "color": "#1B2A4A"
+      },
+      "blocks": [
+        {
+          "id": "accueil-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Les bons réflexes numériques",
+          "style": {
+            "color": "#FFFFFF"
+          }
+        },
+        {
+          "id": "accueil-texte",
+          "type": "text",
+          "content": "Un module de démonstration : **chaque page montre une activité** de Learning Suite.\nCartes, onglets, frise, texte à trous, glisser-déposer, zones à trouver.",
+          "style": {
+            "color": "#C9D6FF"
+          }
+        },
+        {
+          "id": "accueil-go",
+          "type": "button",
+          "label": "Commencer",
+          "action": {
+            "type": "next"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cartes",
+      "title": "Idées reçues",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "cartes-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Vrai ou idée reçue ?"
+        },
+        {
+          "id": "cartes-consigne",
+          "type": "text",
+          "variant": "caption",
+          "content": "Retournez les 4 cartes pour continuer."
+        },
+        {
+          "id": "cartes-jeu",
+          "type": "flipcards",
+          "requireAll": true,
+          "cards": [
+            {
+              "id": "c1",
+              "front": "« Mon antivirus me protège de tout. »",
+              "back": "**Idée reçue.** Il ne bloque pas un mail trompeur qui vous fait saisir votre mot de passe."
+            },
+            {
+              "id": "c2",
+              "front": "« Un mot de passe long vaut mieux qu'un mot de passe compliqué. »",
+              "back": "**Vrai.** Une phrase de 4 ou 5 mots est plus solide et plus facile à retenir."
+            },
+            {
+              "id": "c3",
+              "front": "« Les pirates ne visent que les grandes entreprises. »",
+              "back": "**Idée reçue.** Les petites structures sont des cibles faciles et fréquentes."
+            },
+            {
+              "id": "c4",
+              "front": "« Mettre à jour son poste protège vraiment. »",
+              "back": "**Vrai.** La plupart des attaques utilisent des failles déjà corrigées."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "onglets",
+      "title": "Les arnaques courantes",
+      "blocks": [
+        {
+          "id": "onglets-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Trois arnaques courantes"
+        },
+        {
+          "id": "onglets-contenu",
+          "type": "reveal",
+          "layout": "tabs",
+          "items": [
+            {
+              "id": "t1",
+              "title": "Hameçonnage",
+              "content": "Un mail imite votre banque ou un service connu pour vous faire **cliquer et saisir vos identifiants**.\n- Vérifiez l'adresse de l'expéditeur.\n- Survolez les liens avant de cliquer."
+            },
+            {
+              "id": "t2",
+              "title": "Faux support",
+              "content": "Une fenêtre affiche « Votre ordinateur est infecté, appelez ce numéro ».\n- Ne rappelez jamais.\n- Fermez le navigateur et prévenez votre service informatique."
+            },
+            {
+              "id": "t3",
+              "title": "Arnaque au président",
+              "content": "Un faux dirigeant demande un **virement urgent et confidentiel**.\n- Vérifiez toujours par un autre canal (téléphone connu)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "frise",
+      "title": "Réagir à un incident",
+      "blocks": [
+        {
+          "id": "frise-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Réagir à un incident, étape par étape"
+        },
+        {
+          "id": "frise-contenu",
+          "type": "reveal",
+          "layout": "timeline",
+          "items": [
+            {
+              "id": "e1",
+              "title": "0 min",
+              "content": "**Débranchez le réseau** (câble ou Wi-Fi) sans éteindre l'ordinateur."
+            },
+            {
+              "id": "e2",
+              "title": "5 min",
+              "content": "**Prévenez** le service informatique ou votre référent sécurité."
+            },
+            {
+              "id": "e3",
+              "title": "15 min",
+              "content": "**Notez** ce que vous avez vu : message, heure, pièce jointe ouverte."
+            },
+            {
+              "id": "e4",
+              "title": "1 h",
+              "content": "**Changez vos mots de passe** depuis un autre appareil sûr."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faq",
+      "title": "Questions fréquentes",
+      "blocks": [
+        {
+          "id": "faq-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Questions fréquentes"
+        },
+        {
+          "id": "faq-contenu",
+          "type": "reveal",
+          "layout": "accordion",
+          "items": [
+            {
+              "id": "f1",
+              "title": "Puis-je utiliser ma clé USB personnelle ?",
+              "content": "Seulement si votre entreprise l'autorise, et après analyse par l'antivirus."
+            },
+            {
+              "id": "f2",
+              "title": "Faut-il un mot de passe différent par site ?",
+              "content": "Oui. Un gestionnaire de mots de passe vous aide à les retenir."
+            },
+            {
+              "id": "f3",
+              "title": "Que faire d'un mail douteux ?",
+              "content": "Ne cliquez pas, ne répondez pas : signalez-le au service informatique."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trous",
+      "title": "Un bon mot de passe",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "trous-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Un bon mot de passe"
+        },
+        {
+          "id": "trous-activite",
+          "type": "fillblanks",
+          "prompt": "Complétez le texte : saisissez le mot manquant ou choisissez dans la liste.",
+          "text": "Un bon mot de passe est [[*long|court|simple]] et [[*unique|identique]] pour chaque site.\nLe plus simple : une [[phrase|phrase de passe]] de plusieurs mots, gardée dans un [[*gestionnaire|carnet|fichier Excel]] de mots de passe.",
+          "attempts": 2,
+          "feedback": {
+            "correct": "Parfait !",
+            "partial": "Presque : relisez les trous en rouge.",
+            "incorrect": "Relisez la carte sur les mots de passe."
+          }
+        }
+      ]
+    },
+    {
+      "id": "ranger",
+      "title": "Bon ou mauvais réflexe ?",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "ranger-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Bon ou mauvais réflexe ?"
+        },
+        {
+          "id": "ranger-activite",
+          "type": "dragdrop",
+          "kind": "categorize",
+          "categories": [
+            {
+              "id": "bon",
+              "label": "✓ Bon réflexe"
+            },
+            {
+              "id": "mauvais",
+              "label": "✗ Mauvais réflexe"
+            }
+          ],
+          "items": [
+            {
+              "id": "r1",
+              "text": "Verrouiller son poste en partant",
+              "category": "bon"
+            },
+            {
+              "id": "r2",
+              "text": "Noter son mot de passe sur un post-it",
+              "category": "mauvais"
+            },
+            {
+              "id": "r3",
+              "text": "Installer les mises à jour",
+              "category": "bon"
+            },
+            {
+              "id": "r4",
+              "text": "Ouvrir une pièce jointe inattendue",
+              "category": "mauvais"
+            },
+            {
+              "id": "r5",
+              "text": "Signaler un mail douteux",
+              "category": "bon"
+            },
+            {
+              "id": "r6",
+              "text": "Prêter son badge à un collègue",
+              "category": "mauvais"
+            }
+          ],
+          "feedback": {
+            "correct": "Tous les réflexes sont bien rangés.",
+            "partial": "Quelques erreurs : regardez la correction.",
+            "incorrect": "Revoyez les pages précédentes."
+          }
+        }
+      ]
+    },
+    {
+      "id": "relier",
+      "title": "Le bon mot",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "relier-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Associez chaque terme à sa définition"
+        },
+        {
+          "id": "relier-activite",
+          "type": "dragdrop",
+          "kind": "match",
+          "attempts": 2,
+          "pairs": [
+            {
+              "id": "m1",
+              "prompt": "Hameçonnage",
+              "answer": "Faux message pour voler des identifiants"
+            },
+            {
+              "id": "m2",
+              "prompt": "Rançongiciel",
+              "answer": "Logiciel qui chiffre vos fichiers contre rançon"
+            },
+            {
+              "id": "m3",
+              "prompt": "Double authentification",
+              "answer": "Un code en plus du mot de passe"
+            },
+            {
+              "id": "m4",
+              "prompt": "Mise à jour",
+              "answer": "Correction des failles connues"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ordre",
+      "title": "Dans l’ordre",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "ordre-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Remettez les étapes dans l’ordre"
+        },
+        {
+          "id": "ordre-activite",
+          "type": "dragdrop",
+          "kind": "order",
+          "scoring": "all-or-nothing",
+          "attempts": 2,
+          "prompt": "Vous avez cliqué sur un lien douteux. Que faites-vous ?",
+          "items": [
+            {
+              "id": "o1",
+              "text": "Débrancher le réseau"
+            },
+            {
+              "id": "o2",
+              "text": "Prévenir le service informatique"
+            },
+            {
+              "id": "o3",
+              "text": "Noter ce qui s’est passé"
+            },
+            {
+              "id": "o4",
+              "text": "Changer ses mots de passe"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zones",
+      "title": "Explorer le bureau",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "zones-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Explorez le bureau"
+        },
+        {
+          "id": "zones-explore",
+          "type": "hotspot",
+          "kind": "explore",
+          "requireAll": true,
+          "prompt": "Touchez chaque objet pour découvrir le bon réflexe.",
+          "src": "media/bureau.svg",
+          "alt": "Un bureau avec un écran allumé, un post-it, une clé USB et un badge.",
+          "zones": [
+            {
+              "id": "ecran",
+              "x": 33,
+              "y": 15,
+              "w": 30,
+              "h": 40,
+              "label": "Écran",
+              "content": "**Verrouillez** votre session dès que vous quittez le poste : touches Windows + L."
+            },
+            {
+              "id": "postit",
+              "x": 64.5,
+              "y": 12,
+              "w": 11.5,
+              "h": 17,
+              "label": "Post-it",
+              "content": "Un mot de passe **ne s'écrit jamais** sur papier : utilisez un gestionnaire."
+            },
+            {
+              "id": "usb",
+              "x": 15.5,
+              "y": 64,
+              "w": 13,
+              "h": 9,
+              "label": "Clé USB",
+              "content": "Une clé trouvée ou inconnue se **remet au service informatique**, sans la brancher."
+            },
+            {
+              "id": "badge",
+              "x": 57.5,
+              "y": 72.5,
+              "w": 13,
+              "h": 14,
+              "label": "Badge",
+              "content": "Votre badge **reste sur vous** : il ouvre les locaux à n'importe qui."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bilan",
+      "title": "Bilan",
+      "blocks": [
+        {
+          "id": "bilan-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Votre bilan"
+        },
+        {
+          "id": "bilan-resultat",
+          "type": "results",
+          "passedMessage": "Vous avez les bons réflexes. Merci !",
+          "failedMessage": "Reprenez les activités en rouge, puis réessayez."
+        }
+      ]
+    }
+  ]
+}

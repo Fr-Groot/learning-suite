@@ -1,0 +1,28 @@
+{
+  "id": "page",
+  "title": "Citation",
+  "blocks": [
+    {
+      "id": "trait",
+      "type": "shape",
+      "shape": "line",
+      "stroke": "#FFB020",
+      "strokeWidth": 8
+    },
+    {
+      "id": "citation",
+      "type": "text",
+      "variant": "subtitle",
+      "content": "« Une phrase forte qui résume l'idée clé. »",
+      "style": {
+        "fontSize": 28
+      }
+    },
+    {
+      "id": "auteur",
+      "type": "text",
+      "variant": "caption",
+      "content": "Prénom Nom, fonction"
+    }
+  ]
+}

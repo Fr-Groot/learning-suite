@@ -11,6 +11,8 @@ if not exist node_modules (
 call npm.cmd run export -- ../examples/presentation-suite || goto erreur
 call npm.cmd run export -- ../examples/jeu-html || goto erreur
 call npm.cmd run export -- ../examples/vertical-demo || goto erreur
+call npm.cmd run export -- ../examples/activites || goto erreur
+call npm.cmd run export -- ../examples/activites-mobile || goto erreur
 echo.
 echo Termine. Les fichiers .zip sont dans le dossier « exports ».
 start "" "%~dp0exports"

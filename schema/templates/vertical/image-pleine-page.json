@@ -1,0 +1,19 @@
+{
+  "id": "page",
+  "title": "Image pleine page",
+  "blocks": [
+    {
+      "id": "image",
+      "type": "image",
+      "src": "media/fond.jpg",
+      "alt": "Description de l'image",
+      "width": "full"
+    },
+    {
+      "id": "legende",
+      "type": "text",
+      "variant": "subtitle",
+      "content": "Une légende courte et percutante"
+    }
+  ]
+}

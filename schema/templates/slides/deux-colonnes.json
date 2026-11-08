@@ -1,0 +1,96 @@
+{
+  "id": "page",
+  "title": "Deux colonnes",
+  "blocks": [
+    {
+      "id": "titre",
+      "type": "text",
+      "variant": "title",
+      "content": "Comparer deux idées",
+      "frame": {
+        "x": 60,
+        "y": 40,
+        "w": 1160,
+        "h": 80
+      }
+    },
+    {
+      "id": "fond-gauche",
+      "type": "shape",
+      "shape": "rectangle",
+      "fill": "#F3F5FA",
+      "style": {
+        "radius": 12
+      },
+      "frame": {
+        "x": 60,
+        "y": 150,
+        "w": 560,
+        "h": 500
+      }
+    },
+    {
+      "id": "fond-droite",
+      "type": "shape",
+      "shape": "rectangle",
+      "fill": "#F3F5FA",
+      "style": {
+        "radius": 12
+      },
+      "frame": {
+        "x": 660,
+        "y": 150,
+        "w": 560,
+        "h": 500
+      }
+    },
+    {
+      "id": "titre-gauche",
+      "type": "text",
+      "variant": "subtitle",
+      "content": "Avant",
+      "frame": {
+        "x": 90,
+        "y": 170,
+        "w": 500,
+        "h": 50
+      }
+    },
+    {
+      "id": "texte-gauche",
+      "type": "text",
+      "variant": "body",
+      "content": "Texte de la colonne de gauche.",
+      "frame": {
+        "x": 90,
+        "y": 230,
+        "w": 500,
+        "h": 400
+      }
+    },
+    {
+      "id": "titre-droite",
+      "type": "text",
+      "variant": "subtitle",
+      "content": "Après",
+      "frame": {
+        "x": 690,
+        "y": 170,
+        "w": 500,
+        "h": 50
+      }
+    },
+    {
+      "id": "texte-droite",
+      "type": "text",
+      "variant": "body",
+      "content": "Texte de la colonne de droite.",
+      "frame": {
+        "x": 690,
+        "y": 230,
+        "w": 500,
+        "h": 400
+      }
+    }
+  ]
+}

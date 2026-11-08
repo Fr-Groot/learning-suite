@@ -1,0 +1,36 @@
+{
+  "id": "page",
+  "title": "Deux colonnes",
+  "blocks": [
+    {
+      "id": "titre",
+      "type": "text",
+      "variant": "title",
+      "content": "Comparer deux idées"
+    },
+    {
+      "id": "titre-gauche",
+      "type": "text",
+      "variant": "subtitle",
+      "content": "Avant"
+    },
+    {
+      "id": "texte-gauche",
+      "type": "text",
+      "variant": "body",
+      "content": "Texte de la colonne de gauche."
+    },
+    {
+      "id": "titre-droite",
+      "type": "text",
+      "variant": "subtitle",
+      "content": "Après"
+    },
+    {
+      "id": "texte-droite",
+      "type": "text",
+      "variant": "body",
+      "content": "Texte de la colonne de droite."
+    }
+  ]
+}

@@ -334,7 +334,7 @@
 .lsp-flipcard::after { content: "↻"; position: absolute; right: 10px; bottom: 6px; font-size: 18px; color: #fff; opacity: 0.8; pointer-events: none; }
 .lsp-flipcard.is-flipped::after { color: var(--lsp-primary); }
 .lsp--vertical .lsp-flipcards { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); height: auto; }
-.lsp--vertical .lsp-flipcard { aspect-ratio: 4 / 3; height: auto; }
+.lsp--vertical .lsp-flipcard { aspect-ratio: 1; height: auto; min-height: 0; }
 .lsp--slides .lsp-flipcards { font-size: var(--lsp-fs, 22px); }
 
 /* ---------- Onglets, frise, accordéon ---------- */

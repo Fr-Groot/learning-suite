@@ -1,0 +1,43 @@
+{
+  "id": "page",
+  "title": "Titre, texte et image",
+  "blocks": [
+    {
+      "id": "titre",
+      "type": "text",
+      "variant": "title",
+      "content": "Titre de la page",
+      "frame": {
+        "x": 60,
+        "y": 40,
+        "w": 1160,
+        "h": 80
+      }
+    },
+    {
+      "id": "texte",
+      "type": "text",
+      "variant": "body",
+      "content": "Votre texte ici.\n- Premier point\n- Deuxième point",
+      "frame": {
+        "x": 60,
+        "y": 150,
+        "w": 560,
+        "h": 480
+      }
+    },
+    {
+      "id": "image",
+      "type": "image",
+      "src": "media/image.png",
+      "alt": "Description de l'image",
+      "fit": "contain",
+      "frame": {
+        "x": 660,
+        "y": 150,
+        "w": 560,
+        "h": 480
+      }
+    }
+  ]
+}

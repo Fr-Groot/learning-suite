@@ -608,6 +608,36 @@
           }
         }
       ]
+    },
+    {
+      "id": "bilan",
+      "title": "Bilan",
+      "blocks": [
+        {
+          "id": "bilan-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Votre bilan",
+          "frame": {
+            "x": 60,
+            "y": 30,
+            "w": 1160,
+            "h": 70
+          }
+        },
+        {
+          "id": "bilan-resultat",
+          "type": "results",
+          "passedMessage": "Vous avez les bons réflexes. Merci !",
+          "failedMessage": "Reprenez les activités en rouge, puis réessayez.",
+          "frame": {
+            "x": 240,
+            "y": 130,
+            "w": 800,
+            "h": 480
+          }
+        }
+      ]
     }
   ]
 }

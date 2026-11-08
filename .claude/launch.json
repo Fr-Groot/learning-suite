@@ -65,6 +65,23 @@
       "env": {
         "PORT": "5183"
       }
+    },
+    {
+      "name": "lecteur-activites-mobile",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "player",
+        "run",
+        "open",
+        "--",
+        "../examples/activites-mobile",
+        "--no-open"
+      ],
+      "port": 5184,
+      "env": {
+        "PORT": "5184"
+      }
     }
   ]
 }
