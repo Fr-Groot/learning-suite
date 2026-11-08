@@ -49,6 +49,7 @@ un `frame` en mode vertical et l'oubli d'un `frame` en mode diapositives.
 | `audio` | `src` (MP3), `label`, `transcript`, `autoplay` |
 | `question` | voir ci-dessous |
 | `results` | affiche score, seuil, « Réussi » / « Échoué », bouton « Recommencer » |
+| `html` | jeu ou contenu HTML isolé : `src`, `title`, `graded`, `points`, `height` (v1.1) |
 
 Toutes les briques ont un `id` et peuvent avoir un `style` (couleur, fond, taille
 de texte, gras, alignement, arrondi, opacité, marge intérieure) qui surcharge le thème.
@@ -93,6 +94,23 @@ Réussi si score ≥ `scoring.passingScore`.
 `**gras**`, `*italique*`, listes (`- ` ou `1. `), liens `[texte](https://…)`,
 retours à la ligne. Pas de HTML : c'est lisible par un humain et par l'IA,
 et ça empêche d'injecter du code dans un module.
+
+## Brique `html` : jeux et contenus HTML (v1.1)
+
+```json
+{ "id": "jeu", "type": "html", "src": "media/jeux/paires.html", "title": "Jeu des paires",
+  "graded": true, "points": 2, "frame": { "x": 40, "y": 30, "w": 800, "h": 660 } }
+```
+
+- Le fichier HTML est dans `media/` (un seul fichier conseillé ; un dossier est possible).
+- Il s'affiche dans un **cadre isolé** : il ne peut lire ni le module, ni le LMS,
+  ni les données de l'apprenant.
+- Pour remonter un score, le jeu appelle `LearningSuite.score(0 à 100)` (voir
+  `docs/jeux-html.md`). Seuls les messages venant de ce cadre sont acceptés.
+- `graded` (faux par défaut) : le jeu compte dans le score final. Il rapporte une part
+  de ses `points` : 80 % sur un jeu à 2 points = 1,6 point. On garde le meilleur score.
+- `unlockNext: "questionsAnswered"` attend aussi la fin des jeux notés de la page.
+- `height` : hauteur en mode vertical (en mode diapositives, c'est le `frame`).
 
 ## Ce que le schéma ne peut pas vérifier seul
 

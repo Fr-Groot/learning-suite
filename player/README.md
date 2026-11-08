@@ -14,6 +14,7 @@ et vertical), briques, quiz, voix off, menu, progression, suivi.
 | `npm test` | Tests unitaires |
 | `npm run test:e2e` | Tests de bout en bout (Edge) |
 | `npm run build` | Produit `dist/player.js` et `dist/player.css` |
+| `npm run export -- ../examples/jeu-html` | Produit les zip SCORM 1.2 et HTML5 dans `exports/` |
 
 ## Organisation
 
@@ -21,6 +22,7 @@ et vertical), briques, quiz, voix off, menu, progression, suivi.
 - `src/navigation.ts`, `src/quiz.ts` : logique pure (testée dans `tests/`).
 - `src/render/` : une fonction d'affichage par brique, plus les deux mises en page.
 - `src/voiceover.ts` : voix off par page.
-- `src/tracker/` : interface `Tracker` et `LocalTracker` (aperçu). Les adaptateurs
-  SCORM viendront avec l'export.
+- `src/tracker/` : interface `Tracker`, `LocalTracker` (aperçu, HTML5) et `Scorm12Tracker`.
+- `src/export/` : construction des paquets (manifeste SCORM, index.html, zip).
+- `src/render/html.ts` : brique HTML (jeux isolés qui renvoient un score).
 - `src/player.ts` : assemble le tout.

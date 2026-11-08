@@ -25,3 +25,10 @@
 | 2026-11-08 | Tests de bout en bout avec Playwright sur Edge déjà installé | Pas de navigateur à télécharger sur le poste |
 | 2026-11-08 | Voix off d'exemple générées avec la voix Windows « Hortense » (WAV) | Gratuit et hors ligne ; MP3 recommandé pour les vrais modules |
 | 2026-11-09 | Code hébergé sur GitHub, dépôt privé Fr-Groot/learning-suite | Sauvegarde en ligne ; passage en public (AGPLv3) décidé plus tard par le porteur |
+| 2026-11-09 | Brique `html` : cadre isolé (sandbox) + message `learning-suite` vérifié par expéditeur | Jeux faits par IA sans risque pour le LMS ni les données |
+| 2026-11-09 | Jeux HTML : score partiel, meilleur score conservé, non notés par défaut | Un jeu n'est pas tout-ou-rien ; l'auteur choisit ce qui compte |
+| 2026-11-09 | Paquets exportés autonomes : projet embarqué dans `project.js` | Marche dans un LMS et en double-clic, sans serveur |
+| 2026-11-09 | Zip avec la bibliothèque fflate (~10 Ko), code d'export réutilisable par Studio | Léger, sans dépendance au disque |
+| 2026-11-09 | Reprise SCORM via `cmi.suspend_data` (allégée si > 4096 caractères) | L'apprenant reprend là où il s'était arrêté |
+| 2026-11-09 | Signature Windows reportée au jalon « 1re version publique de Studio » | Forme juridique pas encore choisie ; Microsoft refuse les entrepreneurs individuels européens |
+| 2026-11-09 | Phase 3b « Activités » insérée avant l'éditeur Studio | L'éditeur doit connaître toutes les briques |
