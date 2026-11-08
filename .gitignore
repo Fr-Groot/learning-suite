@@ -1,0 +1,24 @@
+# Dépendances et sorties de construction
+node_modules/
+dist/
+target/
+*.tsbuildinfo
+
+# Rapports de tests
+playwright-report/
+test-results/
+
+# Archives (le kit de démarrage reste sur le disque, hors dépôt)
+*.zip
+
+# Système et éditeurs
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Secrets : jamais dans le dépôt
+.env
+.env.*
+!.env.example
