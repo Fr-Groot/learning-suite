@@ -43,6 +43,12 @@ export class Navigator {
     this.unlocked.add(this.index);
   }
 
+  /** Reverrouille une page (ex. « Recommencer le quiz »). Sans effet sur une page « always ». */
+  lock(i: number) {
+    this.unlocked.delete(i);
+    this.refreshUnlock(i);
+  }
+
   isUnlocked(i = this.index) {
     return this.unlocked.has(i);
   }

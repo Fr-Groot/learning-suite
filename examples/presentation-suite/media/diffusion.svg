@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 420">
+  <circle cx="230" cy="200" r="70" fill="#2F5BEA"/>
+  <text x="230" y="208" font-family="system-ui, sans-serif" font-size="22" font-weight="700" fill="#fff" text-anchor="middle">Module</text>
+  <g stroke="#9AA6BF" stroke-width="4"><path d="M230 130 L230 60"/><path d="M290 240 L380 300"/><path d="M170 240 L80 300"/></g>
+  <rect x="160" y="20" width="140" height="50" rx="12" fill="#FFB020"/>
+  <text x="230" y="52" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#1B2A4A" text-anchor="middle">SCORM · LMS</text>
+  <rect x="320" y="290" width="130" height="50" rx="12" fill="#1B2A4A"/>
+  <text x="385" y="322" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">Lien direct</text>
+  <rect x="10" y="290" width="140" height="50" rx="12" fill="#1E9E5A"/>
+  <text x="80" y="322" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">Suivi, scores</text>
+  <g fill="#1B2A4A"><circle cx="200" cy="380" r="10"/><circle cx="230" cy="380" r="10"/><circle cx="260" cy="380" r="10"/></g>
+</svg>

@@ -1,17 +1,22 @@
-// Vérifie un project.json : npm run validate -- ../examples/presentation-suite
+// Vérifie un projet : npm run validate -- ../examples/presentation-suite
+// Schéma + règles de cohérence (src/validate.ts) + présence des fichiers media/.
 import fs from "node:fs";
 import path from "node:path";
-import Ajv2020 from "ajv/dist/2020.js";
+import { validateProject } from "../src/validate.ts";
 
 const dir = path.resolve(process.argv[2] ?? "../examples/presentation-suite");
-const schema = JSON.parse(fs.readFileSync(new URL("../../schema/project.v1.schema.json", import.meta.url), "utf8"));
-const project = JSON.parse(fs.readFileSync(path.join(dir, "project.json"), "utf8"));
-const ajv = new Ajv2020({ allErrors: true, strict: false });
-const ok = ajv.validate(schema, project);
-const missing = [...JSON.stringify(project).matchAll(/"(media\/[^"]+)"/g)]
-  .map((m) => m[1])
-  .filter((p) => !fs.existsSync(path.join(dir, p)));
-if (!ok) for (const e of ajv.errors) console.error(`✗ ${e.instancePath || "/"} : ${e.message}`);
-for (const m of new Set(missing)) console.error(`✗ fichier manquant : ${m}`);
-if (ok && missing.length === 0) console.log(`✓ ${dir}/project.json est valide`);
-process.exit(ok && missing.length === 0 ? 0 : 1);
+const file = path.join(dir, "project.json");
+if (!fs.existsSync(file)) {
+  console.error(`Aucun project.json dans : ${dir}`);
+  process.exit(1);
+}
+const project = JSON.parse(fs.readFileSync(file, "utf8"));
+const { errors } = validateProject(project);
+const media = new Set([...JSON.stringify(project).matchAll(/"(media\/[^"]+)"/g)].map((m) => m[1]));
+for (const m of media) if (!fs.existsSync(path.join(dir, m))) errors.push(`fichier manquant : ${m}`);
+
+if (errors.length) {
+  for (const e of errors) console.error(`✗ ${e}`);
+  process.exit(1);
+}
+console.log(`✓ ${path.relative(process.cwd(), file) || file} est valide (${project.pages.length} pages, ${media.size} média${media.size > 1 ? "s" : ""})`);

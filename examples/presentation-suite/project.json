@@ -1,0 +1,200 @@
+{
+  "$schema": "../../schema/project.v1.schema.json",
+  "schemaVersion": "1.0",
+  "meta": {
+    "id": "01f0ff45-cc04-463c-9fed-b7db022d3346",
+    "title": "Découvrir Learning Suite",
+    "description": "Module de présentation de la suite : Studio, Review, diffusion et suivi. Sert aussi d'exemple du format project.json.",
+    "language": "fr",
+    "author": "Learning Suite",
+    "version": "1.0.0",
+    "estimatedMinutes": 5
+  },
+  "mode": "slides",
+  "theme": {
+    "colors": {
+      "primary": "#2F5BEA",
+      "secondary": "#1B2A4A",
+      "accent": "#FFB020",
+      "background": "#FFFFFF",
+      "surface": "#F3F5FA",
+      "text": "#1B2A4A",
+      "success": "#1E9E5A",
+      "error": "#D64545"
+    },
+    "fonts": { "heading": "Segoe UI", "body": "Segoe UI" },
+    "radius": 10
+  },
+  "navigation": { "linear": true, "allowBack": true, "showMenu": true, "showProgress": true },
+  "scoring": { "passingScore": 70 },
+  "pages": [
+    {
+      "id": "accueil",
+      "title": "Bienvenue",
+      "background": { "color": "#1B2A4A" },
+      "voiceover": {
+        "src": "media/vo-accueil.wav",
+        "transcript": "Bienvenue ! En cinq minutes, découvrez Learning Suite : une suite d'outils pour créer, relire et diffuser vos modules e-learning. Un petit quiz vous attend à la fin.",
+        "autoplay": true
+      },
+      "unlockNext": "always",
+      "blocks": [
+        { "id": "accueil-titre", "type": "text", "variant": "title", "content": "Learning Suite",
+          "style": { "color": "#FFFFFF" },
+          "frame": { "x": 80, "y": 170, "w": 620, "h": 80 } },
+        { "id": "accueil-sous-titre", "type": "text", "variant": "subtitle", "content": "Créer, relire et diffuser vos modules e-learning",
+          "style": { "color": "#C9D6FF" },
+          "frame": { "x": 80, "y": 262, "w": 600, "h": 100 } },
+        { "id": "accueil-intro", "type": "text",
+          "content": "Durée : **5 minutes**.\nUn quiz de 3 questions vous attend à la fin.",
+          "style": { "color": "#FFFFFF" },
+          "frame": { "x": 80, "y": 384, "w": 600, "h": 90 } },
+        { "id": "accueil-commencer", "type": "button", "label": "Commencer", "action": { "type": "next" },
+          "frame": { "x": 80, "y": 510, "w": 240, "h": 64 } },
+        { "id": "accueil-illustration", "type": "image", "src": "media/accueil.svg", "alt": "",
+          "frame": { "x": 720, "y": 120, "w": 480, "h": 480 } }
+      ]
+    },
+    {
+      "id": "constat",
+      "title": "Le constat",
+      "voiceover": {
+        "src": "media/vo-constat.wav",
+        "transcript": "Aujourd'hui, produire un module demande souvent quatre outils différents : un pour créer, un pour faire relire, un pour diffuser, et un autre encore pour suivre les apprenants. Résultat : des allers-retours, des fichiers perdus et des coûts qui s'additionnent.",
+        "autoplay": true
+      },
+      "unlockNext": "voiceoverEnded",
+      "blocks": [
+        { "id": "constat-titre", "type": "text", "variant": "title", "content": "Le constat",
+          "frame": { "x": 80, "y": 60, "w": 1120, "h": 80 } },
+        { "id": "constat-texte", "type": "text",
+          "content": "Produire un module demande souvent **quatre outils** :\n- un pour créer ;\n- un pour faire relire ;\n- un pour diffuser ;\n- un pour suivre les apprenants.\n\nRésultat : des allers-retours, des fichiers perdus et des coûts qui s'additionnent.",
+          "frame": { "x": 80, "y": 170, "w": 600, "h": 440 } },
+        { "id": "constat-illustration", "type": "image", "src": "media/constat.svg",
+          "alt": "Quatre étapes séparées : créer, relire, diffuser, suivre, reliées par des pointillés et un point d'interrogation.",
+          "frame": { "x": 730, "y": 160, "w": 470, "h": 430 } }
+      ]
+    },
+    {
+      "id": "studio",
+      "title": "Studio : créer",
+      "voiceover": {
+        "src": "media/vo-studio.wav",
+        "transcript": "Studio est l'application auteur pour Windows. Vous choisissez entre deux modes : des diapositives au format 16 9, ou un défilement vertical pensé pour le mobile. Vous assemblez des briques, puis vous exportez en HTML5 ou en SCORM.",
+        "autoplay": true
+      },
+      "blocks": [
+        { "id": "studio-titre", "type": "text", "variant": "title", "content": "Studio : créer",
+          "frame": { "x": 80, "y": 60, "w": 1120, "h": 80 } },
+        { "id": "studio-trait", "type": "shape", "shape": "line", "stroke": "#FFB020", "strokeWidth": 6,
+          "frame": { "x": 80, "y": 140, "w": 120, "h": 12 } },
+        { "id": "studio-texte", "type": "text",
+          "content": "L'application auteur pour Windows :\n- **deux modes** : diapositives 16:9 ou vertical ;\n- des briques : texte, image, forme, bouton, vidéo, audio, quiz ;\n- export HTML5 et SCORM ;\n- pilotable par l'IA.",
+          "frame": { "x": 80, "y": 180, "w": 560, "h": 420 } },
+        { "id": "studio-forme-169", "type": "shape", "shape": "rectangle", "fill": "#2F5BEA",
+          "style": { "radius": 10 },
+          "frame": { "x": 690, "y": 220, "w": 320, "h": 180 } },
+        { "id": "studio-legende-169", "type": "text", "variant": "caption", "content": "Diapositives 16:9",
+          "style": { "align": "center" },
+          "frame": { "x": 690, "y": 412, "w": 320, "h": 36 } },
+        { "id": "studio-forme-vertical", "type": "shape", "shape": "rectangle", "fill": "#FFB020",
+          "style": { "radius": 10 },
+          "frame": { "x": 1060, "y": 170, "w": 140, "h": 250 } },
+        { "id": "studio-legende-vertical", "type": "text", "variant": "caption", "content": "Vertical",
+          "style": { "align": "center" },
+          "frame": { "x": 1040, "y": 432, "w": 180, "h": 36 } },
+        { "id": "studio-pastille", "type": "shape", "shape": "ellipse", "fill": "#1E9E5A",
+          "frame": { "x": 980, "y": 500, "w": 56, "h": 56 } },
+        { "id": "studio-pastille-texte", "type": "text", "variant": "caption",
+          "content": "Même format de projet pour les deux modes.",
+          "style": { "verticalAlign": "middle" },
+          "frame": { "x": 690, "y": 500, "w": 280, "h": 56 } }
+      ]
+    },
+    {
+      "id": "review",
+      "title": "Review : relire",
+      "voiceover": {
+        "src": "media/vo-review.wav",
+        "transcript": "Avec Review, vos relecteurs ouvrent le module dans leur navigateur et cliquent directement sur l'écran pour commenter. Chaque commentaire garde une capture et un statut : à corriger, corrigé, validé. Cela fonctionne aussi avec les modules faits dans d'autres outils.",
+        "autoplay": true
+      },
+      "blocks": [
+        { "id": "review-titre", "type": "text", "variant": "title", "content": "Review : relire",
+          "frame": { "x": 80, "y": 60, "w": 1120, "h": 80 } },
+        { "id": "review-texte", "type": "text",
+          "content": "Vos relecteurs commentent **directement sur l'écran** du module :\n- un clic = une épingle et une capture ;\n- statuts : à corriger, corrigé, validé ;\n- versions : les commentaires de la V1 restent visibles en V2 ;\n- compatible avec Rise, Storyline, EdTake et Studio.",
+          "frame": { "x": 80, "y": 170, "w": 600, "h": 440 } },
+        { "id": "review-illustration", "type": "image", "src": "media/review.svg",
+          "alt": "Un écran de module avec trois épingles de commentaires numérotées et une bulle de commentaire en dessous.",
+          "frame": { "x": 730, "y": 170, "w": 470, "h": 410 } }
+      ]
+    },
+    {
+      "id": "diffusion",
+      "title": "Diffuser et suivre",
+      "voiceover": {
+        "src": "media/vo-diffusion.wav",
+        "transcript": "Enfin, diffusez votre module : en paquet SCORM pour votre plateforme, ou par simple lien. Le serveur suit la progression et les scores de vos apprenants. Passons maintenant au quiz.",
+        "autoplay": true
+      },
+      "blocks": [
+        { "id": "diffusion-titre", "type": "text", "variant": "title", "content": "Diffuser et suivre",
+          "frame": { "x": 80, "y": 60, "w": 1120, "h": 80 } },
+        { "id": "diffusion-texte", "type": "text",
+          "content": "- En **paquet SCORM** pour votre plateforme (LMS) ;\n- ou par **simple lien**, sans plateforme ;\n- progression et scores suivis par le serveur ;\n- connecteurs prévus, comme Dendreo.",
+          "frame": { "x": 80, "y": 170, "w": 600, "h": 300 } },
+        { "id": "diffusion-revoir", "type": "button", "label": "Revoir Studio", "variant": "secondary",
+          "action": { "type": "goto", "page": "studio" },
+          "frame": { "x": 80, "y": 510, "w": 240, "h": 64 } },
+        { "id": "diffusion-quiz", "type": "button", "label": "Passer au quiz", "action": { "type": "next" },
+          "frame": { "x": 340, "y": 510, "w": 260, "h": 64 } },
+        { "id": "diffusion-illustration", "type": "image", "src": "media/diffusion.svg",
+          "alt": "Le module au centre, relié à trois sorties : SCORM et LMS, lien direct, suivi et scores.",
+          "frame": { "x": 730, "y": 160, "w": 470, "h": 430 } }
+      ]
+    },
+    {
+      "id": "quiz",
+      "title": "Quiz",
+      "unlockNext": "questionsAnswered",
+      "blocks": [
+        { "id": "q-relecture", "type": "question", "kind": "single",
+          "prompt": "Quel outil de la suite sert à faire relire un module ?",
+          "choices": [
+            { "id": "studio", "text": "Studio", "correct": false },
+            { "id": "review", "text": "Review", "correct": true },
+            { "id": "lecteur", "text": "Le lecteur", "correct": false }
+          ],
+          "feedback": { "correct": "Oui : Review sert à la relecture.", "incorrect": "C'est **Review**." },
+          "shuffle": true,
+          "style": { "fontSize": 17 },
+          "frame": { "x": 30, "y": 20, "w": 600, "h": 360 } },
+        { "id": "q-formats", "type": "question", "kind": "multiple",
+          "prompt": "Quels formats d'export sont prévus ?",
+          "choices": [
+            { "id": "html5", "text": "HTML5", "correct": true },
+            { "id": "scorm", "text": "SCORM", "correct": true },
+            { "id": "pptx", "text": "PowerPoint", "correct": false },
+            { "id": "cmi5", "text": "cmi5", "correct": true }
+          ],
+          "feedback": { "correct": "Exact.", "incorrect": "HTML5, SCORM et cmi5 ; pas PowerPoint." },
+          "attempts": 2,
+          "points": 2,
+          "style": { "fontSize": 17 },
+          "frame": { "x": 650, "y": 20, "w": 600, "h": 450 } },
+        { "id": "q-modes", "type": "question", "kind": "truefalse",
+          "prompt": "Studio propose deux modes : diapositives et vertical.",
+          "answer": true,
+          "feedback": { "correct": "Vrai !", "incorrect": "C'était vrai." },
+          "style": { "fontSize": 17 },
+          "frame": { "x": 30, "y": 395, "w": 600, "h": 305 } },
+        { "id": "resultat", "type": "results",
+          "passedMessage": "Bravo, vous connaissez la suite !",
+          "failedMessage": "Relisez les pages précédentes, puis réessayez.",
+          "style": { "fontSize": 17 },
+          "frame": { "x": 650, "y": 485, "w": 600, "h": 215 } }
+      ]
+    }
+  ]
+}
