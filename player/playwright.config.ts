@@ -20,5 +20,17 @@ export default defineConfig({
       env: { PORT: "5191" },
       reuseExistingServer: false,
     },
+    {
+      command: "node scripts/open.mjs ../examples/activites --no-open",
+      url: "http://localhost:5192/",
+      env: { PORT: "5192" },
+      reuseExistingServer: false,
+    },
+    {
+      command: "node scripts/open.mjs ../examples/activites-mobile --no-open",
+      url: "http://localhost:5193/",
+      env: { PORT: "5193" },
+      reuseExistingServer: false,
+    },
   ],
 });

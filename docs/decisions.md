@@ -32,3 +32,8 @@
 | 2026-11-09 | Reprise SCORM via `cmi.suspend_data` (allégée si > 4096 caractères) | L'apprenant reprend là où il s'était arrêté |
 | 2026-11-09 | Signature Windows reportée au jalon « 1re version publique de Studio » | Forme juridique pas encore choisie ; Microsoft refuse les entrepreneurs individuels européens |
 | 2026-11-09 | Phase 3b « Activités » insérée avant l'éditeur Studio | L'éditeur doit connaître toutes les briques |
+| 2026-11-09 | Activités à plusieurs éléments notées au prorata par défaut, « tout ou rien » en option | Choix du porteur : plus juste pour l'apprenant |
+| 2026-11-09 | Glisser-déposer sans le glisser natif du navigateur : toucher puis placer, + vrai glisser | Le glisser natif ne marche pas sur téléphone ni au clavier |
+| 2026-11-09 | Un seul modèle « éléments → cibles » pour catégories, paires et ordre | Moins de code, même comportement partout |
+| 2026-11-09 | Zones cliquables en % de l'image | Restent alignées quelle que soit la taille de l'écran |
+| 2026-11-09 | Modèles de page = morceaux de project.json, pas un nouveau format | Simples à réutiliser par Studio et par l'IA |

@@ -12,7 +12,7 @@ const packages = new Map<string, Record<string, Uint8Array>>();
 
 test.beforeAll(() => {
   const out = fs.mkdtempSync(path.join(os.tmpdir(), "ls-export-"));
-  for (const [name, dir] of [["suite", "../examples/presentation-suite"], ["jeu", "../examples/jeu-html"]]) {
+  for (const [name, dir] of [["suite", "../examples/presentation-suite"], ["jeu", "../examples/jeu-html"], ["activites", "../examples/activites"]]) {
     execFileSync(process.execPath, ["scripts/export.mjs", dir, "--format", "scorm12", "--out", out], { stdio: "pipe" });
     const zip = fs.readdirSync(out).find((f) => f.endsWith("-scorm12.zip") && !packages.has(f))!;
     packages.set(name, unzipSync(new Uint8Array(fs.readFileSync(path.join(out, zip)))));
@@ -149,4 +149,39 @@ test("un message de score qui ne vient pas du jeu est ignoré", async ({ page })
 
   await expect(sco.getByText("Résultat en attente")).toBeVisible();
   expect(await lmsValue(page, "cmi.core.score.raw")).not.toBe("100");
+});
+
+test("activités dans un paquet SCORM : score partiel au LMS, réponses retrouvées à la reprise", async ({ page }) => {
+  await page.goto(`${LMS}/lms/activites`);
+  let sco = page.frameLocator("#sco");
+  const openPage = async (title: string) => {
+    await sco.getByRole("button", { name: "☰ Menu" }).click();
+    await sco.getByRole("navigation", { name: "Pages du module" }).getByRole("button", { name: title, exact: true }).click();
+  };
+
+  // Texte à trous : 3 bons sur 4, puis le dernier essai est épuisé avec la même réponse.
+  await openPage("Un bon mot de passe");
+  const trous = sco.locator('[data-activity="trous-activite"]');
+  const blanks = trous.locator(".lsp-blank");
+  await blanks.nth(0).selectOption("long");
+  await blanks.nth(1).selectOption("identique");
+  await blanks.nth(2).fill("phrase");
+  await blanks.nth(3).selectOption("gestionnaire");
+  const valider = trous.locator(".lsp-question-actions").getByRole("button", { name: "Valider" });
+  await valider.click();
+  await valider.click();
+  await expect(trous.getByText("Partiellement juste : 75 %")).toBeVisible();
+
+  // 0,75 point sur 5 activités notées d'un point = 15 % ; le module n'est pas fini.
+  expect(await lmsValue(page, "cmi.core.score.raw")).toBe("15");
+  expect(await lmsValue(page, "cmi.core.lesson_status")).toBe("incomplete");
+
+  // L'apprenant ferme et revient : la page et les réponses (corrigées) sont là.
+  await page.reload();
+  sco = page.frameLocator("#sco");
+  await expect(sco.locator(".lsp-main")).toHaveAttribute("aria-label", "Un bon mot de passe");
+  const back = sco.locator('[data-activity="trous-activite"] .lsp-blank');
+  await expect(back.nth(1)).toHaveValue("identique");
+  await expect(back.nth(1)).toHaveClass(/is-wrong/);
+  await expect(back.nth(2)).toBeDisabled();
 });

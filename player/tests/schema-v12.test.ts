@@ -1,30 +1,28 @@
-import fs from "node:fs";
-import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { validateProject } from "../src/validate.ts";
 import type { Project } from "../src/types.ts";
 import { miniProject } from "./fixture.ts";
 
-const root = path.resolve(__dirname, "../..");
-const readJson = (p: string) => JSON.parse(fs.readFileSync(path.join(root, p), "utf8"));
+// Tous les fichiers JSON utiles, chargés par Vite au moment des tests.
+const projects = import.meta.glob("../../examples/*/project.json", { eager: true, import: "default" });
+const templates = import.meta.glob("../../schema/templates/*/*.json", { eager: true, import: "default" });
+const clone = <T>(x: T): T => structuredClone(x);
 
 describe("schéma 1.2 : exemples et modèles", () => {
-  it.each(["examples/activites", "examples/activites-mobile", "examples/jeu-html", "examples/presentation-suite", "examples/vertical-demo"])(
-    "%s est valide",
-    (dir) => expect(validateProject(readJson(`${dir}/project.json`))).toEqual({ ok: true, errors: [] }),
-  );
+  it("les 5 exemples sont trouvés", () => expect(Object.keys(projects)).toHaveLength(5));
+  for (const [file, project] of Object.entries(projects)) {
+    it(`${file.replace("../../", "")} est valide`, () => expect(validateProject(clone(project))).toEqual({ ok: true, errors: [] }));
+  }
 
-  for (const mode of ["slides", "vertical"] as const) {
-    const dir = `schema/templates/${mode}`;
-    for (const file of fs.readdirSync(path.join(root, dir))) {
-      it(`modèle ${mode}/${file} est valide`, () => {
-        const p = miniProject();
-        p.schemaVersion = "1.2";
-        p.mode = mode;
-        p.pages = [readJson(`${dir}/${file}`)];
-        expect(validateProject(p).errors).toEqual([]);
-      });
-    }
+  it("les 12 modèles sont trouvés", () => expect(Object.keys(templates)).toHaveLength(12));
+  for (const [file, page] of Object.entries(templates)) {
+    it(`modèle ${file.replace("../../schema/templates/", "")} est valide`, () => {
+      const p = miniProject();
+      p.schemaVersion = "1.2";
+      p.mode = file.includes("/vertical/") ? "vertical" : "slides";
+      p.pages = [clone(page) as Project["pages"][number]];
+      expect(validateProject(p).errors).toEqual([]);
+    });
   }
 });
 

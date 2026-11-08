@@ -3,11 +3,13 @@
 ## État au 2026-11-09
 Ordre changé (voir decisions.md) : on a commencé par le socle Studio et la phase 3.
 - Fait : appli Studio vide (fenêtre + installateurs .exe et MSI).
-- Fait : schéma project.json v1.1, lecteur HTML5, trois projets d'exemple, tests.
+- Fait : schéma project.json v1.2, lecteur HTML5, cinq projets d'exemple, tests.
 - Fait : export HTML5 et SCORM 1.2 (reprise, score, statut), brique HTML pour les jeux avec score.
 - Validé le 2026-11-09 : les paquets passent dans SCORM Cloud (score, statut, reprise, jeu HTML).
 - Reste en phase 3 : test dans Rise Up (facultatif), skill Claude (après la phase 3b, quand le schéma sera stable).
-- Ensuite : phase 3b (activités), puis phase 4 (Studio).
+- Fait (phase 3b) : cartes, onglets, accordéon, frise, texte à trous, glisser-déposer
+  (catégories, paires, ordre), zones cliquables, modèles de page ; au doigt, souris et clavier.
+- Ensuite : phase 4 (éditeur Studio).
 
 ## Phase 1 : Review en local (sur ton PC)
 Livrable : le serveur tourne sur ton PC, s'ouvre dans le navigateur.

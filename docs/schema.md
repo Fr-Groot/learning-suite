@@ -50,6 +50,11 @@ un `frame` en mode vertical et l'oubli d'un `frame` en mode diapositives.
 | `question` | voir ci-dessous |
 | `results` | affiche score, seuil, « Réussi » / « Échoué », bouton « Recommencer » |
 | `html` | jeu ou contenu HTML isolé : `src`, `title`, `graded`, `points`, `height` (v1.1) |
+| `flipcards` | cartes à retourner (recto / verso, texte ou image) (v1.2) |
+| `reveal` | onglets, accordéon ou frise chronologique (v1.2) |
+| `fillblanks` | texte à trous, à saisir ou en liste (v1.2) |
+| `dragdrop` | glisser-déposer : catégories, paires, ordre (v1.2) |
+| `hotspot` | image avec zones à trouver ou à explorer (v1.2) |
 
 Toutes les briques ont un `id` et peuvent avoir un `style` (couleur, fond, taille
 de texte, gras, alignement, arrondi, opacité, marge intérieure) qui surcharge le thème.
@@ -112,6 +117,42 @@ et ça empêche d'injecter du code dans un module.
 - `unlockNext: "questionsAnswered"` attend aussi la fin des jeux notés de la page.
 - `height` : hauteur en mode vertical (en mode diapositives, c'est le `frame`).
 
+## Activités (v1.2)
+
+Exemple complet : `examples/activites/` (diapositives) et `examples/activites-mobile/` (téléphone).
+
+**Réglages communs des activités notées** (`fillblanks`, `dragdrop`, `hotspot` « find ») :
+`graded` (oui par défaut), `points`, `attempts`, `feedback` (`correct`, `partial`, `incorrect`) et
+`scoring` : `partial` (défaut, au prorata : 3 sur 4 = 75 % des points) ou `all-or-nothing`.
+
+**Activités de découverte** (`flipcards`, `reveal`, `hotspot` « explore ») : jamais notées ;
+avec `requireAll: true`, il faut tout ouvrir pour terminer.
+
+`unlockNext: "activitiesDone"` : « Suivant » attend que toutes les activités de la page soient
+terminées (l'ancien nom `questionsAnswered` reste accepté).
+
+| Brique | Exemple |
+| --- | --- |
+| Cartes | `{ "type": "flipcards", "cards": [{ "id": "c1", "front": "Question", "back": "Réponse" }] }` |
+| Onglets / frise / accordéon | `{ "type": "reveal", "layout": "tabs", "items": [{ "id": "t1", "title": "Onglet", "content": "Texte" }] }` |
+| Texte à trous | `{ "type": "fillblanks", "text": "Le chat [[mange\|dévore]] la [[*souris\|chaise]]." }` |
+| Catégories | `{ "type": "dragdrop", "kind": "categorize", "categories": [...], "items": [{ "id": "a", "text": "…", "category": "bon" }] }` |
+| Paires | `{ "type": "dragdrop", "kind": "match", "pairs": [{ "id": "p1", "prompt": "Terme", "answer": "Définition" }] }` |
+| Ordre | `{ "type": "dragdrop", "kind": "order", "items": [ …dans le bon ordre, ils seront mélangés… ] }` |
+| Zones | `{ "type": "hotspot", "kind": "find", "src": "media/x.svg", "alt": "…", "zones": [{ "id": "z", "x": 10, "y": 20, "w": 15, "h": 10, "label": "…", "correct": true }] }` |
+
+- **Texte à trous** : `[[a|b]]` = à saisir (a ou b accepté) ; `[[*a|b|c]]` = liste, l'étoile marque la
+  bonne réponse. Majuscules et accents tolérés sauf `caseSensitive` / `accentSensitive`.
+- **Zones** : position et taille en **% de l'image**. En « find », chaque mauvaise zone cochée annule
+  une bonne (sinon il suffirait de tout cocher).
+- **Glisser-déposer** : jouable en touchant l'élément puis sa place (doigt, souris, clavier),
+  ou en le faisant vraiment glisser.
+
+## Modèles de page
+
+`schema/templates/slides/` et `schema/templates/vertical/` : titre + texte + image, image pleine
+page, deux colonnes, citation, question, résultat. Ce sont des pages prêtes à copier dans `pages`.
+
 ## Ce que le schéma ne peut pas vérifier seul
 
 Le lecteur fera ces contrôles en plus, avec un message clair :
@@ -120,7 +161,6 @@ identifiants en double, bouton `goto` vers une page qui n'existe pas,
 
 ## Hors v1 (volontairement)
 
-Animations et transitions, déclencheurs/variables, glisser-déposer, questions
-à trous ou d'association, points partiels, banque de questions tirées au sort,
+Animations et transitions, déclencheurs/variables, banque de questions tirées au sort,
 multilingue dans un même fichier, polices embarquées. On les ajoutera en v1.x
 sans casser les projets existants.
