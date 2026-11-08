@@ -22,24 +22,72 @@
       "success": "#1E9E5A",
       "error": "#D64545"
     },
-    "fonts": { "heading": "Segoe UI", "body": "Segoe UI" },
+    "fonts": {
+      "heading": "Segoe UI",
+      "body": "Segoe UI"
+    },
     "radius": 10
   },
-  "navigation": { "linear": false, "allowBack": true, "showMenu": true, "showProgress": true },
-  "scoring": { "passingScore": 70 },
+  "navigation": {
+    "linear": false,
+    "allowBack": true,
+    "showMenu": true,
+    "showProgress": true
+  },
+  "scoring": {
+    "passingScore": 70
+  },
   "pages": [
     {
       "id": "accueil",
       "title": "Bienvenue",
-      "background": { "color": "#1B2A4A" },
+      "background": {
+        "color": "#1B2A4A"
+      },
       "blocks": [
-        { "id": "accueil-titre", "type": "text", "variant": "title", "content": "Les bons réflexes numériques",
-          "style": { "color": "#FFFFFF" }, "frame": { "x": 80, "y": 180, "w": 1120, "h": 90 } },
-        { "id": "accueil-texte", "type": "text",
+        {
+          "id": "accueil-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Les bons réflexes numériques",
+          "style": {
+            "color": "#FFFFFF"
+          },
+          "frame": {
+            "x": 80,
+            "y": 180,
+            "w": 1120,
+            "h": 90
+          }
+        },
+        {
+          "id": "accueil-texte",
+          "type": "text",
           "content": "Un module de démonstration : **chaque page montre une activité** de Learning Suite.\nCartes, onglets, frise, texte à trous, glisser-déposer, zones à trouver.",
-          "style": { "color": "#C9D6FF" }, "frame": { "x": 80, "y": 290, "w": 900, "h": 120 } },
-        { "id": "accueil-go", "type": "button", "label": "Commencer", "action": { "type": "next" },
-          "frame": { "x": 80, "y": 470, "w": 240, "h": 64 } }
+          "style": {
+            "color": "#C9D6FF"
+          },
+          "frame": {
+            "x": 80,
+            "y": 290,
+            "w": 900,
+            "h": 120
+          }
+        },
+        {
+          "id": "accueil-go",
+          "type": "button",
+          "label": "Commencer",
+          "action": {
+            "type": "next"
+          },
+          "frame": {
+            "x": 80,
+            "y": 470,
+            "w": 240,
+            "h": 64
+          }
+        }
       ]
     },
     {
@@ -47,64 +95,244 @@
       "title": "Idées reçues",
       "unlockNext": "activitiesDone",
       "blocks": [
-        { "id": "cartes-titre", "type": "text", "variant": "title", "content": "Vrai ou idée reçue ?",
-          "frame": { "x": 60, "y": 30, "w": 1160, "h": 70 } },
-        { "id": "cartes-consigne", "type": "text", "variant": "caption", "content": "Retournez les 4 cartes pour continuer.",
-          "frame": { "x": 60, "y": 100, "w": 1160, "h": 36 } },
-        { "id": "cartes-jeu", "type": "flipcards", "requireAll": true, "columns": 4,
+        {
+          "id": "cartes-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Vrai ou idée reçue ?",
+          "frame": {
+            "x": 60,
+            "y": 30,
+            "w": 1160,
+            "h": 70
+          }
+        },
+        {
+          "id": "cartes-consigne",
+          "type": "text",
+          "variant": "caption",
+          "content": "Retournez les 4 cartes pour continuer.",
+          "frame": {
+            "x": 60,
+            "y": 100,
+            "w": 1160,
+            "h": 36
+          }
+        },
+        {
+          "id": "cartes-jeu",
+          "type": "flipcards",
+          "requireAll": true,
+          "columns": 4,
           "cards": [
-            { "id": "c1", "front": "« Mon antivirus me protège de tout. »", "back": "**Idée reçue.** Il ne bloque pas un mail trompeur qui vous fait saisir votre mot de passe." },
-            { "id": "c2", "front": "« Un mot de passe long vaut mieux qu'un mot de passe compliqué. »", "back": "**Vrai.** Une phrase de 4 ou 5 mots est plus solide et plus facile à retenir." },
-            { "id": "c3", "front": "« Les pirates ne visent que les grandes entreprises. »", "back": "**Idée reçue.** Les petites structures sont des cibles faciles et fréquentes." },
-            { "id": "c4", "front": "« Mettre à jour son poste protège vraiment. »", "back": "**Vrai.** La plupart des attaques utilisent des failles déjà corrigées." }
+            {
+              "id": "c1",
+              "front": "« Mon antivirus me protège de tout. »",
+              "back": "**Idée reçue.** Il ne bloque pas un mail trompeur qui vous fait saisir votre mot de passe."
+            },
+            {
+              "id": "c2",
+              "front": "« Un mot de passe long vaut mieux qu'un mot de passe compliqué. »",
+              "back": "**Vrai.** Une phrase de 4 ou 5 mots est plus solide et plus facile à retenir."
+            },
+            {
+              "id": "c3",
+              "front": "« Les pirates ne visent que les grandes entreprises. »",
+              "back": "**Idée reçue.** Les petites structures sont des cibles faciles et fréquentes."
+            },
+            {
+              "id": "c4",
+              "front": "« Mettre à jour son poste protège vraiment. »",
+              "back": "**Vrai.** La plupart des attaques utilisent des failles déjà corrigées."
+            }
           ],
-          "frame": { "x": 60, "y": 160, "w": 1160, "h": 500 } }
+          "frame": {
+            "x": 60,
+            "y": 160,
+            "w": 1160,
+            "h": 500
+          }
+        }
       ]
     },
     {
       "id": "onglets",
       "title": "Les arnaques courantes",
       "blocks": [
-        { "id": "onglets-titre", "type": "text", "variant": "title", "content": "Trois arnaques courantes",
-          "frame": { "x": 60, "y": 30, "w": 1160, "h": 70 } },
-        { "id": "onglets-contenu", "type": "reveal", "layout": "tabs",
+        {
+          "id": "onglets-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Trois arnaques courantes",
+          "frame": {
+            "x": 60,
+            "y": 30,
+            "w": 1160,
+            "h": 70
+          }
+        },
+        {
+          "id": "onglets-contenu",
+          "type": "reveal",
+          "layout": "tabs",
           "items": [
-            { "id": "t1", "title": "Hameçonnage", "content": "Un mail imite votre banque ou un service connu pour vous faire **cliquer et saisir vos identifiants**.\n- Vérifiez l'adresse de l'expéditeur.\n- Survolez les liens avant de cliquer." },
-            { "id": "t2", "title": "Faux support", "content": "Une fenêtre affiche « Votre ordinateur est infecté, appelez ce numéro ».\n- Ne rappelez jamais.\n- Fermez le navigateur et prévenez votre service informatique." },
-            { "id": "t3", "title": "Arnaque au président", "content": "Un faux dirigeant demande un **virement urgent et confidentiel**.\n- Vérifiez toujours par un autre canal (téléphone connu)." }
+            {
+              "id": "t1",
+              "title": "Hameçonnage",
+              "content": "Un mail imite votre banque ou un service connu pour vous faire **cliquer et saisir vos identifiants**.\n- Vérifiez l'adresse de l'expéditeur.\n- Survolez les liens avant de cliquer."
+            },
+            {
+              "id": "t2",
+              "title": "Faux support",
+              "content": "Une fenêtre affiche « Votre ordinateur est infecté, appelez ce numéro ».\n- Ne rappelez jamais.\n- Fermez le navigateur et prévenez votre service informatique."
+            },
+            {
+              "id": "t3",
+              "title": "Arnaque au président",
+              "content": "Un faux dirigeant demande un **virement urgent et confidentiel**.\n- Vérifiez toujours par un autre canal (téléphone connu)."
+            }
           ],
-          "frame": { "x": 60, "y": 120, "w": 1160, "h": 560 } }
+          "frame": {
+            "x": 60,
+            "y": 120,
+            "w": 1160,
+            "h": 560
+          }
+        }
       ]
     },
     {
       "id": "frise",
       "title": "Réagir à un incident",
       "blocks": [
-        { "id": "frise-titre", "type": "text", "variant": "title", "content": "Réagir à un incident, étape par étape",
-          "frame": { "x": 60, "y": 30, "w": 1160, "h": 70 } },
-        { "id": "frise-contenu", "type": "reveal", "layout": "timeline",
+        {
+          "id": "frise-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Réagir à un incident, étape par étape",
+          "frame": {
+            "x": 60,
+            "y": 30,
+            "w": 1160,
+            "h": 70
+          }
+        },
+        {
+          "id": "frise-contenu",
+          "type": "reveal",
+          "layout": "timeline",
           "items": [
-            { "id": "e1", "title": "0 min", "content": "**Débranchez le réseau** (câble ou Wi-Fi) sans éteindre l'ordinateur." },
-            { "id": "e2", "title": "5 min", "content": "**Prévenez** le service informatique ou votre référent sécurité." },
-            { "id": "e3", "title": "15 min", "content": "**Notez** ce que vous avez vu : message, heure, pièce jointe ouverte." },
-            { "id": "e4", "title": "1 h", "content": "**Changez vos mots de passe** depuis un autre appareil sûr." }
+            {
+              "id": "e1",
+              "title": "0 min",
+              "content": "**Débranchez le réseau** (câble ou Wi-Fi) sans éteindre l'ordinateur."
+            },
+            {
+              "id": "e2",
+              "title": "5 min",
+              "content": "**Prévenez** le service informatique ou votre référent sécurité."
+            },
+            {
+              "id": "e3",
+              "title": "15 min",
+              "content": "**Notez** ce que vous avez vu : message, heure, pièce jointe ouverte."
+            },
+            {
+              "id": "e4",
+              "title": "1 h",
+              "content": "**Changez vos mots de passe** depuis un autre appareil sûr."
+            }
           ],
-          "frame": { "x": 60, "y": 120, "w": 1160, "h": 560 } }
+          "frame": {
+            "x": 60,
+            "y": 120,
+            "w": 1160,
+            "h": 560
+          }
+        }
       ]
     },
     {
       "id": "faq",
       "title": "Questions fréquentes",
       "blocks": [
-        { "id": "faq-titre", "type": "text", "variant": "title", "content": "Questions fréquentes",
-          "frame": { "x": 60, "y": 30, "w": 1160, "h": 70 } },
-        { "id": "faq-contenu", "type": "reveal", "layout": "accordion",
+        {
+          "id": "faq-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Questions fréquentes",
+          "frame": {
+            "x": 60,
+            "y": 30,
+            "w": 1160,
+            "h": 70
+          }
+        },
+        {
+          "id": "faq-contenu",
+          "type": "reveal",
+          "layout": "accordion",
           "items": [
-            { "id": "f1", "title": "Puis-je utiliser ma clé USB personnelle ?", "content": "Seulement si votre entreprise l'autorise, et après analyse par l'antivirus." },
-            { "id": "f2", "title": "Faut-il un mot de passe différent par site ?", "content": "Oui. Un gestionnaire de mots de passe vous aide à les retenir." },
-            { "id": "f3", "title": "Que faire d'un mail douteux ?", "content": "Ne cliquez pas, ne répondez pas : signalez-le au service informatique." }
+            {
+              "id": "f1",
+              "title": "Puis-je utiliser ma clé USB personnelle ?",
+              "content": "Seulement si votre entreprise l'autorise, et après analyse par l'antivirus."
+            },
+            {
+              "id": "f2",
+              "title": "Faut-il un mot de passe différent par site ?",
+              "content": "Oui. Un gestionnaire de mots de passe vous aide à les retenir."
+            },
+            {
+              "id": "f3",
+              "title": "Que faire d'un mail douteux ?",
+              "content": "Ne cliquez pas, ne répondez pas : signalez-le au service informatique."
+            }
           ],
-          "frame": { "x": 60, "y": 120, "w": 1160, "h": 560 } }
+          "frame": {
+            "x": 60,
+            "y": 120,
+            "w": 1160,
+            "h": 560
+          }
+        }
+      ]
+    },
+    {
+      "id": "trous",
+      "title": "Un bon mot de passe",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        {
+          "id": "trous-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Un bon mot de passe",
+          "frame": {
+            "x": 60,
+            "y": 30,
+            "w": 1160,
+            "h": 70
+          }
+        },
+        {
+          "id": "trous-activite",
+          "type": "fillblanks",
+          "prompt": "Complétez le texte : saisissez le mot manquant ou choisissez dans la liste.",
+          "text": "Un bon mot de passe est [[*long|court|simple]] et [[*unique|identique]] pour chaque site.\nLe plus simple : une [[phrase|phrase de passe]] de plusieurs mots, gardée dans un [[*gestionnaire|carnet|fichier Excel]] de mots de passe.",
+          "attempts": 2,
+          "feedback": {
+            "correct": "Parfait !",
+            "partial": "Presque : relisez les trous en rouge.",
+            "incorrect": "Relisez la carte sur les mots de passe."
+          },
+          "frame": {
+            "x": 60,
+            "y": 120,
+            "w": 1160,
+            "h": 560
+          }
+        }
       ]
     }
   ]

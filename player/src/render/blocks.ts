@@ -2,6 +2,7 @@
 import type { Block } from "../types.ts";
 import { renderButton } from "./button.ts";
 import type { RenderContext } from "./context.ts";
+import { renderFillBlanks } from "./fillblanks.ts";
 import { renderFlipCards } from "./flipcards.ts";
 import { renderHtml } from "./html.ts";
 import { renderImage } from "./image.ts";
@@ -27,6 +28,7 @@ export function renderBlock(b: Block, ctx: RenderContext): HTMLElement {
     case "html": content = renderHtml(b, ctx); break;
     case "flipcards": content = renderFlipCards(b, ctx); break;
     case "reveal": content = renderReveal(b, ctx); break;
+    case "fillblanks": content = renderFillBlanks(b, ctx); break;
     default: content = ctx.doc.createElement("div");
   }
   const wrap = ctx.doc.createElement("div");

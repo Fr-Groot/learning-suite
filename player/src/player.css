@@ -237,6 +237,20 @@
 .lsp-html-status { margin: 6px 0 0; font-size: 0.85em; font-weight: 600; color: var(--lsp-success); }
 .lsp--slides .lsp-html-status { font-size: 16px; }
 
+/* ---------- Texte à trous ---------- */
+.lsp-fillblanks-text { line-height: 2.1; }
+.lsp-fillblanks-text p { margin: 0 0 0.5em; }
+.lsp-blank {
+  font: inherit; font-size: 0.95em; padding: 2px 8px; margin: 0 2px; min-width: 4ch; max-width: 100%;
+  border: 2px solid color-mix(in srgb, var(--lsp-text) 25%, transparent); border-radius: calc(var(--lsp-radius) / 2);
+  background: var(--lsp-background); color: var(--lsp-text);
+}
+.lsp-blank:focus { border-color: var(--lsp-primary); outline: none; }
+.lsp-blank.is-right { border-color: var(--lsp-success); background: color-mix(in srgb, var(--lsp-success) 10%, var(--lsp-background)); }
+.lsp-blank.is-wrong { border-color: var(--lsp-error); background: color-mix(in srgb, var(--lsp-error) 8%, var(--lsp-background)); }
+.lsp-blank:disabled { color: var(--lsp-text); opacity: 1; }
+.lsp-blank-answer { color: var(--lsp-success); font-weight: 600; }
+
 /* ---------- Cartes à retourner ---------- */
 .lsp-flipcards { display: grid; grid-template-columns: repeat(var(--lsp-cols, 3), minmax(0, 1fr)); gap: 16px; height: 100%; }
 .lsp-flipcards > [role="listitem"] { min-height: 0; }

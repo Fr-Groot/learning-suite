@@ -51,7 +51,7 @@ export function submit(q: QuestionBlock, state: QuestionState, response: Respons
   return { attemptsUsed, correct, done: correct || attemptsUsed >= maxAttempts, lastResponse: response };
 }
 
-export const attemptsLeft = (q: QuestionBlock, s: QuestionState) => Math.max(0, (q.attempts ?? 1) - s.attemptsUsed);
+export const attemptsLeft = (a: { attempts?: number }, s: ActivityState) => Math.max(0, (a.attempts ?? 1) - s.attemptsUsed);
 
 /**
  * Message reçu d'un jeu HTML. On garde le meilleur score obtenu.

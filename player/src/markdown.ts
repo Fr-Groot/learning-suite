@@ -92,19 +92,22 @@ export function parseInline(src: string): Inline[] {
   return out;
 }
 
+/** Remplace un morceau de texte brut par des éléments (ex. les champs d'un texte à trous). */
+export type TextHook = (text: string) => Node[];
+
 /** Transforme le mini-Markdown en éléments de page. */
-export function renderMarkdown(src: string, doc: Document = document): DocumentFragment {
+export function renderMarkdown(src: string, doc: Document = document, hook?: TextHook): DocumentFragment {
   const frag = doc.createDocumentFragment();
   for (const block of parseMarkdown(src)) {
     if (block.type === "p") {
       const p = doc.createElement("p");
-      appendInlines(p, block.c, doc);
+      appendInlines(p, block.c, doc, hook);
       frag.append(p);
     } else {
       const list = doc.createElement(block.type);
       for (const item of block.items) {
         const li = doc.createElement("li");
-        appendInlines(li, item, doc);
+        appendInlines(li, item, doc, hook);
         list.append(li);
       }
       frag.append(list);
@@ -113,9 +116,9 @@ export function renderMarkdown(src: string, doc: Document = document): DocumentF
   return frag;
 }
 
-function appendInlines(parent: HTMLElement, inlines: Inline[], doc: Document) {
+function appendInlines(parent: HTMLElement, inlines: Inline[], doc: Document, hook?: TextHook) {
   for (const n of inlines) {
-    if (n.t === "text") parent.append(doc.createTextNode(n.v));
+    if (n.t === "text") parent.append(...(hook ? hook(n.v) : [doc.createTextNode(n.v)]));
     else if (n.t === "br") parent.append(doc.createElement("br"));
     else {
       const el = doc.createElement(n.t === "strong" ? "strong" : n.t === "em" ? "em" : "a");
@@ -124,7 +127,7 @@ function appendInlines(parent: HTMLElement, inlines: Inline[], doc: Document) {
         (el as HTMLAnchorElement).target = "_blank";
         (el as HTMLAnchorElement).rel = "noopener noreferrer";
       }
-      appendInlines(el, n.c, doc);
+      appendInlines(el, n.c, doc, hook);
       parent.append(el);
     }
   }
