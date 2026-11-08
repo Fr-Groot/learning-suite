@@ -13,3 +13,6 @@
 | 2026-11-08 | Modèle : création gratuite, diffusion et collaboration payantes | Le paiement tombe là où sont les coûts (serveurs, suivi, humain) |
 | 2026-11-08 | Premier développement : Server, module Review | Utile tout de suite sur Rise Up et EdTake, premier revenu |
 | 2026-11-08 | Connecteur Dendreo porté par le serveur | Seul le serveur voit inscriptions et résultats |
+| 2026-11-08 | Ordre changé : Studio + schéma + lecteur avant Review | Choix du porteur : poser d'abord le format pivot et le lecteur |
+| 2026-11-08 | Rust en version MSVC sous Windows | Configuration officielle de Tauri, moins de surprises à la construction |
+| 2026-11-08 | Installateurs Studio : setup.exe (NSIS) et MSI | Le .exe pour les indépendants (sans droits admin), le MSI pour les DSI |
