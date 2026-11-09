@@ -1,0 +1,67 @@
+# Vérification automatique à chaque envoi : tous les tests (lecteur, Studio, Rust) sous Windows.
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            player/package-lock.json
+            studio/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: studio/src-tauri
+
+      - name: Lecteur — installation
+        working-directory: player
+        run: npm ci
+
+      - name: Lecteur — tests unitaires
+        working-directory: player
+        run: npm test
+
+      - name: Lecteur — construction
+        working-directory: player
+        run: npm run build
+
+      - name: Lecteur — parcours de bout en bout (Edge)
+        working-directory: player
+        run: npm run test:e2e
+
+      - name: Studio — installation
+        working-directory: studio
+        run: npm ci
+
+      - name: Studio — tests unitaires
+        working-directory: studio
+        run: npm test
+
+      - name: Studio — parcours de bout en bout (Edge)
+        working-directory: studio
+        run: npx playwright test
+
+      - name: Studio — construction de l'interface (nécessaire aux tests Rust)
+        working-directory: studio
+        run: npm run build
+
+      - name: Studio — tests Rust
+        working-directory: studio/src-tauri
+        run: cargo test --locked
