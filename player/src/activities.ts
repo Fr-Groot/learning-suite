@@ -99,15 +99,24 @@ export function openItem(state: ActivityState, itemId: string, allIds: string[],
   return { ...state, opened, done };
 }
 
-/** Une brique compte-t-elle dans le score ? Jeux HTML : non par défaut ; autres activités notables : oui. */
-export function isGraded(b: Block): b is Activity {
-  if (b.type === "question" || b.type === "fillblanks" || b.type === "dragdrop") return b.graded !== false;
-  if (b.type === "hotspot") return b.kind === "find" && b.graded !== false;
-  if (b.type === "html") return b.graded === true;
-  return false;
+/** Rôle d'une interaction : réglage « role », sinon ancien « graded », sinon valeur par défaut. */
+export function roleOf(b: Activity): "exercise" | "activity" {
+  if (b.role) return b.role;
+  if (b.type === "html") return b.graded === true ? "exercise" : "activity";
+  if (b.type === "hotspot" && b.kind === "explore") return "activity";
+  return b.graded === false ? "activity" : "exercise";
 }
 
-export const gradedActivities = (project: Project): Activity[] => project.pages.flatMap((p) => p.blocks.filter(isGraded));
+/** Briques qui peuvent être un exercice (les autres sont toujours des activités de découverte). */
+export const isInteraction = (b: Block): b is Activity =>
+  b.type === "question" || b.type === "fillblanks" || b.type === "dragdrop" || b.type === "html" || (b.type === "hotspot" && b.kind === "find");
+
+/** Un exercice : noté, compte dans le score et dans le LMS. */
+export function isExercise(b: Block): b is Activity {
+  return isInteraction(b) && roleOf(b) === "exercise";
+}
+
+export const exercises = (project: Project): Activity[] => project.pages.flatMap((p) => p.blocks.filter(isExercise));
 
 /** Briques à terminer avant de débloquer « Suivant » (activitiesDone / questionsAnswered). */
 export const pageActivities = (page: Page): Block[] =>
@@ -115,7 +124,7 @@ export const pageActivities = (page: Page): Block[] =>
     (b) =>
       ((b.type === "flipcards" || b.type === "reveal" || (b.type === "hotspot" && b.kind === "explore")) && b.requireAll === true) ||
       b.type === "question" ||
-      isGraded(b),
+      isExercise(b),
   );
 
 export interface Score {
@@ -141,7 +150,7 @@ export function computeScore(project: Project, states: Map<string, QuestionState
   let raw = 0;
   let max = 0;
   let complete = true;
-  for (const a of gradedActivities(project)) {
+  for (const a of exercises(project)) {
     const pts = a.points ?? 1;
     const s = states.get(a.id);
     max += pts;
@@ -154,7 +163,7 @@ export function computeScore(project: Project, states: Map<string, QuestionState
   return { raw, max, percent, passed: percent >= project.scoring.passingScore, complete };
 }
 
-export const hasGradedActivities = (project: Project) => gradedActivities(project).length > 0;
+export const hasExercises = (project: Project) => exercises(project).length > 0;
 
 /** Pour les tests et l'affichage : ce type d'activité est-il un jeu HTML ? */
 export const isHtml = (a: Activity): a is HtmlBlock => a.type === "html";

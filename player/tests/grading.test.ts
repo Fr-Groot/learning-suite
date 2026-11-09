@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isGraded, newQuestionState, openItem, pageActivities, submitMulti } from "../src/activities.ts";
+import { isExercise, newQuestionState, openItem, pageActivities, submitMulti } from "../src/activities.ts";
 import { dragModel, gradeDragDrop } from "../src/grading/dragdrop.ts";
 import { gradeFillBlanks, normalize, parseBlanks } from "../src/grading/fillblanks.ts";
 import { gradeHotspot } from "../src/grading/hotspot.ts";
@@ -81,8 +81,9 @@ describe("zones à trouver", () => {
     expect(gradeHotspot(hs, ["plante"])).toBe(0);
   });
   it("seules les zones « à trouver » sont notées", () => {
-    expect(isGraded(hs)).toBe(true);
-    expect(isGraded({ ...hs, kind: "explore" })).toBe(false);
+    expect(isExercise(hs)).toBe(true);
+    expect(isExercise({ ...hs, kind: "explore" })).toBe(false);
+    expect(isExercise({ ...hs, role: "activity" })).toBe(false);
   });
 });
 

@@ -16,7 +16,7 @@ export function renderResults(b: ResultsBlock, ctx: RenderContext): HTMLElement 
     if (!s.complete) {
       box.append(
         el(doc, "p", { class: "lsp-results-status", text: "Résultat en attente" }),
-        el(doc, "p", { text: "Terminez toutes les activités notées pour voir votre résultat." }),
+        el(doc, "p", { text: "Terminez les exercices notés pour voir votre résultat." }),
       );
       return;
     }

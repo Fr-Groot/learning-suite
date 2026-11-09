@@ -48,7 +48,7 @@ function freshIds(page: Page, taken: Set<string>): Page {
 export function newProject(opts: { title: string; mode: Mode; themeId?: string; author?: string }): Project {
   const theme = THEMES.find((t) => t.id === opts.themeId) ?? THEMES[0];
   const project: Project = {
-    schemaVersion: "1.2",
+    schemaVersion: "1.3",
     meta: { id: crypto.randomUUID(), title: opts.title.trim() || "Nouveau module", language: "fr", version: "1.0.0", ...(opts.author ? { author: opts.author } : {}) },
     mode: opts.mode,
     theme: clone(theme.theme),

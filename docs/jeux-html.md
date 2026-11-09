@@ -10,7 +10,7 @@ Le jeu peut **renvoyer un score** : il compte dans le résultat et part au LMS (
 3. Ajoutez la brique dans `project.json` :
    ```json
    { "id": "mon-jeu", "type": "html", "src": "media/jeux/mon-jeu.html",
-     "title": "Jeu : les bons gestes", "graded": true, "points": 2,
+     "title": "Jeu : les bons gestes", "role": "exercise", "points": 2,
      "frame": { "x": 40, "y": 30, "w": 800, "h": 660 } }
    ```
    En mode vertical, remplacez `frame` par `"height": 600`.

@@ -1,5 +1,6 @@
 // Panneau Propriétés (à droite) : réglages de la brique sélectionnée, de la page, ou du module.
 import { useEffect, useState } from "react";
+import { isInteraction, roleOf } from "@player/activities.ts";
 import type { Block, ButtonAction, Frame, Page, Project, Style } from "@player/types.ts";
 import { reorderBlock, updateBlock, updatePage, updateProject } from "../model/actions.ts";
 import { store, useEditor } from "../model/store.ts";
@@ -156,6 +157,14 @@ function BlockContent({ block, set, project }: { block: Block; set: (patch: Part
     default:
       return (
         <Section title="Contenu">
+          {isInteraction(block) && (
+            <Select
+              label="Type"
+              value={roleOf(block)}
+              options={[["exercise", "Exercice noté (compte dans le score)"], ["activity", "Activité d'entraînement (non notée)"]]}
+              onChange={(role) => set({ role, graded: undefined } as Partial<Block>)}
+            />
+          )}
           <p className="st-note">Cette activité s'affiche et se déplace déjà. Ses réglages détaillés (questions, réponses, zones…) arrivent à la prochaine étape de Studio.</p>
         </Section>
       );

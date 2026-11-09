@@ -2,6 +2,7 @@
 // Le cadre ne peut ni lire le module, ni le LMS, ni les données de l'apprenant
 // (sandbox sans « allow-same-origin »). Il ne peut qu'envoyer un message :
 //   { type: "learning-suite", score: 0-100, completed: true }
+import { roleOf } from "../activities.ts";
 import type { HtmlBlock } from "../types.ts";
 import { el, type RenderContext } from "./context.ts";
 
@@ -25,7 +26,7 @@ export function renderHtml(b: HtmlBlock, ctx: RenderContext): HTMLElement {
 
   const draw = () => {
     const st = ctx.questionState(b.id);
-    status.hidden = !b.graded || !st.done;
+    status.hidden = roleOf(b) !== "exercise" || !st.done;
     status.textContent = st.done ? `Activité terminée · score enregistré : ${Math.round(st.score ?? 0)} %` : "";
   };
 

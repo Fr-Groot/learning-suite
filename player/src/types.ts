@@ -3,9 +3,12 @@
 
 export type Mode = "slides" | "vertical";
 
+/** Exercice = noté (compte dans le score et le LMS). Activité = jamais notée (entraînement, découverte). */
+export type Role = "exercise" | "activity";
+
 export interface Project {
   $schema?: string;
-  schemaVersion: "1.0" | "1.1" | "1.2";
+  schemaVersion: "1.0" | "1.1" | "1.2" | "1.3";
   meta: Meta;
   mode: Mode;
   theme: Theme;
@@ -151,6 +154,8 @@ export interface QuestionBlock extends BlockBase {
   attempts?: number;
   shuffle?: boolean;
   points?: number;
+  role?: Role;
+  /** @deprecated remplacé par role (schéma 1.3) ; encore lu pour les anciens modules. */
   graded?: boolean;
 }
 
@@ -165,6 +170,8 @@ export interface HtmlBlock extends BlockBase {
   type: "html";
   src: string;
   title: string;
+  role?: Role;
+  /** @deprecated remplacé par role (schéma 1.3) ; encore lu pour les anciens modules. */
   graded?: boolean;
   points?: number;
   height?: number;
@@ -172,6 +179,8 @@ export interface HtmlBlock extends BlockBase {
 
 /** Réglages communs aux activités notées à plusieurs éléments (v1.2). */
 interface GradedProps {
+  role?: Role;
+  /** @deprecated remplacé par role (schéma 1.3) ; encore lu pour les anciens modules. */
   graded?: boolean;
   points?: number;
   attempts?: number;

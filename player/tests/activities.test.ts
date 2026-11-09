@@ -70,7 +70,7 @@ describe("score", () => {
   });
   it("ignore les questions d'entraînement", () => {
     const q = miniProject();
-    (q.pages[1].blocks[1] as QuestionBlock).graded = false;
+    (q.pages[1].blocks[1] as QuestionBlock).role = "activity";
     const st = new Map([["q1", { attemptsUsed: 1, done: true, correct: true }]]);
     expect(computeScore(q, st)).toMatchObject({ max: 1, percent: 100, passed: true, complete: true });
   });
@@ -91,7 +91,7 @@ it("le mélange garde tous les éléments et dépend de la graine", () => {
 describe("jeux HTML", () => {
   const withGame = () => {
     const p = miniProject();
-    p.pages[1].blocks.push({ id: "jeu", type: "html", src: "media/jeu.html", title: "Jeu", graded: true, points: 2 });
+    p.pages[1].blocks.push({ id: "jeu", type: "html", src: "media/jeu.html", title: "Jeu", role: "exercise", points: 2 });
     return p;
   };
 
@@ -119,7 +119,7 @@ describe("jeux HTML", () => {
 
   it("un jeu non noté ne compte pas", () => {
     const p = withGame();
-    (p.pages[1].blocks[3] as { graded?: boolean }).graded = false;
+    (p.pages[1].blocks[3] as { role?: string }).role = "activity";
     expect(computeScore(p, new Map()).max).toBe(2);
   });
 });

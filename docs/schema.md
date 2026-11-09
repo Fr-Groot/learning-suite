@@ -49,7 +49,7 @@ un `frame` en mode vertical et l'oubli d'un `frame` en mode diapositives.
 | `audio` | `src` (MP3), `label`, `transcript`, `autoplay` |
 | `question` | voir ci-dessous |
 | `results` | affiche score, seuil, « Réussi » / « Échoué », bouton « Recommencer » |
-| `html` | jeu ou contenu HTML isolé : `src`, `title`, `graded`, `points`, `height` (v1.1) |
+| `html` | jeu ou contenu HTML isolé : `src`, `title`, `role`, `points`, `height` (v1.1) |
 | `flipcards` | cartes à retourner (recto / verso, texte ou image) (v1.2) |
 | `reveal` | onglets, accordéon ou frise chronologique (v1.2) |
 | `fillblanks` | texte à trous, à saisir ou en liste (v1.2) |
@@ -62,6 +62,14 @@ de texte, gras, alignement, arrondi, opacité, marge intérieure) qui surcharge 
 **Ajout par rapport à ta liste :** la brique `results`, pour afficher le score
 final à l'endroit voulu (en général la dernière page).
 
+## Exercices et activités (v1.3)
+
+- **Exercice** (`"role": "exercise"`) : noté, compte dans le score et dans le LMS. Étiquette « Exercice noté ».
+- **Activité** (`"role": "activity"`) : jamais notée (entraînement, découverte). Étiquette « Entraînement ».
+- Par défaut : question, texte à trous, glisser-déposer, zones « à trouver » = exercices ; jeu HTML = activité ;
+  cartes, onglets, frise, accordéon, zones « à explorer » = toujours des activités.
+- L'ancien réglage `graded` (avant 1.3) est encore compris ; Studio convertit le module à l'ouverture.
+
 ## Les questions
 
 ```json
@@ -72,13 +80,13 @@ final à l'endroit voulu (en général la dernière page).
     { "id": "b", "text": "PDF",   "correct": false }
   ],
   "feedback": { "correct": "Exact !", "incorrect": "Non : c'est SCORM." },
-  "attempts": 2, "shuffle": true, "points": 1, "graded": true }
+  "attempts": 2, "shuffle": true, "points": 1, "role": "exercise" }
 ```
 
 - `kind` : `single` (exactement une bonne réponse, vérifié par le schéma),
   `multiple` (au moins une), `truefalse` (pas de `choices`, juste `"answer": true`).
 - `attempts` : nombre d'essais (1 par défaut).
-- `graded: false` : question d'entraînement, ne compte pas dans le score.
+- `role: "activity"` : question d'entraînement, ne compte pas dans le score.
 - Une réponse multiple est juste seulement si **toutes** les bonnes cases sont
   cochées et aucune mauvaise (pas de points partiels en v1).
 
@@ -104,7 +112,7 @@ et ça empêche d'injecter du code dans un module.
 
 ```json
 { "id": "jeu", "type": "html", "src": "media/jeux/paires.html", "title": "Jeu des paires",
-  "graded": true, "points": 2, "frame": { "x": 40, "y": 30, "w": 800, "h": 660 } }
+  "role": "exercise", "points": 2, "frame": { "x": 40, "y": 30, "w": 800, "h": 660 } }
 ```
 
 - Le fichier HTML est dans `media/` (un seul fichier conseillé ; un dossier est possible).
@@ -112,7 +120,7 @@ et ça empêche d'injecter du code dans un module.
   ni les données de l'apprenant.
 - Pour remonter un score, le jeu appelle `LearningSuite.score(0 à 100)` (voir
   `docs/jeux-html.md`). Seuls les messages venant de ce cadre sont acceptés.
-- `graded` (faux par défaut) : le jeu compte dans le score final. Il rapporte une part
+- `role: "exercise"` (activité par défaut) : le jeu compte dans le score final. Il rapporte une part
   de ses `points` : 80 % sur un jeu à 2 points = 1,6 point. On garde le meilleur score.
 - `unlockNext: "questionsAnswered"` attend aussi la fin des jeux notés de la page.
 - `height` : hauteur en mode vertical (en mode diapositives, c'est le `frame`).
@@ -122,7 +130,7 @@ et ça empêche d'injecter du code dans un module.
 Exemple complet : `examples/activites/` (diapositives) et `examples/activites-mobile/` (téléphone).
 
 **Réglages communs des activités notées** (`fillblanks`, `dragdrop`, `hotspot` « find ») :
-`graded` (oui par défaut), `points`, `attempts`, `feedback` (`correct`, `partial`, `incorrect`) et
+`role` (exercice par défaut), `points`, `attempts`, `feedback` (`correct`, `partial`, `incorrect`) et
 `scoring` : `partial` (défaut, au prorata : 3 sur 4 = 75 % des points) ou `all-or-nothing`.
 
 **Activités de découverte** (`flipcards`, `reveal`, `hotspot` « explore ») : jamais notées ;

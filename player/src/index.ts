@@ -8,6 +8,7 @@ import { findScorm12Api, Scorm12Tracker } from "./tracker/scorm12.ts";
 import type { Tracker } from "./tracker/tracker.ts";
 import type { Project } from "./types.ts";
 import { checkRules } from "./validate-rules.ts";
+import { migrateProject } from "./migrate.ts";
 
 export { Player } from "./player.ts";
 export { LocalTracker } from "./tracker/local.ts";
@@ -19,7 +20,8 @@ export function mount(container: HTMLElement, project: Project, options?: Player
   // Le schéma complet est vérifié avant l'export ; ici on garde les contrôles légers.
   const problems = checkRules(project);
   if (problems.length) console.warn("[lecteur] projet incohérent :", problems);
-  return new Player(container, project, options);
+  // Un paquet exporté avec une ancienne version reste lisible.
+  return new Player(container, migrateProject(project), options);
 }
 
 /** Démarre un paquet exporté : le projet est dans window.__LS_PROJECT__ (fichier project.js). */

@@ -23,9 +23,10 @@
       "enum": [
         "1.0",
         "1.1",
-        "1.2"
+        "1.2",
+        "1.3"
       ],
-      "description": "Version du format. 1.1 ajoute la brique html ; 1.2 les activités (cartes, onglets, texte à trous, glisser-déposer, zones). Les anciennes versions restent valides."
+      "description": "Version du format. 1.1 : brique html ; 1.2 : activités ; 1.3 : « role » (exercice noté ou activité) remplace « graded ». Les anciennes versions restent valides."
     },
     "meta": {
       "$ref": "#/$defs/meta"
@@ -287,7 +288,7 @@
           "type": "number",
           "minimum": 0,
           "maximum": 100,
-          "description": "Seuil de réussite en %, calculé sur les points des questions notées (graded)."
+          "description": "Seuil de réussite en %, calculé sur les points des exercices notés."
         }
       }
     },
@@ -985,8 +986,12 @@
         },
         "graded": {
           "type": "boolean",
-          "default": true,
-          "description": "Compte dans le score final (faux = question d'entraînement)."
+          "deprecated": true,
+          "description": "Ancien réglage (avant 1.3), remplacé par role. Encore accepté."
+        },
+        "role": {
+          "$ref": "#/$defs/role",
+          "default": "exercise"
         }
       },
       "allOf": [
@@ -1120,8 +1125,8 @@
         },
         "graded": {
           "type": "boolean",
-          "default": false,
-          "description": "Compte dans le score final. Le jeu doit alors appeler LearningSuite.score()."
+          "deprecated": true,
+          "description": "Ancien réglage (avant 1.3), remplacé par role. Encore accepté."
         },
         "points": {
           "type": "number",
@@ -1136,6 +1141,11 @@
           "maximum": 4000,
           "default": 600,
           "description": "Hauteur en pixels en mode vertical (en mode diapositives, c'est le frame qui compte)."
+        },
+        "role": {
+          "$ref": "#/$defs/role",
+          "default": "activity",
+          "description": "exercise : le jeu doit appeler LearningSuite.score()."
         }
       }
     },
@@ -1145,8 +1155,8 @@
       "properties": {
         "graded": {
           "type": "boolean",
-          "default": true,
-          "description": "Compte dans le score final."
+          "deprecated": true,
+          "description": "Ancien réglage (avant 1.3), remplacé par role. Encore accepté."
         },
         "points": {
           "type": "number",
@@ -1184,6 +1194,10 @@
               "$ref": "#/$defs/richText"
             }
           }
+        },
+        "role": {
+          "$ref": "#/$defs/role",
+          "default": "exercise"
         }
       }
     },
@@ -1665,6 +1679,13 @@
           "description": "explore : il faut ouvrir toutes les zones."
         }
       }
+    },
+    "role": {
+      "enum": [
+        "exercise",
+        "activity"
+      ],
+      "description": "exercise = exercice noté (compte dans le score et le LMS) ; activity = activité d'entraînement, jamais notée."
     }
   }
 }

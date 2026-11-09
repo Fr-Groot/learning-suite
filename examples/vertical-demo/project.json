@@ -1,6 +1,6 @@
 {
   "$schema": "../../schema/project.v1.schema.json",
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.3",
   "meta": {
     "id": "fed54c70-1791-4d91-aacc-e06b8b6b9002",
     "title": "Démo du mode vertical",
@@ -20,26 +20,74 @@
       "surface": "#EEF6F3",
       "text": "#12343B"
     },
-    "fonts": { "heading": "Georgia", "body": "Segoe UI" },
+    "fonts": {
+      "heading": "Georgia",
+      "body": "Segoe UI"
+    },
     "radius": 14
   },
-  "navigation": { "linear": false, "allowBack": true, "showMenu": true, "showProgress": true },
-  "scoring": { "passingScore": 100 },
+  "navigation": {
+    "linear": false,
+    "allowBack": true,
+    "showMenu": true,
+    "showProgress": true
+  },
+  "scoring": {
+    "passingScore": 100
+  },
   "pages": [
     {
       "id": "lire",
       "title": "Lire sur mobile",
       "blocks": [
-        { "id": "v-titre", "type": "text", "variant": "title", "content": "Le mode vertical" },
-        { "id": "v-intro", "type": "text",
-          "content": "Ici, pas de diapositive : les briques **s'empilent** et on fait défiler, comme sur un site ou un réseau social." },
-        { "id": "v-image", "type": "image", "src": "media/accueil.svg", "alt": "", "width": "full",
-          "style": { "background": "#12343B", "padding": 24 } },
-        { "id": "v-liste", "type": "text", "variant": "subtitle", "content": "Quand l'utiliser ?" },
-        { "id": "v-liste-texte", "type": "text",
-          "content": "- lecture sur téléphone ;\n- fiches pratiques, procédures ;\n- micro-formations entre deux tâches." },
-        { "id": "v-separateur", "type": "shape", "shape": "line", "stroke": "#F2A541", "strokeWidth": 4 },
-        { "id": "v-suivant", "type": "button", "label": "Une question pour finir", "action": { "type": "next" } }
+        {
+          "id": "v-titre",
+          "type": "text",
+          "variant": "title",
+          "content": "Le mode vertical"
+        },
+        {
+          "id": "v-intro",
+          "type": "text",
+          "content": "Ici, pas de diapositive : les briques **s'empilent** et on fait défiler, comme sur un site ou un réseau social."
+        },
+        {
+          "id": "v-image",
+          "type": "image",
+          "src": "media/accueil.svg",
+          "alt": "",
+          "width": "full",
+          "style": {
+            "background": "#12343B",
+            "padding": 24
+          }
+        },
+        {
+          "id": "v-liste",
+          "type": "text",
+          "variant": "subtitle",
+          "content": "Quand l'utiliser ?"
+        },
+        {
+          "id": "v-liste-texte",
+          "type": "text",
+          "content": "- lecture sur téléphone ;\n- fiches pratiques, procédures ;\n- micro-formations entre deux tâches."
+        },
+        {
+          "id": "v-separateur",
+          "type": "shape",
+          "shape": "line",
+          "stroke": "#F2A541",
+          "strokeWidth": 4
+        },
+        {
+          "id": "v-suivant",
+          "type": "button",
+          "label": "Une question pour finir",
+          "action": {
+            "type": "next"
+          }
+        }
       ]
     },
     {
@@ -47,14 +95,24 @@
       "title": "Vérifier",
       "unlockNext": "questionsAnswered",
       "blocks": [
-        { "id": "v-q", "type": "question", "kind": "truefalse",
+        {
+          "id": "v-q",
+          "type": "question",
+          "kind": "truefalse",
           "prompt": "En mode vertical, chaque brique a une position x / y sur une toile.",
           "answer": false,
           "attempts": 2,
-          "feedback": { "correct": "Exact : les briques s'empilent simplement, dans l'ordre.", "incorrect": "Non : en mode vertical, pas de position, les briques s'empilent." } },
-        { "id": "v-resultat", "type": "results",
+          "feedback": {
+            "correct": "Exact : les briques s'empilent simplement, dans l'ordre.",
+            "incorrect": "Non : en mode vertical, pas de position, les briques s'empilent."
+          }
+        },
+        {
+          "id": "v-resultat",
+          "type": "results",
           "passedMessage": "Vous avez compris le mode vertical.",
-          "failedMessage": "Relisez la page précédente." }
+          "failedMessage": "Relisez la page précédente."
+        }
       ]
     }
   ]

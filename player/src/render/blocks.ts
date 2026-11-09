@@ -1,4 +1,5 @@
 // Aiguillage : une fonction d'affichage par type de brique.
+import { isInteraction, roleOf } from "../activities.ts";
 import type { Block } from "../types.ts";
 import { renderButton } from "./button.ts";
 import type { RenderContext } from "./context.ts";
@@ -38,6 +39,13 @@ export function renderBlock(b: Block, ctx: RenderContext): HTMLElement {
   const wrap = ctx.doc.createElement("div");
   wrap.className = `lsp-block lsp-block--${b.type}`;
   wrap.dataset.block = b.id;
+  if (isInteraction(b)) {
+    const role = roleOf(b);
+    const tag = ctx.doc.createElement("p");
+    tag.className = `lsp-role lsp-role--${role}`;
+    tag.textContent = role === "exercise" ? "Exercice noté" : "Entraînement";
+    wrap.append(tag);
+  }
   wrap.append(content);
   applyStyle(wrap, b.style);
   return wrap;

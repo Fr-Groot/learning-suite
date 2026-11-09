@@ -1,5 +1,5 @@
 // Fichier imsmanifest.xml d'un paquet SCORM 1.2 : un seul SCO (le module entier).
-import { hasGradedActivities } from "../activities.ts";
+import { hasExercises } from "../activities.ts";
 import type { Project } from "../types.ts";
 
 const xml = (s: string) =>
@@ -9,7 +9,7 @@ export function scorm12Manifest(project: Project, files: string[]): string {
   const id = `LS-${project.meta.id}`;
   const title = xml(project.meta.title);
   // Seuil de réussite transmis au LMS seulement s'il y a des activités notées.
-  const mastery = hasGradedActivities(project)
+  const mastery = hasExercises(project)
     ? `\n        <adlcp:masteryscore>${Math.round(project.scoring.passingScore)}</adlcp:masteryscore>`
     : "";
   const fileList = [...files, "imsmanifest.xml"]

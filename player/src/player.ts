@@ -1,7 +1,7 @@
 // Le lecteur : assemble l'interface (titre, menu, progression, navigation, voix off)
 // et affiche la page courante dans le bon mode.
 import { Navigator } from "./navigation.ts";
-import { computeScore, hasGradedActivities, isGraded, waitsForActivities, newQuestionState, openItem, submitMulti, pageActivities, reportHtml, submit, type QuestionState } from "./activities.ts";
+import { computeScore, hasExercises, isExercise, waitsForActivities, newQuestionState, openItem, submitMulti, pageActivities, reportHtml, submit, type QuestionState } from "./activities.ts";
 import { el, type RenderContext } from "./render/context.ts";
 import { renderSlidesPage } from "./render/layout-slides.ts";
 import { renderVerticalPage } from "./render/layout-vertical.ts";
@@ -201,7 +201,7 @@ export class Player {
 
   /** Statut de l'apprenant : réussi/échoué s'il y a des activités notées, sinon terminé quand tout est vu. */
   status(): LessonStatus {
-    if (hasGradedActivities(this.project)) {
+    if (hasExercises(this.project)) {
       const s = this.score();
       return s.complete ? (s.passed ? "passed" : "failed") : "incomplete";
     }
@@ -223,7 +223,7 @@ export class Player {
       pageId: this.nav.page.id,
       progress: this.nav.progress,
       status: this.status(),
-      score: hasGradedActivities(this.project) ? this.score() : null,
+      score: hasExercises(this.project) ? this.score() : null,
       state: this.snapshot(),
     });
   }
@@ -260,7 +260,7 @@ export class Player {
     const pages = this.project.pages;
     let first = -1;
     pages.forEach((p, i) => {
-      const graded = p.blocks.filter(isGraded);
+      const graded = p.blocks.filter(isExercise);
       if (graded.length === 0) return;
       if (first < 0) first = i;
       graded.forEach((q) => this.states.delete(q.id));

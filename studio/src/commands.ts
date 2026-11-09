@@ -1,4 +1,5 @@
 // Les commandes de l'éditeur qui touchent au disque : créer, ouvrir, enregistrer, importer.
+import { migrateProject } from "@player/migrate.ts";
 import { validateProject } from "@player/validate.ts";
 import type { Mode, Project } from "@player/types.ts";
 import { backend, backendSync, type MediaKind } from "./io/backend.ts";
@@ -82,9 +83,11 @@ export async function openProject(dir?: string) {
   const target = dir ?? (await b.pickProject());
   if (!target) return false;
   try {
-    const data = JSON.parse(await b.read(target)) as Project;
+    const raw = JSON.parse(await b.read(target)) as Project;
+    // Un module d'une version précédente est mis à jour (et sera réenregistré au nouveau format).
+    const data = migrateProject(raw);
     const check = validateProject(data);
-    store.load(data, target);
+    store.load(data, target, raw.schemaVersion !== data.schemaVersion);
     remember(target, data.meta?.title ?? target);
     if (!check.ok) tell(`Module ouvert, mais ${check.errors.length} problème(s) à corriger (voir « Vérifier »).`, "error");
     return true;

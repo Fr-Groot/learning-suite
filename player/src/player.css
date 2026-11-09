@@ -191,6 +191,15 @@
 .lsp-audio audio { width: 100%; }
 .lsp-audio figcaption { font-weight: 600; margin-bottom: 6px; }
 
+/* ---------- Étiquette exercice / entraînement ---------- */
+.lsp-role {
+  align-self: flex-start; display: inline-block; margin: 0 0 6px; padding: 2px 10px; border-radius: 999px;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.02em; line-height: 1.6;
+}
+.lsp-role--exercise { background: var(--lsp-primary); color: #fff; }
+.lsp-role--activity { background: color-mix(in srgb, var(--lsp-primary) 12%, transparent); color: var(--lsp-primary); }
+.lsp--slides .lsp-block > .lsp-role { flex: 0 0 auto; font-size: 17px; }
+
 /* ---------- Questions ---------- */
 .lsp-question {
   padding: 20px 24px;
