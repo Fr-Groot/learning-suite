@@ -1,65 +1,46 @@
-# Roadmap
+# Feuille de route
 
 ## État au 2026-11-09
-Ordre changé (voir decisions.md) : on a commencé par le socle Studio et la phase 3.
-- Fait : appli Studio vide (fenêtre + installateurs .exe et MSI).
-- Fait : schéma project.json v1.2, lecteur HTML5, cinq projets d'exemple, tests.
-- Fait : export HTML5 et SCORM 1.2 (reprise, score, statut), brique HTML pour les jeux avec score.
-- Validé le 2026-11-09 : les paquets passent dans SCORM Cloud (score, statut, reprise, jeu HTML).
-- Reste en phase 3 : test dans Rise Up (facultatif), skill Claude (après la phase 3b, quand le schéma sera stable).
-- Fait (phase 3b) : cartes, onglets, accordéon, frise, texte à trous, glisser-déposer
-  (catégories, paires, ordre), zones cliquables, modèles de page ; au doigt, souris et clavier.
-- Fait (phase 4a) : éditeur Studio de base (pages, briques, propriétés, thème, voix off,
-  aperçu, export), version 0.2.0. Guide : docs/studio.md.
-- Ensuite : 4b (réglages des activités dans l'éditeur), puis 4c (pilotage par Claude).
+- Fait : lecteur HTML5, schéma 1.2, exercices et activités (lecteur), export SCORM 1.2 / HTML5
+  validé dans SCORM Cloud, Studio 0.2.0 (éditeur de base).
+- Réorientation : suite gratuite et open source, sans serveur, pour formateurs indépendants
+  et petits streamers (voir decisions.md).
 
-## Phase 1 : Review en local (sur ton PC)
-Livrable : le serveur tourne sur ton PC, s'ouvre dans le navigateur.
-- Créer un projet de relecture, déposer un zip SCORM ou HTML.
-- Lire le module avec un faux LMS (SCORM 1.2 et 2004).
-- Cliquer sur l'écran pour commenter : capture automatique + épingle.
-- Statuts : à corriger, corrigé, validé.
-- Versions : déposer la V2, les commentaires de la V1 restent visibles.
-- Export du rapport (PDF ou Excel).
-Critère de fin : tu relis un vrai export Rise Up et un vrai export EdTake,
-et tu sors un rapport utilisable avec un client.
+## 1. Refondation (en cours de plan)
+- Langues FR/EN : lecteur (suit la langue du module) et Studio (réglage).
+- Exercices (notés) / activités (jamais notées) : `role` dans le schéma (v1.3), conversion des anciens modules.
+- Dépôt public (après vérification), construction des installateurs par GitHub Actions,
+  candidature SignPath Foundation, page « politique de signature ».
+- Documents à jour : CLAUDE.md, decisions.md, cette feuille de route.
 
-## Phase 2 : Review partageable
-- Lien de relecture pour le client, connexion par lien magique email.
-- Plusieurs relecteurs, notifications email.
-- Déploiement sur un hébergeur européen (offre Cloud en bêta payante).
-Critère de fin : un vrai client relit un module sans rien installer.
+## 2. Lanceur Learning Suite
+- Projets récents avec leur étape du parcours, ouverture dans Studio.
+- Applis de la suite installées (Studio, Review) et outils externes (« Mes outils »).
+- **Clicksy** : détecté s'il est installé (sinon lien vers ses Releases), lancement,
+  actions (« Enregistrer une démo », « Guide pas à pas ») via `clicksy.exe --action`.
 
-## Phase 3 : Player + export (sans éditeur)
-- Schéma project.json v1 (deux modes, briques communes, quiz).
-- Lecteur HTML5, export HTML5 et SCORM 1.2.
-- Ton skill Claude génère des project.json.
-Critère de fin : un module généré passe dans SCORM Cloud et Rise Up.
+## 3. Studio 4b : exercices et activités dans l'éditeur
+- Réglages de toutes les briques existantes, dessin des zones à la souris.
+- Nouveaux exercices : réponse courte, curseur numérique, mise en situation à embranchements,
+  repérer les erreurs dans un texte, banque de questions.
+- Nouvelles activités : vidéo interactive, avant/après, diaporama, auto-positionnement,
+  réflexion libre, sondage, flashcards, checklist.
+- Import depuis Clicksy : captures, vidéos et guides de la formation du même nom.
 
-## Phase 3b : Activités (avant Studio, schéma v1.2)
-- Modèles de page prêts à l'emploi : titre + texte + image, image plein écran, deux colonnes…
-- Cartes à retourner.
-- Glisser-déposer, association, remise en ordre.
-- Texte à trous (saisie ou liste).
-- Zones cliquables sur image (hotspot).
-- Contenus interactifs : onglets, accordéon, frise chronologique.
-Critère de fin : chaque activité marche dans les deux modes, au clavier, et remonte son score en SCORM.
+## 4. Parcours de conception
+- Cadrage, scénario, storyboard (facultatifs) ; storyboard → pages ; export du storyboard
+  (Word/PDF) pour validation client.
 
-## Phase 4 : Studio (éditeur)
-- Appli Tauri, éditeur deux modes, panneau Propriétés, thème, quiz,
-  voix off, aperçu, assistant d'export.
-- Serveur MCP local pour le pilotage par Claude.
-- Jalon « Signature Windows » avant la 1re version publique de Studio
-  (supprime l'alerte de Windows à l'installation, qui s'efface avec le temps) :
-  - société (SAS, SARL…) → Microsoft Artifact Signing, environ 10 $ par mois ;
-  - micro-entreprise ou particulier → Certum : « Open Source » dès 69 € par an si le code
-    est public, sinon certificat classique (plus cher).
-  - Lancer les démarches environ un mois avant : vérification d'identité.
+## 5. Relecture
+- Paquet de relecture (navigateur, sans installation) + fichier de commentaires.
+- Appli Review pour le producteur ; import des commentaires dans Studio.
 
-## Phase 5 : Diffusion et Business
-- Diffusion par lien et suivi apprenants dans le serveur.
-- SCORM 2004, cmi5, xAPI.
-- Connecteur Dendreo, licence Business auto-hébergée.
+## 6. Claude et connexions
+- Serveur MCP local (Studio) + skill Claude.
+- « Modifier avec… » (ArtCraft, Krita, GIMP…), dossier d'import surveillé.
+- Voix off gratuite hors ligne (Piper), publication en lien gratuite (Netlify, GitHub Pages).
+- Guide pas à pas Clicksy → simulation logicielle dans Studio (nécessite un export
+  `guide.json` côté Clicksy).
 
 ## Plus tard
-Hub, Capture, LTI 1.3, H5P, QTI.
+SCORM 2004, cmi5, xAPI, LTI, H5P, serveur facultatif.

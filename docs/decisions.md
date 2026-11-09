@@ -43,3 +43,13 @@
 | 2026-11-09 | Historique d'annulation maison (100 étapes, un geste = une étape) | Simple, sans bibliothèque, testé |
 | 2026-11-09 | Validateur du schéma généré d'avance (Ajv « standalone ») | La sécurité de Studio (CSP) interdit de fabriquer du code au démarrage |
 | 2026-11-09 | Studio testé dans un navigateur avec un « disque en mémoire », et la vraie appli pilotée via WebView2 | Tests automatiques sans toucher aux fichiers de l'utilisateur |
+| 2026-11-09 | **Réorientation** : suite entièrement gratuite et open source, sans serveur | Cible : formateurs indépendants et petits streamers ; pas de coût d'hébergement à couvrir |
+| 2026-11-09 | Serveur, offre Cloud, Dendreo et modules Business sortent du périmètre | Remplacés par des échanges de fichiers et des outils locaux |
+| 2026-11-09 | Un installateur par appli (Lanceur, Studio, Review), même famille visuelle | Choix du porteur, à la manière d'Adobe CC |
+| 2026-11-09 | Relecture séparée de la production : paquet navigateur pour le client + appli Review | Le client commente sans rien installer ; le producteur centralise |
+| 2026-11-09 | Parcours de conception facultatif : cadrage, scénario, storyboard, puis production | Méthode des concepteurs pédagogiques, chaque étape optionnelle |
+| 2026-11-09 | Exercice = noté ; activité = jamais notée (`role` remplace `graded`) | Distinction claire pour l'auteur et pour le LMS |
+| 2026-11-09 | Applis et lecteur en français et anglais | Élargir le public ; à faire avant d'ajouter beaucoup de textes |
+| 2026-11-09 | Dépôt rendu public, installateurs construits par GitHub Actions, signature SignPath Foundation | Signature gratuite réservée aux projets open source à dépôt public |
+| 2026-11-09 | Clicksy (projet MIT du porteur) joue le rôle de « Capture » ; intégration par fichiers et ligne de commande | Déjà fait, éprouvé ; pas de code à réécrire |
+| 2026-11-09 | Connexions externes par fichiers (« Modifier avec… », dossier surveillé) plutôt que par API | Marche avec ArtCraft, Krita, GIMP… sans dépendre d'une API non documentée |
