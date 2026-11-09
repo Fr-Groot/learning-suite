@@ -25,3 +25,6 @@ Thumbs.db
 
 # Paquets exportés (se régénèrent)
 exports/
+
+# Cache de l aperçu local (Vite)
+.vite/
