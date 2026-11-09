@@ -1,4 +1,4 @@
-# Vérification automatique à chaque envoi : tous les tests (lecteur, Studio, Rust) sous Windows.
+# Vérification automatique à chaque envoi : tous les tests (lecteur, Studio, lanceur, Rust) sous Windows.
 name: Tests
 
 on:
@@ -23,12 +23,16 @@ jobs:
           cache-dependency-path: |
             player/package-lock.json
             studio/package-lock.json
+            launcher/package-lock.json
 
       - uses: dtolnay/rust-toolchain@stable
 
       - uses: Swatinem/rust-cache@v2
         with:
-          workspaces: studio/src-tauri
+          workspaces: |
+            crates/suite-core
+            studio/src-tauri
+            launcher/src-tauri
 
       - name: Lecteur — installation
         working-directory: player
@@ -64,4 +68,24 @@ jobs:
 
       - name: Studio — tests Rust
         working-directory: studio/src-tauri
+        run: cargo test --locked
+
+      - name: Noyau commun — tests Rust
+        working-directory: crates/suite-core
+        run: cargo test --locked
+
+      - name: Lanceur — installation
+        working-directory: launcher
+        run: npm ci
+
+      - name: Lanceur — parcours de bout en bout (Edge)
+        working-directory: launcher
+        run: npx playwright test
+
+      - name: Lanceur — construction de l'interface (nécessaire aux tests Rust)
+        working-directory: launcher
+        run: npm run build
+
+      - name: Lanceur — tests Rust
+        working-directory: launcher/src-tauri
         run: cargo test --locked

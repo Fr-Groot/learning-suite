@@ -53,3 +53,9 @@
 | 2026-11-09 | Dépôt rendu public, installateurs construits par GitHub Actions, signature SignPath Foundation | Signature gratuite réservée aux projets open source à dépôt public |
 | 2026-11-09 | Clicksy (projet MIT du porteur) joue le rôle de « Capture » ; intégration par fichiers et ligne de commande | Déjà fait, éprouvé ; pas de code à réécrire |
 | 2026-11-09 | Connexions externes par fichiers (« Modifier avec… », dossier surveillé) plutôt que par API | Marche avec ArtCraft, Krita, GIMP… sans dépendre d'une API non documentée |
+| 2026-11-09 | Lanceur : appli normale (menu Démarrer), pas d'icône dans la barre des tâches | Choix du porteur : simple et prévisible |
+| 2026-11-09 | Liens entre applis par un dossier commun `%APPDATA%\Learning Suite` (annuaire, récents, outils) | Sans serveur, lisible, chaque appli s'y inscrit seule ; Review et Clicksy pourront s'y ajouter |
+| 2026-11-09 | Code commun Rust `crates/suite-core` partagé par Studio et le lanceur | Une seule logique (récents, détection, lancement sûr), testée une fois |
+| 2026-11-09 | Le lanceur ne lance que Studio, les actions Clicksy connues et les outils ajoutés par l'utilisateur | L'interface ne peut pas démarrer n'importe quel programme |
+| 2026-11-09 | Clicksy reste indépendant : repéré dans Windows (ou version portable indiquée), piloté par `--action` | Rien à modifier dans Clicksy ; raccordé seulement s'il est installé |
+| 2026-11-09 | Studio accepte `--open` / `--new` et une seule fenêtre (les demandes vont à la fenêtre ouverte) | Le lanceur ouvre un module même si Studio tourne déjà |

@@ -13,7 +13,8 @@
   candidature SignPath Foundation, page « politique de signature ».
 - Documents à jour : CLAUDE.md, decisions.md, cette feuille de route.
 
-## 2. Lanceur Learning Suite
+## 2. Lanceur Learning Suite — fait le 2026-11-09 (publication après les tests du porteur)
+Voir `docs/lanceur.md`.
 - Projets récents avec leur étape du parcours, ouverture dans Studio.
 - Applis de la suite installées (Studio, Review) et outils externes (« Mes outils »).
 - **Clicksy** : détecté s'il est installé (sinon lien vers ses Releases), lancement,

@@ -43,7 +43,7 @@ Les noms de projet et de règle de signature attendus par le workflow sont `lear
 ## 5. Publier une version de Studio
 1. Mettre le numéro de version dans `studio/package.json`, `studio/src-tauri/tauri.conf.json`
    et `studio/src-tauri/Cargo.toml` (Claude le fait).
-2. Créer l'étiquette `studio-vX.Y.Z` et l'envoyer : GitHub lance **Release Studio**.
+2. Créer l'étiquette `studio-vX.Y.Z` (ou `launcher-vX.Y.Z` pour le lanceur) et l'envoyer : GitHub lance **Release Studio** (ou **Release Lanceur**).
 3. GitHub construit les installateurs, les signe (si SignPath est branché), calcule
    `SHA256SUMS.txt` et prépare une **release brouillon**.
 4. Toi : vérifier la release brouillon (télécharger, installer, tester), puis **Publish release**.

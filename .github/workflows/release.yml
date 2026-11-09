@@ -32,7 +32,9 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
         with:
-          workspaces: studio/src-tauri
+          workspaces: |
+            crates/suite-core
+            studio/src-tauri
 
       - name: Installer les outils
         run: |
