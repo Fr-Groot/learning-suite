@@ -105,6 +105,17 @@
         "--strictPort"
       ],
       "port": 5300
+    },
+    {
+      "name": "lanceur-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "launcher",
+        "run",
+        "dev"
+      ],
+      "port": 1440
     }
   ]
 }
