@@ -1,7 +1,7 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import "@player/player.css";
 import "./App.css";
-import { notices, saveProject, startAutosave } from "./commands.ts";
+import { handleRequest, notices, saveProject, startAutosave } from "./commands.ts";
 import { getLang, useT } from "./i18n/index.ts";
 import { backend } from "./io/backend.ts";
 import { store, useEditor } from "./model/store.ts";
@@ -18,8 +18,22 @@ function App() {
   useEffect(() => void (document.documentElement.lang = lang), [lang]);
 
   useEffect(() => {
-    void backend().then(() => setReady(true));
-    return startAutosave();
+    let stop: (() => void) | undefined;
+    let alive = true;
+    void backend().then(async (b) => {
+      setReady(true);
+      // Studio lancé par le lanceur (« ouvre ce module ») ou déjà ouvert et sollicité.
+      const unlisten = await b.listenRequests((req) => void handleRequest(req));
+      if (alive) stop = unlisten;
+      else unlisten();
+      await handleRequest(await b.startupRequest());
+    });
+    const stopAutosave = startAutosave();
+    return () => {
+      alive = false;
+      stop?.();
+      stopAutosave();
+    };
   }, []);
 
   // Dans l'appli Windows : titre de la fenêtre, et enregistrement automatique à la fermeture.

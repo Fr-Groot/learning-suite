@@ -1,14 +1,17 @@
 // Écran d'accueil : nouveau module, ouvrir, projets récents, langue de Studio.
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import type { Mode } from "@player/types.ts";
-import { createProject, openProject, recents, slugify, type Recent } from "../commands.ts";
+import { createProject, newDialog, openProject, recents, slugify, type Recent } from "../commands.ts";
 import { getLang, setLang, tr, type StudioLang } from "../i18n/index.ts";
 import { backend } from "../io/backend.ts";
 import { THEMES } from "../model/themes.ts";
 
 export function Welcome() {
-  const [creating, setCreating] = useState(false);
-  const [list, setList] = useState<Recent[]>(recents());
+  const creating = useSyncExternalStore(newDialog.subscribe, newDialog.get);
+  const setCreating = newDialog.set;
+  const [list, setList] = useState<Recent[]>([]);
+  const refresh = () => void recents().then(setList);
+  useEffect(refresh, []);
   return (
     <main className="st-welcome">
       <div className="st-welcome-top">
@@ -24,7 +27,7 @@ export function Welcome() {
       <p className="st-muted">{tr("welcomeLead")}</p>
       <div className="st-welcome-actions">
         <button className="st-btn st-btn--primary st-btn--big" onClick={() => setCreating(true)}>{tr("newModule")}</button>
-        <button className="st-btn st-btn--big" onClick={() => void openProject().then(() => setList(recents()))}>{tr("openModule")}</button>
+        <button className="st-btn st-btn--big" onClick={() => void openProject().then(refresh)}>{tr("openModule")}</button>
       </div>
       {list.length > 0 && (
         <section className="st-recents">
@@ -32,7 +35,7 @@ export function Welcome() {
           <ul>
             {list.map((r) => (
               <li key={r.dir}>
-                <button className="st-recent" onClick={() => void openProject(r.dir).then(() => setList(recents()))}>
+                <button className="st-recent" onClick={() => void openProject(r.dir).then(refresh)}>
                   <strong>{r.title}</strong>
                   <span className="st-muted">{r.dir}</span>
                 </button>

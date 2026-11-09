@@ -2,7 +2,7 @@
 import { migrateProject } from "@player/migrate.ts";
 import { validateProject } from "@player/validate.ts";
 import type { Mode, Project } from "@player/types.ts";
-import { backend, backendSync, type MediaKind } from "./io/backend.ts";
+import { backend, backendSync, type MediaKind, type Recent, type SuiteRequest } from "./io/backend.ts";
 import { newProject } from "./model/actions.ts";
 import { store } from "./model/store.ts";
 import { tr } from "./i18n/index.ts";
@@ -28,35 +28,49 @@ export function tell(text: string, kind: Notice["kind"] = "info") {
 }
 const message = (e: unknown) => (e instanceof Error ? e.message : String(e));
 
-// ---------- Projets récents (mémorisés dans Studio) ----------
+// ---------- Modules récents (partagés avec le lanceur et les autres applis) ----------
 
-export interface Recent {
-  dir: string;
-  title: string;
-  at: number;
-}
-const RECENT_KEY = "learning-suite-studio:recent";
+export type { Recent } from "./io/backend.ts";
 
-export function recents(): Recent[] {
+export async function recents(): Promise<Recent[]> {
   try {
-    return JSON.parse(localStorage.getItem(RECENT_KEY) ?? "[]");
+    return await (await backend()).recents();
   } catch {
     return [];
   }
 }
 function remember(dir: string, title: string) {
-  const list = [{ dir, title, at: Date.now() }, ...recents().filter((r) => r.dir !== dir)].slice(0, 8);
-  try {
-    localStorage.setItem(RECENT_KEY, JSON.stringify(list));
-  } catch {
-    // sans importance
-  }
+  void backend().then((b) => b.remember(dir, title)).catch(() => undefined);
 }
 export function forget(dir: string) {
-  try {
-    localStorage.setItem(RECENT_KEY, JSON.stringify(recents().filter((r) => r.dir !== dir)));
-  } catch {
-    // sans importance
+  void backend().then((b) => b.forget(dir)).catch(() => undefined);
+}
+
+// ---------- Fenêtre « Nouveau module » (ouverte depuis l'accueil ou demandée par le lanceur) ----------
+
+let wantNew = false;
+const newListeners = new Set<() => void>();
+export const newDialog = {
+  get: () => wantNew,
+  subscribe: (fn: () => void) => (newListeners.add(fn), () => newListeners.delete(fn)),
+  set(v: boolean) {
+    wantNew = v;
+    newListeners.forEach((fn) => fn());
+  },
+};
+
+// ---------- Demandes venues d'une autre appli (« ouvre ce module », « nouveau module ») ----------
+
+export async function handleRequest(req: SuiteRequest | null) {
+  if (!req || (!req.open && !req.new)) return;
+  // Le module en cours est enregistré avant d'en ouvrir un autre.
+  if (store.get().dirty && !(await saveProject(true))) return;
+  if (req.open) {
+    if (store.get().dir === req.open) return;
+    await openProject(req.open);
+  } else if (req.new) {
+    store.close();
+    newDialog.set(true);
   }
 }
 
@@ -89,6 +103,7 @@ export async function openProject(dir?: string) {
     const data = migrateProject(raw);
     const check = validateProject(data);
     store.load(data, target, raw.schemaVersion !== data.schemaVersion);
+    newDialog.set(false);
     remember(target, data.meta?.title ?? target);
     if (!check.ok) tell(tr("openedWithIssues", { n: check.errors.length }), "error");
     return true;

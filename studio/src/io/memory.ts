@@ -1,7 +1,7 @@
 // Version « navigateur » : tout reste en mémoire. Sert aux tests automatiques de l'interface
 // et à l'aperçu de développement ; l'appli Windows utilise tauri.ts.
 import { zipSync } from "fflate";
-import { MEDIA_FILTERS, type Backend } from "./backend.ts";
+import { MEDIA_FILTERS, type Backend, type Recent, type SuiteRequest } from "./backend.ts";
 
 interface MemProject {
   json: string;
@@ -93,4 +93,38 @@ export const memoryBackend: Backend & { projects: typeof projects } = {
   },
 
   confirm: async (message) => window.confirm(message),
+
+  recents: async () => readRecents(),
+  async remember(dir, title) {
+    writeRecents([{ dir, title, at: Date.now() }, ...readRecents().filter((r) => r.dir !== dir)].slice(0, 20));
+  },
+  async forget(dir) {
+    writeRecents(readRecents().filter((r) => r.dir !== dir));
+  },
+  // Pour les tests : « ?new=1 » simule « studio.exe --new ».
+  async startupRequest() {
+    const q = new URLSearchParams(location.search);
+    return q.has("new") ? { new: true } : null;
+  },
+  async listenRequests(fn) {
+    const handler = (e: Event) => fn((e as CustomEvent<SuiteRequest>).detail);
+    window.addEventListener("suite-request", handler);
+    return () => window.removeEventListener("suite-request", handler);
+  },
 };
+
+const RECENT_KEY = "learning-suite-studio:recent";
+function readRecents(): Recent[] {
+  try {
+    return JSON.parse(localStorage.getItem(RECENT_KEY) ?? "[]");
+  } catch {
+    return [];
+  }
+}
+function writeRecents(list: Recent[]) {
+  try {
+    localStorage.setItem(RECENT_KEY, JSON.stringify(list));
+  } catch {
+    // sans importance
+  }
+}

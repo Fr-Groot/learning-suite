@@ -1,8 +1,9 @@
 // Version « appli Windows » : commandes Rust (src-tauri/src/project.rs) + boîtes de dialogue Windows.
 import { convertFileSrc, invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 import { documentDir, join } from "@tauri-apps/api/path";
 import { ask, open, save } from "@tauri-apps/plugin-dialog";
-import { MEDIA_FILTERS, type Backend } from "./backend.ts";
+import { MEDIA_FILTERS, type Backend, type Recent, type SuiteRequest } from "./backend.ts";
 import { tr } from "../i18n/index.ts";
 
 const dirOf = (file: string) => file.replace(/[\\/][^\\/]*$/, "");
@@ -50,4 +51,26 @@ export const tauriBackend: Backend = {
   },
 
   confirm: (message, title) => ask(message, { title, kind: "warning", okLabel: tr("yes"), cancelLabel: tr("no") }),
+
+  async recents() {
+    await migrateOldRecents();
+    return invoke<Recent[]>("suite_recents");
+  },
+  remember: (dir, title) => invoke("suite_remember", { dir, title }),
+  forget: (dir) => invoke("suite_forget", { dir }),
+  startupRequest: () => invoke<SuiteRequest | null>("startup_request"),
+  listenRequests: (fn) => listen<SuiteRequest>("suite-request", (e) => fn(e.payload)),
 };
+
+// Studio 0.3 gardait ses récents dans l'interface : on les verse une fois dans la liste partagée.
+const OLD_KEY = "learning-suite-studio:recent";
+async function migrateOldRecents() {
+  let old: Recent[] = [];
+  try {
+    old = JSON.parse(localStorage.getItem(OLD_KEY) ?? "[]");
+    localStorage.removeItem(OLD_KEY);
+  } catch {
+    return;
+  }
+  for (const r of [...old].reverse()) await invoke("suite_remember", { dir: r.dir, title: r.title }).catch(() => undefined);
+}

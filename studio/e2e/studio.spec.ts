@@ -165,3 +165,27 @@ test("Studio in English: switch language, create an English module", async ({ pa
   await page.getByLabel("Studio language").selectOption("fr");
   await expect(page.getByRole("button", { name: "＋ Nouveau module" })).toBeVisible();
 });
+
+test("demandes du lanceur : nouveau module au démarrage, puis ouvrir un module récent", async ({ page }) => {
+  // « studio.exe --new » : la fenêtre Nouveau module s'ouvre d'elle-même.
+  await page.goto(`${STUDIO}?new=1`);
+  await expect(page.getByRole("heading", { name: "Nouveau module" })).toBeVisible();
+  await page.getByLabel("Titre du module").fill("Demandé par le lanceur");
+  await page.getByRole("button", { name: "Créer le module" }).click();
+  await expect(page.locator(".st-toolbar-title strong")).toHaveText("Demandé par le lanceur");
+
+  // Un autre module est créé ; puis le lanceur demande d'ouvrir le premier (Studio déjà ouvert).
+  await page.getByText("⌂ Accueil").click();
+  await page.getByRole("button", { name: "＋ Nouveau module" }).click();
+  await page.getByLabel("Titre du module").fill("Second");
+  await page.getByRole("button", { name: "Créer le module" }).click();
+  await expect(page.locator(".st-toolbar-title strong")).toHaveText("Second");
+  await page.evaluate(() => window.dispatchEvent(new CustomEvent("suite-request", { detail: { open: "memoire/demande-par-le-lanceur" } })));
+  await expect(page.locator(".st-toolbar-title strong")).toHaveText("Demandé par le lanceur");
+
+  // « --new » pendant l'édition : retour à l'accueil, fenêtre ouverte, récents à jour.
+  await page.evaluate(() => window.dispatchEvent(new CustomEvent("suite-request", { detail: { new: true } })));
+  await expect(page.getByRole("heading", { name: "Nouveau module" })).toBeVisible();
+  await page.getByRole("button", { name: "Annuler" }).click();
+  await expect(page.locator(".st-recent strong")).toHaveText(["Demandé par le lanceur", "Second"]);
+});
