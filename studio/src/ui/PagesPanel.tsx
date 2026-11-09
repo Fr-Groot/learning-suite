@@ -4,6 +4,7 @@ import { addPage, deletePage, duplicatePage, movePage } from "../model/actions.t
 import { store, useEditor } from "../model/store.ts";
 import { templatesFor } from "../model/templates.ts";
 import { PageThumbnail } from "./StageView.tsx";
+import { tr } from "../i18n/index.ts";
 
 export function PagesPanel() {
   const { project, pageId } = useEditor();
@@ -28,7 +29,7 @@ export function PagesPanel() {
   };
 
   return (
-    <nav className="st-pages" aria-label="Pages du module">
+    <nav className="st-pages" aria-label={tr("pagesNav")}>
       <ol className="st-pages-list">
         {project.pages.map((page, i) => (
           <li key={page.id}>
@@ -46,15 +47,15 @@ export function PagesPanel() {
       </ol>
 
       <div className="st-pages-actions">
-        <button className="st-btn st-btn--primary st-btn--block" onClick={() => setPicking((v) => !v)} aria-expanded={picking}>＋ Ajouter une page</button>
+        <button className="st-btn st-btn--primary st-btn--block" onClick={() => setPicking((v) => !v)} aria-expanded={picking}>{tr("addPage")}</button>
         {pageId && (
           <div className="st-row st-row--tight">
-            <button className="st-btn st-btn--icon" title="Monter" aria-label="Monter la page" disabled={index <= 0} onClick={() => store.edit((p) => movePage(p, pageId, index - 1))}>↑</button>
-            <button className="st-btn st-btn--icon" title="Descendre" aria-label="Descendre la page" disabled={index >= project.pages.length - 1} onClick={() => store.edit((p) => movePage(p, pageId, index + 1))}>↓</button>
+            <button className="st-btn st-btn--icon" title={tr("moveUp")} aria-label={tr("moveUpPage")} disabled={index <= 0} onClick={() => store.edit((p) => movePage(p, pageId, index - 1))}>↑</button>
+            <button className="st-btn st-btn--icon" title={tr("moveDown")} aria-label={tr("moveDownPage")} disabled={index >= project.pages.length - 1} onClick={() => store.edit((p) => movePage(p, pageId, index + 1))}>↓</button>
             <button
               className="st-btn st-btn--icon"
-              title="Dupliquer"
-              aria-label="Dupliquer la page"
+              title={tr("duplicate")}
+              aria-label={tr("duplicatePage")}
               onClick={() => {
                 let created = "";
                 store.edit((p) => {
@@ -65,23 +66,23 @@ export function PagesPanel() {
                 store.selectPage(created);
               }}
             >⧉</button>
-            <button className="st-btn st-btn--icon st-btn--danger" title="Supprimer" aria-label="Supprimer la page" disabled={project.pages.length <= 1} onClick={() => void remove()}>🗑</button>
+            <button className="st-btn st-btn--icon st-btn--danger" title={tr("delete")} aria-label={tr("deletePage")} disabled={project.pages.length <= 1} onClick={() => void remove()}>🗑</button>
           </div>
         )}
       </div>
 
       {picking && (
-        <div className="st-popover" role="dialog" aria-label="Choisir un modèle de page">
-          <h3>Nouvelle page</h3>
+        <div className="st-popover" role="dialog" aria-label={tr("chooseTemplate")}>
+          <h3>{tr("newPage")}</h3>
           <div className="st-templates">
             <button className="st-template" onClick={() => add(null)}>
               <span className="st-template-blank" />
-              Page blanche
+              {tr("blankPage")}
             </button>
             {templatesFor(project.mode).map((t) => (
               <button key={t.id} className="st-template" onClick={() => add(t.id)}>
                 <PageThumbnail page={t.page} project={project} width={130} />
-                {t.label}
+                {tr(t.labelKey)}
               </button>
             ))}
           </div>

@@ -2,6 +2,7 @@
 import { deleteBlocks, duplicateBlocks, reorderBlock } from "../model/actions.ts";
 import { store, useEditor } from "../model/store.ts";
 import { BlockPreview, pageBackground, useTheme } from "./StageView.tsx";
+import { tr } from "../i18n/index.ts";
 
 export function VerticalEditor() {
   const { project, pageId, selection } = useEditor();
@@ -12,7 +13,7 @@ export function VerticalEditor() {
   return (
     <div className="st-vertical-wrap" onPointerDown={() => store.select([])}>
       <div ref={theme} className="lsp-canvas lsp--vertical st-phone" style={pageBackground(page)}>
-        {page.blocks.length === 0 && <p className="st-empty">Page vide : ajoutez une brique avec la barre « Insérer ».</p>}
+        {page.blocks.length === 0 && <p className="st-empty">{tr("emptyPage")}</p>}
         {page.blocks.map((b, i) => {
           const on = selection.includes(b.id);
           return (
@@ -29,12 +30,12 @@ export function VerticalEditor() {
               <BlockPreview block={b} project={project} />
               {on && (
                 <div className="st-vtools" onPointerDown={(e) => e.stopPropagation()}>
-                  <button className="st-btn st-btn--icon" aria-label="Monter" title="Monter" disabled={i === 0} onClick={() => store.edit((p) => reorderBlock(p, page.id, b.id, "up"))}>↑</button>
-                  <button className="st-btn st-btn--icon" aria-label="Descendre" title="Descendre" disabled={i === page.blocks.length - 1} onClick={() => store.edit((p) => reorderBlock(p, page.id, b.id, "down"))}>↓</button>
+                  <button className="st-btn st-btn--icon" aria-label={tr("moveUp")} title={tr("moveUp")} disabled={i === 0} onClick={() => store.edit((p) => reorderBlock(p, page.id, b.id, "up"))}>↑</button>
+                  <button className="st-btn st-btn--icon" aria-label={tr("moveDown")} title={tr("moveDown")} disabled={i === page.blocks.length - 1} onClick={() => store.edit((p) => reorderBlock(p, page.id, b.id, "down"))}>↓</button>
                   <button
                     className="st-btn st-btn--icon"
-                    aria-label="Dupliquer"
-                    title="Dupliquer"
+                    aria-label={tr("duplicate")}
+                    title={tr("duplicate")}
                     onClick={() => {
                       let ids: string[] = [];
                       store.edit((p) => {
@@ -45,7 +46,7 @@ export function VerticalEditor() {
                       store.select(ids);
                     }}
                   >⧉</button>
-                  <button className="st-btn st-btn--icon st-btn--danger" aria-label="Supprimer" title="Supprimer" onClick={() => store.edit((p) => deleteBlocks(p, page.id, [b.id]))}>🗑</button>
+                  <button className="st-btn st-btn--icon st-btn--danger" aria-label={tr("delete")} title={tr("delete")} onClick={() => store.edit((p) => deleteBlocks(p, page.id, [b.id]))}>🗑</button>
                 </div>
               )}
             </div>

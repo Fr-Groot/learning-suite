@@ -47,6 +47,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* ---------- Accueil ---------- */
 .st-welcome { max-width: 760px; margin: 0 auto; padding: 64px 24px; }
 .st-welcome h1 { margin: 0 0 4px; font-size: 30px; }
+.st-welcome-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.st-lang { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--st-muted); }
+.st-lang select { padding: 4px 8px; border: 1px solid var(--st-border); border-radius: 6px; background: #fff; color: var(--st-text); }
+.st-root { height: 100%; }
 .st-welcome-actions { display: flex; gap: 12px; margin: 28px 0; flex-wrap: wrap; }
 .st-recents h2 { font-size: 16px; }
 .st-recents ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }

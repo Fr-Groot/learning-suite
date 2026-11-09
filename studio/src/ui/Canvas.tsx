@@ -6,6 +6,7 @@ import { setFrames, STAGE } from "../model/actions.ts";
 import { resizeFrame, snapMove, type Guides, type Handle } from "../model/snap.ts";
 import { store, useEditor } from "../model/store.ts";
 import { BlockPreview, pageBackground, useTheme } from "./StageView.tsx";
+import { tr } from "../i18n/index.ts";
 
 const HANDLES: Handle[] = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
 
@@ -135,7 +136,7 @@ export function Canvas() {
         </div>
       </div>
       <p className="st-hint st-muted">
-        Cliquez une brique pour la régler à droite · Maj+clic : plusieurs · Flèches : déplacer · Ctrl+D : dupliquer · Suppr : effacer · Alt : sans aimantation
+        {tr("canvasHint")}
       </p>
     </div>
   );

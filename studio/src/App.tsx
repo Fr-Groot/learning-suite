@@ -2,6 +2,7 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import "@player/player.css";
 import "./App.css";
 import { notices, saveProject, startAutosave } from "./commands.ts";
+import { getLang, useT } from "./i18n/index.ts";
 import { backend } from "./io/backend.ts";
 import { store, useEditor } from "./model/store.ts";
 import { Editor } from "./ui/Editor.tsx";
@@ -11,6 +12,10 @@ function App() {
   const { project, dirty } = useEditor();
   const [ready, setReady] = useState(false);
   const notice = useSyncExternalStore(notices.subscribe, notices.get);
+  // Changer de langue redessine toute l'interface (le module ouvert n'est pas touché).
+  useT();
+  const lang = getLang();
+  useEffect(() => void (document.documentElement.lang = lang), [lang]);
 
   useEffect(() => {
     void backend().then(() => setReady(true));
@@ -42,7 +47,7 @@ function App() {
   if (!ready) return null;
   return (
     <>
-      {project ? <Editor /> : <Welcome />}
+      <div key={lang} className="st-root">{project ? <Editor /> : <Welcome />}</div>
       {notice && (
         <div className={`st-notice st-notice--${notice.kind}`} role={notice.kind === "error" ? "alert" : "status"}>
           {notice.text}

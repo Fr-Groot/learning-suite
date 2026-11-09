@@ -1,6 +1,7 @@
 // Opérations sur un module. Chaque fonction reçoit un projet et en renvoie un NOUVEAU
 // (l'ancien n'est jamais modifié) : c'est ce qui permet d'annuler et de rétablir.
 import type { Block, Frame, Mode, Page, Project } from "@player/types.ts";
+import { trFor } from "../i18n/index.ts";
 import { THEMES } from "./themes.ts";
 import { blankPage, templatesFor } from "./templates.ts";
 
@@ -45,11 +46,12 @@ function freshIds(page: Page, taken: Set<string>): Page {
 
 // ---------- Projet ----------
 
-export function newProject(opts: { title: string; mode: Mode; themeId?: string; author?: string }): Project {
+export function newProject(opts: { title: string; mode: Mode; themeId?: string; author?: string; language?: string }): Project {
+  const lang = opts.language ?? "fr";
   const theme = THEMES.find((t) => t.id === opts.themeId) ?? THEMES[0];
   const project: Project = {
     schemaVersion: "1.3",
-    meta: { id: crypto.randomUUID(), title: opts.title.trim() || "Nouveau module", language: "fr", version: "1.0.0", ...(opts.author ? { author: opts.author } : {}) },
+    meta: { id: crypto.randomUUID(), title: opts.title.trim() || trFor(lang, "cNewModule"), language: lang, version: "1.0.0", ...(opts.author ? { author: opts.author } : {}) },
     mode: opts.mode,
     theme: clone(theme.theme),
     navigation: { linear: true, allowBack: true, showMenu: true, showProgress: true },
@@ -59,11 +61,11 @@ export function newProject(opts: { title: string; mode: Mode; themeId?: string; 
   // Première page : le titre du module.
   const first: Page = {
     id: "accueil",
-    title: "Accueil",
+    title: trFor(lang, "cWelcomePage"),
     blocks: [
       { id: "accueil-titre", type: "text", variant: "title", content: project.meta.title, ...(opts.mode === "slides" ? { frame: { x: 80, y: 220, w: 1120, h: 100 } } : {}) },
-      { id: "accueil-texte", type: "text", content: "Sous-titre ou objectif du module.", ...(opts.mode === "slides" ? { frame: { x: 80, y: 340, w: 1120, h: 80 } } : {}) },
-      { id: "accueil-commencer", type: "button", label: "Commencer", action: { type: "next" }, ...(opts.mode === "slides" ? { frame: { x: 80, y: 470, w: 240, h: 64 } } : {}) },
+      { id: "accueil-texte", type: "text", content: trFor(lang, "cSubtitle"), ...(opts.mode === "slides" ? { frame: { x: 80, y: 340, w: 1120, h: 80 } } : {}) },
+      { id: "accueil-commencer", type: "button", label: trFor(lang, "cStart"), action: { type: "next" }, ...(opts.mode === "slides" ? { frame: { x: 80, y: 470, w: 240, h: 64 } } : {}) },
     ],
   };
   project.pages.push(first);
@@ -77,7 +79,7 @@ export function addPage(project: Project, templateId: string | null, afterPageId
   const template = templateId ? templatesFor(project.mode).find((t) => t.id === templateId)?.page : undefined;
   let pageId = "";
   const next = produce(project, (d) => {
-    const page = freshIds(template ?? blankPage(), allIds(d));
+    const page = freshIds(template ?? blankPage(trFor(d.meta.language, "cNewPage")), allIds(d));
     pageId = page.id;
     const i = afterPageId ? d.pages.findIndex((p) => p.id === afterPageId) : d.pages.length - 1;
     d.pages.splice(i + 1, 0, page);
@@ -90,7 +92,7 @@ export function duplicatePage(project: Project, pageId: string): { project: Proj
   const next = produce(project, (d) => {
     const i = d.pages.findIndex((p) => p.id === pageId);
     if (i < 0) return;
-    const copy = freshIds({ ...d.pages[i], title: `${d.pages[i].title} (copie)` }, allIds(d));
+    const copy = freshIds({ ...d.pages[i], title: `${d.pages[i].title} ${trFor(d.meta.language, "cCopy")}` }, allIds(d));
     newId = copy.id;
     d.pages.splice(i + 1, 0, copy);
   });
@@ -127,14 +129,14 @@ export function updatePage(project: Project, pageId: string, patch: Partial<Page
 // ---------- Briques ----------
 
 /** Brique neuve d'un type donné, avec un contenu de départ. */
-export function defaultBlock(type: "text" | "image" | "shape" | "button" | "video" | "audio", src?: string): Block {
+export function defaultBlock(type: "text" | "image" | "shape" | "button" | "video" | "audio", src?: string, lang = "fr"): Block {
   switch (type) {
-    case "text": return { id: "", type, content: "Votre texte" };
+    case "text": return { id: "", type, content: trFor(lang, "cYourText") };
     case "image": return { id: "", type, src: src ?? "media/image.png", alt: "", fit: "contain" };
     case "shape": return { id: "", type, shape: "rectangle", fill: "#C9D6FF" };
-    case "button": return { id: "", type, label: "Suivant", action: { type: "next" } };
+    case "button": return { id: "", type, label: trFor(lang, "cNext"), action: { type: "next" } };
     case "video": return { id: "", type, src: src ?? "media/video.mp4" };
-    case "audio": return { id: "", type, src: src ?? "media/son.mp3", label: "Écouter" };
+    case "audio": return { id: "", type, src: src ?? "media/son.mp3", label: trFor(lang, "cListen") };
   }
 }
 

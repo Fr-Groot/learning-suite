@@ -152,3 +152,11 @@ it("un champ fermé sans « blur » ne fusionne pas deux étapes d'annulation", 
   s.undo();
   expect(s.get().project!.pages[0].blocks[0].frame!.x).toBe(80);
 });
+
+it("un module anglais a ses textes de départ en anglais", () => {
+  const p = newProject({ title: "Safety", mode: "slides", language: "en" });
+  expect(p.meta.language).toBe("en");
+  expect(p.pages[0].title).toBe("Welcome");
+  expect(validateProject(p).ok).toBe(true);
+  expect(addPage(p, null, null).project.pages[1].title).toBe("New page");
+});

@@ -4,6 +4,7 @@ import { Player } from "@player/player.ts";
 import { LocalTracker } from "@player/tracker/local.ts";
 import { mediaUrl } from "../commands.ts";
 import { useEditor } from "../model/store.ts";
+import { tr } from "../i18n/index.ts";
 
 export function Preview({ onClose }: { onClose: () => void }) {
   const { project, pageId } = useEditor();
@@ -36,9 +37,9 @@ export function Preview({ onClose }: { onClose: () => void }) {
   }, [onClose]);
 
   return (
-    <div className="st-preview" role="dialog" aria-label="Aperçu du module">
+    <div className="st-preview" role="dialog" aria-label={tr("previewAria")}>
       <div className="st-preview-player" ref={host} />
-      <button className="st-btn st-btn--primary st-preview-close" onClick={onClose}>✕ Fermer l'aperçu</button>
+      <button className="st-btn st-btn--primary st-preview-close" onClick={onClose}>{tr("closePreview")}</button>
     </div>
   );
 }

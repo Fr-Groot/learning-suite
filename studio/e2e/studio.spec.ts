@@ -142,3 +142,26 @@ test("enregistrer puis rouvrir depuis l'accueil (projets récents)", async ({ pa
   await page.getByRole("button", { name: /Module à rouvrir/ }).click();
   await expect(page.locator(".st-item")).toHaveCount(4);
 });
+
+test("Studio in English: switch language, create an English module", async ({ page }) => {
+  await page.goto(STUDIO);
+  await page.getByLabel("Langue de Studio").selectOption("en");
+  await expect(page.getByRole("button", { name: "＋ New module" })).toBeVisible();
+  await page.getByRole("button", { name: "＋ New module" }).click();
+  await page.getByLabel("Module title").fill("Workplace safety");
+  await expect(page.getByLabel("Module language")).toHaveValue("en");
+  await page.getByRole("button", { name: "Create module" }).click();
+
+  // English interface, English starter content
+  await expect(page.getByRole("button", { name: "⇪ Export" })).toBeVisible();
+  await expect(page.locator(".st-page-title").first()).toHaveText("Welcome");
+  await page.getByRole("button", { name: "¶ Text" }).click();
+  await expect(page.locator("#st-main-field")).toHaveValue("Your text");
+  await expect(page.getByRole("tab", { name: "Properties" }).or(page.getByRole("tab", { name: "Block" }))).toBeVisible();
+
+  // The choice is remembered: after a reload, Studio is still in English.
+  await page.reload();
+  await expect(page.getByRole("button", { name: "＋ New module" })).toBeVisible();
+  await page.getByLabel("Studio language").selectOption("fr");
+  await expect(page.getByRole("button", { name: "＋ Nouveau module" })).toBeVisible();
+});

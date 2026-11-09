@@ -1,3 +1,4 @@
+import type { StudioKey } from "../i18n/index.ts";
 // Tout ce que l'éditeur demande au système : fichiers, boîtes de dialogue.
 // Deux versions : Tauri (la vraie appli Windows) et mémoire (navigateur, tests automatiques).
 
@@ -25,12 +26,12 @@ export interface Backend {
   confirm(message: string, title: string): Promise<boolean>;
 }
 
-export const MEDIA_FILTERS: Record<MediaKind, { name: string; extensions: string[] }> = {
-  image: { name: "Images", extensions: ["png", "jpg", "jpeg", "gif", "webp", "svg"] },
-  audio: { name: "Sons", extensions: ["mp3", "wav", "m4a", "ogg"] },
-  video: { name: "Vidéos", extensions: ["mp4", "webm"] },
-  captions: { name: "Sous-titres", extensions: ["vtt"] },
-  html: { name: "Pages HTML", extensions: ["html", "htm"] },
+export const MEDIA_FILTERS: Record<MediaKind, { nameKey: StudioKey; extensions: string[] }> = {
+  image: { nameKey: "fImages", extensions: ["png", "jpg", "jpeg", "gif", "webp", "svg"] },
+  audio: { nameKey: "fSounds", extensions: ["mp3", "wav", "m4a", "ogg"] },
+  video: { nameKey: "fVideos", extensions: ["mp4", "webm"] },
+  captions: { nameKey: "fCaptions", extensions: ["vtt"] },
+  html: { nameKey: "fHtml", extensions: ["html", "htm"] },
 };
 
 let current: Backend | null = null;

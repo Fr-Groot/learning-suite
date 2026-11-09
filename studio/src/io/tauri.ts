@@ -3,6 +3,7 @@ import { convertFileSrc, invoke } from "@tauri-apps/api/core";
 import { documentDir, join } from "@tauri-apps/api/path";
 import { ask, open, save } from "@tauri-apps/plugin-dialog";
 import { MEDIA_FILTERS, type Backend } from "./backend.ts";
+import { tr } from "../i18n/index.ts";
 
 const dirOf = (file: string) => file.replace(/[\\/][^\\/]*$/, "");
 
@@ -14,12 +15,12 @@ export const tauriBackend: Backend = {
   },
 
   async pickFolder() {
-    const r = await open({ directory: true, title: "Choisir où créer le module" });
+    const r = await open({ directory: true, title: tr("dlgCreateWhere") });
     return typeof r === "string" ? r : null;
   },
 
   async pickProject() {
-    const r = await open({ title: "Ouvrir un module", filters: [{ name: "Module Learning Suite", extensions: ["json"] }] });
+    const r = await open({ title: tr("dlgOpen"), filters: [{ name: tr("dlgModuleFilter"), extensions: ["json"] }] });
     return typeof r === "string" ? dirOf(r) : null;
   },
 
@@ -29,7 +30,8 @@ export const tauriBackend: Backend = {
 
   async importMedia(dir, kind) {
     const f = MEDIA_FILTERS[kind];
-    const source = await open({ title: `Importer : ${f.name.toLowerCase()}`, filters: [f] });
+    const name = tr(f.nameKey);
+    const source = await open({ title: tr("dlgImport", { kind: name.toLowerCase() }), filters: [{ name, extensions: f.extensions }] });
     if (typeof source !== "string") return null;
     return invoke<string>("media_import", { dir, source });
   },
@@ -41,11 +43,11 @@ export const tauriBackend: Backend = {
   listMedia: (dir) => invoke<string[]>("media_list", { dir }),
 
   async exportZip(dir, suggestedName, texts, media) {
-    const out = await save({ title: "Enregistrer le paquet", defaultPath: suggestedName, filters: [{ name: "Paquet zip", extensions: ["zip"] }] });
+    const out = await save({ title: tr("dlgSavePackage"), defaultPath: suggestedName, filters: [{ name: tr("dlgZipFilter"), extensions: ["zip"] }] });
     if (!out) return null;
     await invoke("export_zip", { dir, out, texts, media });
     return out;
   },
 
-  confirm: (message, title) => ask(message, { title, kind: "warning", okLabel: "Oui", cancelLabel: "Non" }),
+  confirm: (message, title) => ask(message, { title, kind: "warning", okLabel: tr("yes"), cancelLabel: tr("no") }),
 };

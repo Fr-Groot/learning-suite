@@ -6,7 +6,7 @@ export default defineConfig({
   testDir: "e2e",
   timeout: 60_000,
   reporter: "list",
-  use: { channel: "msedge", headless: true, viewport: { width: 1440, height: 900 }, acceptDownloads: true },
+  use: { channel: "msedge", headless: true, locale: "fr-FR", viewport: { width: 1440, height: 900 }, acceptDownloads: true },
   webServer: {
     command: "npm run dev -- --port 1430 --strictPort",
     url: "http://localhost:1430/",
