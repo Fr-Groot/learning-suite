@@ -7,7 +7,7 @@ export function renderButton(b: ButtonBlock, ctx: RenderContext): HTMLElement {
     text: b.label,
     attrs: { type: "button" },
   });
-  if (b.action.type === "url") btn.setAttribute("aria-description", "s'ouvre dans un nouvel onglet");
+  if (b.action.type === "url") btn.setAttribute("aria-description", ctx.t("opensNewTab"));
   btn.addEventListener("click", () => ctx.act(b.action));
   const refresh = () => (btn.disabled = !ctx.canAct(b.action));
   refresh();

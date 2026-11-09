@@ -3,11 +3,7 @@ import { attemptsLeft, shuffled, type Response } from "../activities.ts";
 import type { Choice, QuestionBlock } from "../types.ts";
 import { el, type RenderContext } from "./context.ts";
 
-const KIND_HINT = {
-  single: "Une seule réponse possible.",
-  multiple: "Plusieurs réponses possibles.",
-  truefalse: "Vrai ou faux ?",
-};
+const KIND_HINT = { single: "qSingle", multiple: "qMultiple", truefalse: "qTrueFalse" } as const;
 
 export function renderQuestion(q: QuestionBlock, ctx: RenderContext): HTMLElement {
   const { doc } = ctx;
@@ -15,14 +11,14 @@ export function renderQuestion(q: QuestionBlock, ctx: RenderContext): HTMLElemen
   const fieldset = el(doc, "fieldset");
   const legend = el(doc, "legend", { class: "lsp-question-prompt" });
   legend.append(renderMarkdown(q.prompt, doc));
-  fieldset.append(legend, el(doc, "p", { class: "lsp-question-hint", text: KIND_HINT[q.kind] }));
+  fieldset.append(legend, el(doc, "p", { class: "lsp-question-hint", text: ctx.t(KIND_HINT[q.kind]) }));
 
   // Les choix : pour vrai/faux on fabrique deux choix « Vrai » et « Faux ».
   const choices: Choice[] =
     q.kind === "truefalse"
       ? [
-          { id: "true", text: "Vrai", correct: q.answer === true },
-          { id: "false", text: "Faux", correct: q.answer === false },
+          { id: "true", text: ctx.t("true"), correct: q.answer === true },
+          { id: "false", text: ctx.t("false"), correct: q.answer === false },
         ]
       : q.shuffle
         ? shuffled(q.choices ?? [], hash(q.id) ^ ctx.seed)
@@ -39,7 +35,7 @@ export function renderQuestion(q: QuestionBlock, ctx: RenderContext): HTMLElemen
   }
   fieldset.append(list);
 
-  const submitBtn = el(doc, "button", { class: "lsp-button lsp-button--primary", text: "Valider", attrs: { type: "submit" } });
+  const submitBtn = el(doc, "button", { class: "lsp-button lsp-button--primary", text: ctx.t("validate"), attrs: { type: "submit" } });
   const feedback = el(doc, "div", { class: "lsp-feedback", attrs: { "aria-live": "polite" } });
   form.append(fieldset, el(doc, "div", { class: "lsp-question-actions" }, submitBtn, feedback));
 
@@ -77,14 +73,14 @@ export function renderQuestion(q: QuestionBlock, ctx: RenderContext): HTMLElemen
         label.classList.toggle("is-wrong", !c?.correct && chosen.includes(label.dataset.choice!));
       });
     }
-    const status = el(doc, "p", { class: "lsp-feedback-status", text: st.correct ? "Bonne réponse" : "Mauvaise réponse" });
+    const status = el(doc, "p", { class: "lsp-feedback-status", text: ctx.t(st.correct ? "correct" : "incorrect") });
     feedback.className = `lsp-feedback ${st.correct ? "is-correct" : "is-incorrect"}`;
     feedback.append(status);
     const message = st.correct ? q.feedback?.correct : q.feedback?.incorrect;
     if (message && (st.done || st.correct)) feedback.append(renderMarkdown(message, doc));
     if (!st.done) {
       const left = attemptsLeft(q, st);
-      feedback.append(el(doc, "p", { text: `Il vous reste ${left} essai${left > 1 ? "s" : ""}.` }));
+      feedback.append(el(doc, "p", { text: left > 1 ? ctx.t("attemptsLeftMany", { n: left }) : ctx.t("attemptsLeftOne") }));
     }
     syncButton();
   }

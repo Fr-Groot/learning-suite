@@ -120,3 +120,14 @@ describe("validation des activités", () => {
     expect(pageActivities(page).map((b) => b.id)).toEqual(["cards", "fb"]);
   });
 });
+
+it("« Suivant » attend aussi les activités d'entraînement, mais pas un jeu HTML non noté", () => {
+  const page: Page = {
+    id: "p", title: "P", blocks: [
+      { id: "practice", type: "fillblanks", text: "Un [[trou]]", role: "activity" },
+      { id: "game", type: "html", src: "media/jeu.html", title: "Jeu" },
+      { id: "graded-game", type: "html", src: "media/jeu2.html", title: "Jeu noté", role: "exercise" },
+    ],
+  };
+  expect(pageActivities(page).map((b) => b.id)).toEqual(["practice", "graded-game"]);
+});

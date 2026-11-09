@@ -9,7 +9,7 @@ const templates = import.meta.glob("../../schema/templates/*/*.json", { eager: t
 const clone = <T>(x: T): T => structuredClone(x);
 
 describe("schéma 1.2 : exemples et modèles", () => {
-  it("les 5 exemples sont trouvés", () => expect(Object.keys(projects)).toHaveLength(5));
+  it("les 6 exemples sont trouvés", () => expect(Object.keys(projects)).toHaveLength(6));
   for (const [file, project] of Object.entries(projects)) {
     it(`${file.replace("../../", "")} est valide`, () => expect(validateProject(clone(project))).toEqual({ ok: true, errors: [] }));
   }

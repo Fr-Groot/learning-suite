@@ -1,5 +1,6 @@
 // Ce que chaque brique peut demander au lecteur pendant l'affichage.
 import type { MultiActivity, Response, QuestionState, Score } from "../activities.ts";
+import type { Translate } from "../i18n.ts";
 import type { ButtonAction, HtmlBlock, Mode, Project, QuestionBlock } from "../types.ts";
 
 export interface RenderContext {
@@ -28,6 +29,8 @@ export interface RenderContext {
   /** Nettoyage à faire quand on quitte la page (écouteurs…). */
   onDispose(fn: () => void): void;
   doc: Document;
+  /** Textes du lecteur dans la langue du module. */
+  t: Translate;
 }
 
 /** Petit utilitaire pour créer un élément avec classes et attributs. */

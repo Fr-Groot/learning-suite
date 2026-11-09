@@ -17,7 +17,7 @@ export function renderHotspot(b: HotspotBlock, ctx: RenderContext): HTMLElement 
   root.append(
     el(doc, "p", {
       class: "lsp-question-hint",
-      text: b.kind === "find" ? "Touchez les zones concernées, puis validez." : "Touchez les zones pour en savoir plus.",
+      text: ctx.t(b.kind === "find" ? "hotspotFind" : "hotspotExplore"),
     }),
   );
 
@@ -60,7 +60,7 @@ export function renderHotspot(b: HotspotBlock, ctx: RenderContext): HTMLElement 
   if (b.kind === "explore") {
     const ids = b.zones.map((z) => z.id);
     const info = el(doc, "div", { class: "lsp-hotspot-info", attrs: { "aria-live": "polite" } });
-    info.append(el(doc, "p", { class: "lsp-question-hint", text: "Aucune zone ouverte pour l'instant." }));
+    info.append(el(doc, "p", { class: "lsp-question-hint", text: ctx.t("hotspotNone") }));
     root.append(info);
     const seen = ctx.questionState(b.id).opened ?? [];
     zones.forEach((btn, i) => {

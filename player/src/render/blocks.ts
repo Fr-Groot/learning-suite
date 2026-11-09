@@ -43,7 +43,7 @@ export function renderBlock(b: Block, ctx: RenderContext): HTMLElement {
     const role = roleOf(b);
     const tag = ctx.doc.createElement("p");
     tag.className = `lsp-role lsp-role--${role}`;
-    tag.textContent = role === "exercise" ? "Exercice noté" : "Entraînement";
+    tag.textContent = ctx.t(role === "exercise" ? "roleExercise" : "roleActivity");
     wrap.append(tag);
   }
   wrap.append(content);

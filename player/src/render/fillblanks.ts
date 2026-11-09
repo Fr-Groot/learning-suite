@@ -58,7 +58,7 @@ export function renderFillBlanks(b: FillBlanksBlock, ctx: RenderContext): HTMLEl
 
 function field(bl: Blank, ctx: RenderContext): HTMLInputElement | HTMLSelectElement {
   const { doc } = ctx;
-  const label = `Trou ${bl.index + 1}`;
+  const label = ctx.t("blank", { n: bl.index + 1 });
   if (bl.select) {
     const select = el(doc, "select", { class: "lsp-blank", attrs: { "aria-label": label } });
     select.append(el(doc, "option", { text: "…", attrs: { value: "" } }));

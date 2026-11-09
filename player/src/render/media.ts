@@ -13,7 +13,7 @@ export function renderVideo(b: VideoBlock, ctx: RenderContext): HTMLElement {
   if (b.captions) {
     video.append(
       el(ctx.doc, "track", {
-        attrs: { kind: "captions", src: ctx.resolve(b.captions), srclang: ctx.project.meta.language, label: "Sous-titres", default: "" },
+        attrs: { kind: "captions", src: ctx.resolve(b.captions), srclang: ctx.project.meta.language, label: ctx.t("captions"), default: "" },
       }),
     );
   }
@@ -28,7 +28,7 @@ export function renderAudio(b: AudioBlock, ctx: RenderContext): HTMLElement {
   box.append(audio);
   if (b.transcript) {
     const details = el(ctx.doc, "details", { class: "lsp-transcript-inline" });
-    details.append(el(ctx.doc, "summary", { text: "Transcription" }), el(ctx.doc, "p", { text: b.transcript }));
+    details.append(el(ctx.doc, "summary", { text: ctx.t("transcript") }), el(ctx.doc, "p", { text: b.transcript }));
     box.append(details);
   }
   return box;

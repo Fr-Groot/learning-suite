@@ -1,0 +1,61 @@
+{
+  "$schema": "../../schema/project.v1.schema.json",
+  "schemaVersion": "1.3",
+  "meta": {
+    "id": "2d9c6a41-58e3-4b7f-9e12-a0b3c4d5e6f7",
+    "title": "Good digital habits",
+    "description": "A short English module: one practice activity, two graded exercises and a result.",
+    "language": "en",
+    "author": "Learning Suite",
+    "version": "1.0.0",
+    "estimatedMinutes": 3
+  },
+  "mode": "vertical",
+  "theme": {
+    "colors": { "primary": "#2F5BEA", "secondary": "#1B2A4A", "accent": "#FFB020", "background": "#FFFFFF", "surface": "#F3F5FA", "text": "#1B2A4A", "success": "#1E9E5A", "error": "#D64545" },
+    "fonts": { "heading": "Segoe UI", "body": "Segoe UI" },
+    "radius": 10
+  },
+  "navigation": { "linear": true, "allowBack": true, "showMenu": true, "showProgress": true },
+  "scoring": { "passingScore": 70 },
+  "pages": [
+    {
+      "id": "welcome",
+      "title": "Welcome",
+      "blocks": [
+        { "id": "welcome-title", "type": "text", "variant": "title", "content": "Good digital habits" },
+        { "id": "welcome-text", "type": "text", "content": "Three minutes, **one practice** activity and **two graded exercises**." },
+        { "id": "welcome-start", "type": "button", "label": "Start", "action": { "type": "next" } }
+      ]
+    },
+    {
+      "id": "practice",
+      "title": "Practice",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        { "id": "practice-sort", "type": "dragdrop", "kind": "categorize", "role": "activity",
+          "prompt": "Good or bad habit? (practice, not graded)",
+          "categories": [{ "id": "good", "label": "Good habit" }, { "id": "bad", "label": "Bad habit" }],
+          "items": [
+            { "id": "p1", "text": "Lock your screen", "category": "good" },
+            { "id": "p2", "text": "Share your password", "category": "bad" }
+          ] }
+      ]
+    },
+    {
+      "id": "quiz",
+      "title": "Quiz",
+      "unlockNext": "activitiesDone",
+      "blocks": [
+        { "id": "quiz-q1", "type": "question", "kind": "single", "prompt": "What should you do with a suspicious email?",
+          "choices": [
+            { "id": "a", "text": "Report it", "correct": true },
+            { "id": "b", "text": "Open the attachment", "correct": false }
+          ],
+          "attempts": 2 },
+        { "id": "quiz-q2", "type": "fillblanks", "text": "A good password is [[*long|short]] and [[unique]] for each site." },
+        { "id": "quiz-result", "type": "results", "passedMessage": "Well done!", "failedMessage": "Review the module and try again." }
+      ]
+    }
+  ]
+}

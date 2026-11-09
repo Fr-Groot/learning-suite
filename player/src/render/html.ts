@@ -27,7 +27,7 @@ export function renderHtml(b: HtmlBlock, ctx: RenderContext): HTMLElement {
   const draw = () => {
     const st = ctx.questionState(b.id);
     status.hidden = roleOf(b) !== "exercise" || !st.done;
-    status.textContent = st.done ? `Activité terminée · score enregistré : ${Math.round(st.score ?? 0)} %` : "";
+    status.textContent = st.done ? ctx.t("htmlDone", { pct: Math.round(st.score ?? 0) }) : "";
   };
 
   // On n'écoute que les messages venant de CE cadre, et au bon format.

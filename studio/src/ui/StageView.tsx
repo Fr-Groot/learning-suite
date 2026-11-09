@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef, type CSSProperties } from "react";
 import { newQuestionState } from "@player/activities.ts";
 import { applyTheme } from "@player/player.ts";
+import { translator } from "@player/i18n.ts";
 import { renderBlock } from "@player/render/blocks.ts";
 import type { RenderContext } from "@player/render/context.ts";
 import type { Block, Page, Project } from "@player/types.ts";
@@ -16,6 +17,7 @@ function staticContext(project: Project, doc: Document): RenderContext {
     project,
     mode: project.mode,
     doc,
+    t: translator(project.meta.language),
     seed: 1,
     resolve: mediaUrl,
     act: noop,
@@ -46,7 +48,7 @@ export function BlockPreview({ block, project }: { block: Block; project: Projec
     // Les vidéos et sons ne doivent pas démarrer dans l'éditeur.
     node.querySelectorAll("video, audio").forEach((m) => ((m as HTMLMediaElement).autoplay = false));
     host.replaceChildren(node);
-  }, [block, project.theme, project.mode, project.pages.length]);
+  }, [block, project.theme, project.mode, project.pages.length, project.meta.language]);
   return <div ref={ref} className="st-block-preview" />;
 }
 

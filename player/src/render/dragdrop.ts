@@ -25,8 +25,8 @@ export function renderDragDrop(b: DragDropBlock, ctx: RenderContext): HTMLElemen
     p.append(renderMarkdown(b.prompt, doc));
     root.append(p);
   }
-  const hint = { categorize: "Rangez chaque élément dans la bonne catégorie.", match: "Associez chaque élément à la bonne case.", order: "Remettez les éléments dans le bon ordre." }[b.kind];
-  root.append(el(doc, "p", { class: "lsp-question-hint", text: `${hint} Touchez un élément, puis sa place (ou faites-le glisser).` }));
+  const hint = ctx.t(({ categorize: "ddCategorize", match: "ddMatch", order: "ddOrder" } as const)[b.kind]);
+  root.append(el(doc, "p", { class: "lsp-question-hint", text: `${hint} ${ctx.t("ddHow")}` }));
   const live = el(doc, "p", { class: "lsp-sr-only", attrs: { "aria-live": "polite" } });
 
   // Éléments à placer
@@ -39,14 +39,14 @@ export function renderDragDrop(b: DragDropBlock, ctx: RenderContext): HTMLElemen
   }
 
   // Zone de départ + cibles
-  const pool = el(doc, "div", { class: "lsp-dd-pool", attrs: { "data-target": POOL, role: "group", "aria-label": "Éléments à placer" } });
-  const poolBtn = el(doc, "button", { class: "lsp-dd-drop lsp-dd-drop--pool", text: "Remettre ici", attrs: { type: "button" } });
+  const pool = el(doc, "div", { class: "lsp-dd-pool", attrs: { "data-target": POOL, role: "group", "aria-label": ctx.t("ddPool") } });
+  const poolBtn = el(doc, "button", { class: "lsp-dd-drop lsp-dd-drop--pool", text: ctx.t("ddBack"), attrs: { type: "button" } });
   pool.append(poolBtn);
   const slots = new Map<string, HTMLElement>([[POOL, pool]]);
   const targets = el(doc, "div", { class: "lsp-dd-targets" });
   for (const t of model.targets) {
     const box = el(doc, "div", { class: "lsp-dd-target", attrs: { "data-target": t.id } });
-    const drop = el(doc, "button", { class: "lsp-dd-drop", attrs: { type: "button", "aria-label": `Placer ici : ${t.label}` } }, el(doc, "span", { text: t.label }));
+    const drop = el(doc, "button", { class: "lsp-dd-drop", attrs: { type: "button", "aria-label": ctx.t("ddPlaceHere", { label: t.label }) } }, el(doc, "span", { text: t.label }));
     const slot = el(doc, "div", { class: "lsp-dd-slot" });
     box.append(drop, slot);
     slots.set(t.id, slot);
@@ -60,7 +60,7 @@ export function renderDragDrop(b: DragDropBlock, ctx: RenderContext): HTMLElemen
   const board = el(doc, "div", { class: "lsp-dd-board" }, pool, targets);
   root.append(board, live);
 
-  const labelOf = (targetId: string) => model.targets.find((t) => t.id === targetId)?.label ?? "la réserve";
+  const labelOf = (targetId: string) => model.targets.find((t) => t.id === targetId)?.label ?? ctx.t("ddReserve");
   const textOf = (itemId: string) => model.items.find((i) => i.id === itemId)?.text ?? itemId;
 
   function place(itemId: string, targetId: string) {
@@ -72,7 +72,7 @@ export function renderDragDrop(b: DragDropBlock, ctx: RenderContext): HTMLElemen
       for (const [other, where] of placement) if (where === targetId && other !== itemId) placement.set(other, from);
     }
     placement.set(itemId, targetId);
-    live.textContent = `« ${textOf(itemId)} » placé dans « ${labelOf(targetId)} ».`;
+    live.textContent = ctx.t("ddPlaced", { item: textOf(itemId), target: labelOf(targetId) });
     select(null);
     draw();
     controls.changed();

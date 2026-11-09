@@ -18,7 +18,7 @@ export function renderFlipCards(b: FlipCardsBlock, ctx: RenderContext): HTMLElem
       class: "lsp-flipcard",
       attrs: { role: "button", tabindex: "0", "aria-pressed": "false", "data-card": card.id },
     }, inner);
-    item.setAttribute("aria-label", `Carte : ${front.textContent?.trim() || card.alt || card.id}. Retourner`);
+    item.setAttribute("aria-label", ctx.t("card", { text: front.textContent?.trim() || card.alt || card.id }));
 
     const flip = () => {
       const flipped = item.classList.toggle("is-flipped");

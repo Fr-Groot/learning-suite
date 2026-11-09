@@ -1,4 +1,5 @@
 // Voix off d'une page : lecture, pause, transcription, et signal de fin.
+import type { Translate } from "./i18n.ts";
 import type { Page } from "./types.ts";
 
 export interface VoiceoverControls {
@@ -8,7 +9,7 @@ export interface VoiceoverControls {
 export function startVoiceover(
   page: Page,
   resolve: (src: string) => string,
-  ui: { button: HTMLButtonElement; transcriptToggle: HTMLButtonElement; transcript: HTMLElement },
+  ui: { button: HTMLButtonElement; transcriptToggle: HTMLButtonElement; transcript: HTMLElement; t: Translate },
   onEnded: () => void,
 ): VoiceoverControls {
   const vo = page.voiceover;
@@ -28,8 +29,8 @@ export function startVoiceover(
 
   const label = () => {
     const playing = !audio.paused && !audio.ended;
-    ui.button.textContent = playing ? "❚❚ Pause" : audio.ended ? "↻ Réécouter" : "▶ Écouter";
-    ui.button.setAttribute("aria-label", playing ? "Mettre la voix off en pause" : "Écouter la voix off");
+    ui.button.textContent = ui.t(playing ? "voPause" : audio.ended ? "voReplay" : "voListen");
+    ui.button.setAttribute("aria-label", ui.t(playing ? "voPauseAria" : "voListenAria"));
   };
   const onClick = () => {
     if (audio.paused || audio.ended) void audio.play().catch(() => {});

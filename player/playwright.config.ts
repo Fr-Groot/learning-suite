@@ -32,5 +32,11 @@ export default defineConfig({
       env: { PORT: "5193" },
       reuseExistingServer: false,
     },
+    {
+      command: "node scripts/open.mjs ../examples/discover-en --no-open",
+      url: "http://localhost:5194/",
+      env: { PORT: "5194" },
+      reuseExistingServer: false,
+    },
   ],
 });

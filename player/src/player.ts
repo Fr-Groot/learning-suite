@@ -1,5 +1,6 @@
 // Le lecteur : assemble l'interface (titre, menu, progression, navigation, voix off)
 // et affiche la page courante dans le bon mode.
+import { translator, type Translate } from "./i18n.ts";
 import { Navigator } from "./navigation.ts";
 import { computeScore, hasExercises, isExercise, waitsForActivities, newQuestionState, openItem, submitMulti, pageActivities, reportHtml, submit, type QuestionState } from "./activities.ts";
 import { el, type RenderContext } from "./render/context.ts";
@@ -51,6 +52,7 @@ export class Player {
   private readonly states = new Map<string, QuestionState>();
   private readonly seed = Math.floor(Math.random() * 2 ** 31);
   private readonly doc: Document;
+  private readonly t: Translate;
   private updaters: (() => void)[] = [];
   private disposers: (() => void)[] = [];
   private disposePage: () => void = () => {};
@@ -60,6 +62,7 @@ export class Player {
   constructor(container: HTMLElement, project: Project, options: PlayerOptions = {}) {
     this.project = project;
     this.doc = container.ownerDocument;
+    this.t = translator(project.meta.language);
     this.baseUrl = options.baseUrl ?? "";
     this.resolveMedia = options.resolveMedia;
     this.tracker = options.tracker ?? new LocalTracker();
@@ -88,17 +91,17 @@ export class Player {
     const root = el(doc, "div", { class: `lsp lsp--${project.mode}`, attrs: { lang: project.meta.language } });
     applyTheme(root, project);
 
-    const menuBtn = el(doc, "button", { class: "lsp-icon-btn", text: "☰ Menu", attrs: { type: "button", "aria-expanded": "false", "aria-controls": "lsp-menu" } });
+    const menuBtn = el(doc, "button", { class: "lsp-icon-btn", text: this.t("menu"), attrs: { type: "button", "aria-expanded": "false", "aria-controls": "lsp-menu" } });
     const counter = el(doc, "span", { class: "lsp-counter" });
     const header = el(doc, "header", { class: "lsp-top" }, menuBtn, el(doc, "h1", { class: "lsp-title", text: project.meta.title }), counter);
     menuBtn.hidden = nav.showMenu === false;
 
     const bar = el(doc, "div", { class: "lsp-progress-bar" });
-    const progress = el(doc, "div", { class: "lsp-progress", attrs: { role: "progressbar", "aria-label": "Progression", "aria-valuemin": "0", "aria-valuemax": "100" } }, bar);
+    const progress = el(doc, "div", { class: "lsp-progress", attrs: { role: "progressbar", "aria-label": this.t("progress"), "aria-valuemin": "0", "aria-valuemax": "100" } }, bar);
     progress.hidden = nav.showProgress === false;
 
     const menuList = el(doc, "ol");
-    const menu = el(doc, "nav", { class: "lsp-menu", attrs: { id: "lsp-menu", "aria-label": "Pages du module" } }, menuList);
+    const menu = el(doc, "nav", { class: "lsp-menu", attrs: { id: "lsp-menu", "aria-label": this.t("pagesNav") } }, menuList);
     menu.hidden = true;
     menuBtn.addEventListener("click", () => {
       menu.hidden = !menu.hidden;
@@ -109,11 +112,11 @@ export class Player {
     const main = el(doc, "main", { class: "lsp-main", attrs: { tabindex: "-1" } });
 
     const voBtn = el(doc, "button", { class: "lsp-icon-btn", attrs: { type: "button" } });
-    const trBtn = el(doc, "button", { class: "lsp-icon-btn", text: "Transcription", attrs: { type: "button", "aria-expanded": "false", "aria-controls": "lsp-transcript" } });
+    const trBtn = el(doc, "button", { class: "lsp-icon-btn", text: this.t("transcript"), attrs: { type: "button", "aria-expanded": "false", "aria-controls": "lsp-transcript" } });
     const transcript = el(doc, "div", { class: "lsp-transcript", attrs: { id: "lsp-transcript" } });
     const hint = el(doc, "span", { class: "lsp-hint", attrs: { "aria-live": "polite" } });
-    const prev = el(doc, "button", { class: "lsp-button lsp-button--secondary", text: "← Précédent", attrs: { type: "button" } });
-    const next = el(doc, "button", { class: "lsp-button lsp-button--primary", text: "Suivant →", attrs: { type: "button" } });
+    const prev = el(doc, "button", { class: "lsp-button lsp-button--secondary", text: this.t("prev"), attrs: { type: "button" } });
+    const next = el(doc, "button", { class: "lsp-button lsp-button--primary", text: this.t("next"), attrs: { type: "button" } });
     prev.addEventListener("click", () => this.act({ type: "prev" }));
     next.addEventListener("click", () => this.act({ type: "next" }));
     const footer = el(doc, "footer", { class: "lsp-bottom" },
@@ -158,8 +161,8 @@ export class Player {
       nav.isUnlocked() || nav.current === nav.count - 1
         ? ""
         : rule === "voiceoverEnded"
-          ? "Écoutez la voix off jusqu'au bout pour continuer."
-          : "Terminez les activités de la page pour continuer.";
+          ? this.t("hintVoiceover")
+          : this.t("hintActivities");
     if (!ui.menu.hidden) this.drawMenu();
     this.updaters.forEach((fn) => fn());
   }
@@ -185,7 +188,7 @@ export class Player {
     // Une page « questionsAnswered » déjà toute répondue reste débloquée.
     if (waitsForActivities(page) && this.pageQuestionsDone()) this.nav.unlockCurrent();
 
-    this.voiceover = startVoiceover(page, (s) => this.resolve(s), { button: this.ui.voBtn, transcriptToggle: this.ui.trBtn, transcript: this.ui.transcript }, () => {
+    this.voiceover = startVoiceover(page, (s) => this.resolve(s), { button: this.ui.voBtn, transcriptToggle: this.ui.trBtn, transcript: this.ui.transcript, t: this.t }, () => {
       if (page.unlockNext === "voiceoverEnded" && this.nav.page === page) {
         this.nav.unlockCurrent();
         this.refresh();
@@ -291,6 +294,7 @@ export class Player {
       project: this.project,
       mode: this.project.mode,
       doc: this.doc,
+      t: this.t,
       seed: this.seed,
       resolve: (s) => this.resolve(s),
       act: (a) => this.act(a),

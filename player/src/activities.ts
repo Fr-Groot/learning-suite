@@ -123,8 +123,9 @@ export const pageActivities = (page: Page): Block[] =>
   page.blocks.filter(
     (b) =>
       ((b.type === "flipcards" || b.type === "reveal" || (b.type === "hotspot" && b.kind === "explore")) && b.requireAll === true) ||
-      b.type === "question" ||
-      isExercise(b),
+      // Exercices ET activités d'entraînement : l'apprenant doit les faire. Exception : un jeu HTML
+      // non noté peut ne jamais signaler sa fin, il ne bloque donc pas la page.
+      (isInteraction(b) && !(b.type === "html" && roleOf(b) !== "exercise")),
   );
 
 export interface Score {
