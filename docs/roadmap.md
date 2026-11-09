@@ -9,7 +9,9 @@ Ordre changé (voir decisions.md) : on a commencé par le socle Studio et la pha
 - Reste en phase 3 : test dans Rise Up (facultatif), skill Claude (après la phase 3b, quand le schéma sera stable).
 - Fait (phase 3b) : cartes, onglets, accordéon, frise, texte à trous, glisser-déposer
   (catégories, paires, ordre), zones cliquables, modèles de page ; au doigt, souris et clavier.
-- Ensuite : phase 4 (éditeur Studio).
+- Fait (phase 4a) : éditeur Studio de base (pages, briques, propriétés, thème, voix off,
+  aperçu, export), version 0.2.0. Guide : docs/studio.md.
+- Ensuite : 4b (réglages des activités dans l'éditeur), puis 4c (pilotage par Claude).
 
 ## Phase 1 : Review en local (sur ton PC)
 Livrable : le serveur tourne sur ton PC, s'ouvre dans le navigateur.

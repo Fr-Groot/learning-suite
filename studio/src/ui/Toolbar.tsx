@@ -1,13 +1,13 @@
 // Barre du haut : accueil, enregistrer, annuler/rétablir, vérifier, aperçu, exporter.
-import { useMemo } from "react";
-import { validateProject } from "@player/validate.ts";
 import { saveProject } from "../commands.ts";
 import { store, useEditor } from "../model/store.ts";
 import type { Dialog } from "./Editor.tsx";
+import { useIssues } from "./IssuesDialog.tsx";
 
 export function Toolbar({ onDialog }: { onDialog: (d: Dialog) => void }) {
   const { project, dirty, canUndo, canRedo } = useEditor();
-  const issues = useMemo(() => (project ? validateProject(project).errors.length : 0), [project]);
+  // Même vérification que l'export : schéma, cohérence et fichiers présents.
+  const issues = useIssues()?.length ?? 0;
   if (!project) return null;
 
   const home = async () => {

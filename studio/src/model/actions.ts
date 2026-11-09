@@ -39,7 +39,7 @@ export function uniqueId(taken: Set<string>, base: string): string {
 function freshIds(page: Page, taken: Set<string>): Page {
   const p = clone(page);
   p.id = uniqueId(taken, p.title || "page");
-  for (const b of p.blocks) b.id = uniqueId(taken, `${p.id}-${b.type}`);
+  for (const b of p.blocks) b.id = uniqueId(taken, `${p.id}-${b.id}`);
   return p;
 }
 

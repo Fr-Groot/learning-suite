@@ -37,3 +37,9 @@
 | 2026-11-09 | Un seul modèle « éléments → cibles » pour catégories, paires et ordre | Moins de code, même comportement partout |
 | 2026-11-09 | Zones cliquables en % de l'image | Restent alignées quelle que soit la taille de l'écran |
 | 2026-11-09 | Modèles de page = morceaux de project.json, pas un nouveau format | Simples à réutiliser par Studio et par l'IA |
+| 2026-11-09 | Studio dessine les briques avec le code du lecteur | Ce que voit l'auteur = ce que voit l'apprenant, un seul code à maintenir |
+| 2026-11-09 | Accès disque de Studio limité à quelques commandes Rust | L'interface ne peut pas lire ou écrire n'importe où sur le PC |
+| 2026-11-09 | Enregistrement via fichier temporaire puis remplacement ; sauvegarde auto 30 s et à la fermeture | Pas de module perdu ni de fichier à moitié écrit |
+| 2026-11-09 | Historique d'annulation maison (100 étapes, un geste = une étape) | Simple, sans bibliothèque, testé |
+| 2026-11-09 | Validateur du schéma généré d'avance (Ajv « standalone ») | La sécurité de Studio (CSP) interdit de fabriquer du code au démarrage |
+| 2026-11-09 | Studio testé dans un navigateur avec un « disque en mémoire », et la vraie appli pilotée via WebView2 | Tests automatiques sans toucher aux fichiers de l'utilisateur |

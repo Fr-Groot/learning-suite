@@ -90,8 +90,10 @@ export function ColorInput({ label, value, onChange, allowEmpty = true, fallback
 
 /** Fichier du projet (image, son…) : aperçu, remplacer, retirer. */
 export function MediaInput({ label, value, kind, onChange, optional }: { label: string; value: string | undefined; kind: MediaKind; onChange: (v: string | undefined) => void; optional?: boolean }) {
+  // Pas d'étiquette <label> ici : elle donnerait son texte au premier bouton (mauvais pour les lecteurs d'écran).
   return (
-    <Field label={label}>
+    <div className="st-field" role="group" aria-label={label}>
+      <span>{label}</span>
       <div className="st-media">
         {value && kind === "image" && <img src={mediaUrl(value)} alt="" />}
         <code className="st-path">{value ?? "aucun fichier"}</code>
@@ -100,7 +102,7 @@ export function MediaInput({ label, value, kind, onChange, optional }: { label: 
           {optional && value && <button type="button" className="st-btn" onClick={() => onChange(undefined)}>Retirer</button>}
         </div>
       </div>
-    </Field>
+    </div>
   );
 }
 

@@ -1,15 +1,14 @@
 // Vérification d'un project.json : d'abord le schéma, puis les règles
 // que le schéma ne sait pas exprimer (identifiants uniques, liens entre pages…).
 // Messages en français, destinés à l'auteur du module.
-import Ajv2020 from "ajv/dist/2020.js";
-import schema from "../../schema/project.v1.schema.json" with { type: "json" };
+// Validateur produit d'avance à partir du schéma (aucun code fabriqué au démarrage : compatible
+// avec la sécurité stricte de Studio). Régénéré par « npm test » et « npm run build ».
+import checkSchema from "./generated/schema-validator.js";
 import type { Project } from "./types.ts";
 import { checkRules } from "./validate-rules.ts";
 
 export { checkRules };
 
-const ajv = new Ajv2020({ allErrors: true, strict: false });
-const checkSchema = ajv.compile(schema);
 
 export interface ValidationResult {
   ok: boolean;

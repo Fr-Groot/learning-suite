@@ -6,11 +6,14 @@
   "type": "module",
   "scripts": {
     "open": "node scripts/open.mjs",
-    "build": "tsc --noEmit && vite build",
+    "build": "node scripts/build-validator.mjs && tsc --noEmit && vite build",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "validate": "node scripts/validate.mjs",
-    "export": "node scripts/export.mjs"
+    "export": "node scripts/export.mjs",
+    "build:validator": "node scripts/build-validator.mjs",
+    "pretest": "node scripts/build-validator.mjs",
+    "pretest:e2e": "node scripts/build-validator.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.0",

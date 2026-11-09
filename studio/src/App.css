@@ -100,7 +100,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* Pages */
 .st-pages { position: relative; display: flex; flex-direction: column; min-height: 0; background: var(--st-panel); border-right: 1px solid var(--st-border); }
-.st-pages-list { flex: 1; overflow: auto; margin: 0; padding: 10px; list-style: none; display: grid; gap: 8px; align-content: start; }
+.st-pages-list { flex: 1; overflow-x: hidden; overflow-y: auto; margin: 0; padding: 10px; list-style: none; display: grid; gap: 8px; align-content: start; }
 .st-page { position: relative; display: flex; flex-direction: column; gap: 4px; width: 100%; padding: 6px; border: 2px solid transparent; border-radius: 8px; background: none; cursor: pointer; text-align: left; }
 .st-page:hover { background: var(--st-bg); }
 .st-page.is-current { border-color: var(--st-accent); background: var(--st-accent-soft); }
