@@ -6,7 +6,7 @@
 - Réorientation : suite gratuite et open source, sans serveur, pour formateurs indépendants
   et petits streamers (voir decisions.md).
 
-## 1. Refondation (en cours de plan)
+## 1. Refondation — faite le 2026-11-09 (sauf publication, en attente des tests du porteur)
 - Langues FR/EN : lecteur (suit la langue du module) et Studio (réglage).
 - Exercices (notés) / activités (jamais notées) : `role` dans le schéma (v1.3), conversion des anciens modules.
 - Dépôt public (après vérification), construction des installateurs par GitHub Actions,
