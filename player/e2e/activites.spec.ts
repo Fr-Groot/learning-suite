@@ -159,8 +159,15 @@ test.describe("au doigt, sur téléphone", () => {
     }
     await expect(next(page)).toBeEnabled();
 
-    // Rien ne dépasse en largeur sur un écran de téléphone.
-    const overflow = await page.locator(".lsp-main").evaluate((m) => m.scrollWidth > m.clientWidth);
-    expect(overflow).toBe(false);
+    // Rien ne dépasse de l'écran du téléphone, sur aucune page (titre de module long compris).
+    for (let i = 0; i < 11; i++) {
+      const wide = await page.evaluate((n) => {
+        (window as any).player.nav.goTo(n, true);
+        (window as any).player.show();
+        const W = document.documentElement.clientWidth;
+        return [...document.querySelectorAll(".lsp *")].filter((e) => e.getBoundingClientRect().right > W + 1).map((e) => e.className).slice(0, 3);
+      }, i);
+      expect(wide, `page ${i + 1}`).toEqual([]);
+    }
   });
 });

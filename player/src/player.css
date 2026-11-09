@@ -6,6 +6,7 @@
   inset: 0;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr); /* jamais plus large que l'écran, même avec un long titre */
   background: var(--lsp-surface);
   color: var(--lsp-text);
   font-family: var(--lsp-font-body);
@@ -29,6 +30,7 @@
 }
 .lsp-title {
   flex: 1;
+  min-width: 0;
   margin: 0;
   font-family: var(--lsp-font-heading);
   font-size: 17px;
@@ -199,6 +201,8 @@
 .lsp-role--exercise { background: var(--lsp-primary); color: #fff; }
 .lsp-role--activity { background: color-mix(in srgb, var(--lsp-primary) 12%, transparent); color: var(--lsp-primary); }
 .lsp--slides .lsp-block > .lsp-role { flex: 0 0 auto; font-size: 17px; }
+/* Sous l'étiquette, les activités qui remplissent leur cadre prennent la place restante. */
+.lsp--slides .lsp-block > .lsp-hotspot, .lsp--slides .lsp-block > .lsp-html { flex: 1 1 auto; min-height: 0; height: auto; }
 
 /* ---------- Questions ---------- */
 .lsp-question {
