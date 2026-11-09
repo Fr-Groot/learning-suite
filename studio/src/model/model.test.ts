@@ -137,3 +137,18 @@ describe("repères d'alignement", () => {
     expect(resizeFrame({ x: 100, y: 100, w: 100, h: 100 }, "e", 437, 0, []).frame.w).toBe(540);
   });
 });
+
+it("un champ fermé sans « blur » ne fusionne pas deux étapes d'annulation", () => {
+  const s = new EditorStore();
+  s.load(newProject({ title: "M", mode: "slides" }), null);
+  s.beginGesture();
+  s.edit((p) => setFrames(p, "accueil", { "accueil-titre": { x: 300, y: 0, w: 10, h: 10 } }));
+  s.endGesture();
+  s.beginGesture(); // saisie dans un champ…
+  s.edit((p) => updateBlock(p, "accueil", "accueil-titre", { content: "Nouveau" } as never));
+  s.select([]); // …le panneau se ferme sans « blur »
+  s.undo();
+  expect(s.get().project!.pages[0].blocks[0].frame!.x).toBe(300);
+  s.undo();
+  expect(s.get().project!.pages[0].blocks[0].frame!.x).toBe(80);
+});

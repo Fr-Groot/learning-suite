@@ -16,6 +16,8 @@ export interface PlayerOptions {
   /** Adresse d'un média, si elle ne se calcule pas simplement à partir de baseUrl (ex. Studio). */
   resolveMedia?: (src: string) => string;
   tracker?: Tracker;
+  /** Page de départ (aperçu dans Studio). */
+  startPage?: number;
 }
 
 /** Couleurs, polices et arrondis du thème, posés en variables CSS sur un élément. */
@@ -65,6 +67,7 @@ export class Player {
     this.ui = this.buildShell(container);
     const saved = this.tracker.start(project.meta);
     if (saved) this.restore(saved);
+    else if (options.startPage) this.nav.goTo(options.startPage, true);
     // Fin de session : on prévient le LMS une seule fois, quel que soit l'événement.
     let finished = false;
     const finish = () => {

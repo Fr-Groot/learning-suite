@@ -66,6 +66,7 @@ export class EditorStore {
   }
 
   beginGesture() {
+    this.endGesture(); // un geste précédent resté ouvert (champ fermé sans « blur ») est clos
     this.gestureStart = this.state.project;
   }
 
@@ -81,6 +82,7 @@ export class EditorStore {
   }
 
   undo() {
+    this.endGesture();
     const prev = this.past.pop();
     if (!prev || !this.state.project) return;
     this.future.push(this.state.project);
@@ -88,6 +90,7 @@ export class EditorStore {
   }
 
   redo() {
+    this.endGesture();
     const next = this.future.pop();
     if (!next || !this.state.project) return;
     this.past.push(this.state.project);
@@ -95,10 +98,12 @@ export class EditorStore {
   }
 
   selectPage(pageId: string) {
+    this.endGesture();
     this.set({ pageId, selection: [] });
   }
 
   select(ids: string[]) {
+    this.endGesture();
     this.set({ selection: ids });
   }
 

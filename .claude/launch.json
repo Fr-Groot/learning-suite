@@ -82,6 +82,17 @@
       "env": {
         "PORT": "5184"
       }
+    },
+    {
+      "name": "studio-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "studio",
+        "run",
+        "dev"
+      ],
+      "port": 1420
     }
   ]
 }

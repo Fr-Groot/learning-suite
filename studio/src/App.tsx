@@ -1,17 +1,54 @@
+import { useEffect, useState, useSyncExternalStore } from "react";
+import "@player/player.css";
 import "./App.css";
+import { notices, saveProject, startAutosave } from "./commands.ts";
+import { backend } from "./io/backend.ts";
+import { store, useEditor } from "./model/store.ts";
+import { Editor } from "./ui/Editor.tsx";
+import { Welcome } from "./ui/Welcome.tsx";
 
-// Écran d'accueil provisoire : il prouve que la fenêtre s'ouvre.
-// L'éditeur (deux modes, propriétés, aperçu) viendra en phase 4.
 function App() {
+  const { project, dirty } = useEditor();
+  const [ready, setReady] = useState(false);
+  const notice = useSyncExternalStore(notices.subscribe, notices.get);
+
+  useEffect(() => {
+    void backend().then(() => setReady(true));
+    return startAutosave();
+  }, []);
+
+  // Dans l'appli Windows : titre de la fenêtre, et enregistrement automatique à la fermeture.
+  useEffect(() => {
+    if (!("__TAURI_INTERNALS__" in window)) return;
+    let unlisten: (() => void) | undefined;
+    void import("@tauri-apps/api/window").then(async ({ getCurrentWindow }) => {
+      const win = getCurrentWindow();
+      unlisten = await win.onCloseRequested(async (e) => {
+        if (!store.get().dirty) return;
+        e.preventDefault();
+        await saveProject(true);
+        await win.destroy();
+      });
+    });
+    return () => unlisten?.();
+  }, []);
+
+  useEffect(() => {
+    const title = project ? `${dirty ? "• " : ""}${project.meta.title} — Learning Suite Studio` : "Learning Suite Studio";
+    document.title = title;
+    if ("__TAURI_INTERNALS__" in window) void import("@tauri-apps/api/window").then(({ getCurrentWindow }) => getCurrentWindow().setTitle(title));
+  }, [project?.meta.title, dirty]);
+
+  if (!ready) return null;
   return (
-    <main className="container">
-      <h1>Learning Suite Studio</h1>
-      <p>Version 0.1.0 : socle de l'application.</p>
-      <p className="hint">
-        L'éditeur de modules arrive bientôt. En attendant, le lecteur HTML5 se
-        teste depuis le dossier <code>player/</code>.
-      </p>
-    </main>
+    <>
+      {project ? <Editor /> : <Welcome />}
+      {notice && (
+        <div className={`st-notice st-notice--${notice.kind}`} role={notice.kind === "error" ? "alert" : "status"}>
+          {notice.text}
+        </div>
+      )}
+    </>
   );
 }
 
