@@ -5,6 +5,13 @@ Fait par Claude avec ton accord, après tes tests :
 1. envoi de l'historique (auteur « Fr-Groot », adresse masquée) sur GitHub ;
 2. passage du dépôt `Fr-Groot/learning-suite` en **public**.
 
+## 1 bis. Site de présentation (une fois, juste après le passage en public)
+Le site est dans `site/` (français) et `site/en/` (anglais). Le workflow **Site (GitHub Pages)**
+le publie à chaque modification. Il faut l'activer une fois : GitHub › dépôt › **Settings** ›
+**Pages** › *Source* : **GitHub Actions** (Claude peut le faire avec ton accord).
+Adresse : <https://fr-groot.github.io/learning-suite/>.
+Pour refaire les captures d'écran du site : demander à Claude (elles viennent des exemples).
+
 ## 2. Double authentification GitHub (toi, une fois)
 Exigée par SignPath. GitHub › photo de profil › **Settings** › **Password and authentication** ›
 **Two-factor authentication** › activer (application d'authentification sur ton téléphone).
